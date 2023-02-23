@@ -1,0 +1,10 @@
+{
+    "categories": {
+        "0": "technical",
+        "1": "data (things)"
+    },
+    "description": "This plugin lets you create a hierarchical tree with drag/drop and indentation functionality.\n",
+    "image": "//s3.amazonaws.com/appforest_uf/f1531455189113x959372189361602000/Bubble%20Icon.png",
+    "license": "private",
+    "name": "Drag and Drop Tree"
+}

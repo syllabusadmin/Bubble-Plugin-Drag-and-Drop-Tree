@@ -1,0 +1,16 @@
+{
+    "assets": {
+        "AAI": {
+            "name": "JQuery-UI",
+            "url": "//dd7tel2830j4w.cloudfront.net/f1669647901984x476989271686958140/JQuery-UI.css"
+        },
+        "AAS": {
+            "name": "Nested Sortable",
+            "url": "//dd7tel2830j4w.cloudfront.net/f1669745613980x373279450817322500/jquery.mjs.nestedSortable.js"
+        }
+    },
+    "dependencies": {
+        "plugin_api_version": 3,
+        "use_jquery": true
+    }
+}

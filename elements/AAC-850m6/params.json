@@ -1,0 +1,156 @@
+{
+    "add_hover_pressed": true,
+    "add_is_visible": true,
+    "can_fit_height": true,
+    "can_fit_width": true,
+    "category": "visual elements",
+    "default_dim": {
+        "height": 800,
+        "width": 400
+    },
+    "display": "dragdrop-tree",
+    "events": {
+        "AAO": {
+            "caption": "change",
+            "name": "change"
+        },
+        "AAP": {
+            "caption": "sort",
+            "name": "sort"
+        },
+        "AAQ": {
+            "caption": "revert",
+            "name": "revert"
+        },
+        "AAR": {
+            "caption": "relocated",
+            "name": "relocated"
+        },
+        "AAa": {
+            "caption": "deleted",
+            "name": "deleted"
+        },
+        "AAd": {
+            "caption": "Stopped typing",
+            "doc": "Triggers after a user stops typing",
+            "name": "stopped_typing"
+        },
+        "AAg": {
+            "caption": "namechange",
+            "doc": "Triggers when user changes the name(Title) of the Card",
+            "name": "namechange"
+        }
+    },
+    "fields": {
+        "AAD": {
+            "caption": "data source",
+            "editor": "DynamicValue",
+            "is_list": true,
+            "name": "data_source",
+            "rank": 2,
+            "value": "_any_thing"
+        },
+        "AAJ": {
+            "caption": "Type Of Items",
+            "editor": "custom_type",
+            "name": "type_of_items",
+            "rank": 0,
+            "value": "_any_thing"
+        },
+        "AAT": {
+            "caption": "Plan Unique ID",
+            "editor": "DynamicValue",
+            "name": "plan_unique_id",
+            "rank": 4,
+            "value": "text"
+        },
+        "AAU": {
+            "caption": "HTML field",
+            "editor": "DynamicValue",
+            "name": "html_field",
+            "rank": 3,
+            "value": "text"
+        },
+        "AAW": {
+            "caption": "type of items type",
+            "editor": "DynamicValue",
+            "name": "type_of_items_type",
+            "rank": 1,
+            "value": "custom_data_AAJ"
+        },
+        "AAl": {
+            "caption": "logging",
+            "default_val": false,
+            "editor": "DynamicValue",
+            "name": "logging",
+            "rank": 5,
+            "value": "boolean"
+        }
+    },
+    "icon": "ion-android-list",
+    "property_applications": {
+        "Border": false,
+        "BoxShadow": false,
+        "MinWidth": true,
+        "Padding": false,
+        "resizable": true
+    },
+    "states": {
+        "AAE": {
+            "caption": "htmlobject",
+            "initialization_code": {
+                "fn": "function(properties, context) {\n\n\n\n}"
+            },
+            "is_list": false,
+            "name": "htmlobject",
+            "value": "text"
+        },
+        "AAb": {
+            "caption": "deletedcard_id",
+            "doc": "The deletd item's id will be exposed, to be selected in the 'deleted' action.",
+            "initialization_code": {
+                "fn": "function(properties, context) {\n\n\n\n}"
+            },
+            "name": "deletedcard_id",
+            "value": "text"
+        },
+        "AAc": {
+            "caption": "deletedchildren_id_list",
+            "doc": "The deleted item's childrens ids will be exposed",
+            "initialization_code": {
+                "fn": "function(properties, context) {\n\n\n\n}"
+            },
+            "is_list": false,
+            "name": "deletedchildren_id_list",
+            "value": "text"
+        },
+        "AAe": {
+            "caption": "delta",
+            "doc": "",
+            "initialization_code": {
+                "fn": "function(properties, context) {\n\n\n\n}"
+            },
+            "name": "delta",
+            "value": "text"
+        },
+        "AAf": {
+            "caption": "editedcard_id",
+            "doc": "The edited card's unique id wille be exposed",
+            "initialization_code": {
+                "fn": "function(properties, context) {\n\n\n\n}"
+            },
+            "name": "editedcard_id",
+            "value": "text"
+        },
+        "AAh": {
+            "caption": "changedname",
+            "doc": "The edited title of the card will be exposed",
+            "initialization_code": {
+                "fn": "function(properties, context) {\n\n\n\n}"
+            },
+            "name": "changedname",
+            "value": "text"
+        }
+    },
+    "support_autobinding": false
+}

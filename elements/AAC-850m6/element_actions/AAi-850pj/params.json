@@ -1,0 +1,12 @@
+{
+    "caption": "Halt Update",
+    "fields": {
+        "AAj": {
+            "caption": "Stop Update",
+            "default_val": false,
+            "editor": "Checkbox",
+            "name": "StopUpdate",
+            "rank": 0
+        }
+    }
+}

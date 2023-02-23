@@ -1,0 +1,13 @@
+{
+    "caption": "Add New List Item",
+    "doc": "",
+    "fields": {
+        "AAZ": {
+            "caption": "Attribute Plan Snippet",
+            "editor": "DynamicValue",
+            "name": "attribute_plan_snippet",
+            "rank": 0,
+            "value": "_any_thing"
+        }
+    }
+}
