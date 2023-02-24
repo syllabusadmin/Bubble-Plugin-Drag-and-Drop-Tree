@@ -5,6 +5,7 @@ function(instance, context) {
           // When the typing has stopped, trigger the "stopped_typing" event and update the Quill contents
           instance.triggerEvent('stopped_typing');
           instance.data.typingTimeout = null;
+          console.log(null)
 
           // Expose Delta as state
           instance.publishState('delta', content);
@@ -17,6 +18,7 @@ function(instance, context) {
           // Clear the timeout and set a new one to handle the typing change
           clearTimeout(instance.data.typingTimeout);
           instance.data.typingTimeout = setTimeout(() => instance.data.handleTypingChange(JSON.stringify(content), id), 250);
+        console.log()
         };
 	
 }
