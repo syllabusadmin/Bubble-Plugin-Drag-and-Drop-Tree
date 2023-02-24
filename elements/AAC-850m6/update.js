@@ -399,7 +399,7 @@ toolbars.forEach(toolbar => {
    });
 
     var hiered = $('ol.sortable').nestedSortable('toHierarchy', { startDepthCount: 0 });
-    console.log(JSON.stringify(hiered));
+    console.log('hiered')
     console.log(hiered);
 
 }
