@@ -43,7 +43,7 @@
     },
     "fields": {
         "AAD": {
-            "caption": "data source",
+            "caption": "Attribute Plan Snippets",
             "editor": "DynamicValue",
             "is_list": true,
             "name": "data_source",
@@ -85,6 +85,64 @@
             "name": "logging",
             "rank": 5,
             "value": "boolean"
+        },
+        "AAm": {
+            "caption": "Drawn Attribute Snippets Type",
+            "editor": "custom_type",
+            "name": "drawn_attribute_snippets",
+            "rank": 6
+        },
+        "AAn": {
+            "caption": "Text Only Attribute Snippets Type",
+            "editor": "custom_type",
+            "name": "text_only_attribute_snippets",
+            "rank": 9
+        },
+        "AAo": {
+            "caption": "DAS",
+            "editor": "DynamicValue",
+            "is_list": true,
+            "name": "das",
+            "rank": 7,
+            "value": "custom_data_AAm"
+        },
+        "AAp": {
+            "caption": "TOAS",
+            "editor": "DynamicValue",
+            "is_list": true,
+            "name": "toas",
+            "rank": 10,
+            "value": "custom_data_AAn"
+        },
+        "AAq": {
+            "caption": "Drawn Attribute Snippets Volume",
+            "editor": "DynamicValue",
+            "is_list": true,
+            "name": "drawn_attribute_snippets_volume",
+            "rank": 8,
+            "value": "number"
+        },
+        "AAr": {
+            "caption": "Text Only Attribute Snippets Volume",
+            "editor": "DynamicValue",
+            "is_list": true,
+            "name": "text_only_attribute_snippets_volume",
+            "rank": 11,
+            "value": "number"
+        },
+        "AAs": {
+            "caption": "Attribute Plan Snippets Type",
+            "editor": "custom_type",
+            "name": "attribute_plan_snippets",
+            "rank": 12
+        },
+        "AAt": {
+            "caption": "APS",
+            "doc": "data_source Swap Out",
+            "editor": "DynamicValue",
+            "name": "aps",
+            "rank": 13,
+            "value": "custom_data_AAs"
         }
     },
     "icon": "ion-android-list",
