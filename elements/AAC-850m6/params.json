@@ -8,7 +8,7 @@
         "height": 800,
         "width": 400
     },
-    "display": "dragdrop-tree",
+    "display": "dragdrop-tree-CSP",
     "events": {
         "AAO": {
             "caption": "change",
