@@ -140,6 +140,7 @@
             "caption": "APS",
             "doc": "data_source Swap Out",
             "editor": "DynamicValue",
+            "is_list": true,
             "name": "aps",
             "rank": 13,
             "value": "custom_data_AAs"
