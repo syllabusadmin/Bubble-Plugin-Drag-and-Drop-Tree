@@ -6,16 +6,23 @@ function(instance, properties, context) {
     if (properties.logging) {
     let dSList = properties.data_source.get(0, properties.data_source.length());
     let DAS = properties.das.get(0, properties.das.length());
-    console.log("DAS",DAS);
+    console.log("DAS",DAS, "properties");
+        let DASProperties = properties.das.get(0, properties.das.length())[0].listProperties();
+    console.log("dasProps", DASProperties);
     let TOAS = properties.toas.get(0, properties.toas.length());
             console.log("TOAS",TOAS);
+    let TOASProperties = properties.toas.get(0, properties.toas.length())[0].listProperties();
+            console.log("TOASProps", TOASProperties);
     let DASV = properties.drawn_attribute_snippets_volume.get(0, properties.drawn_attribute_snippets_volume.length());
             console.log("DASV",DASV);
     let TOASV = properties.text_only_attribute_snippets_volume.get(0, properties.text_only_attribute_snippets_volume.length());
             console.log("TOASV",TOASV);
-        
+    let APS = properties.aps.get(0, properties.aps.length());
+            console.log("TOAS",TOAS);
+    let APSProperties = properties.aps.get(0, properties.aps.length())[0].listProperties();
+            console.log("APSProps", APSProperties);   
     console.log("properties.data_source",properties.data_source, dSList, JSON.stringify(dSList), "stringifyied",JSON.stringify(properties.data_source),"properties.type_of_items",properties.type_of_items_type.listProperties(),
-     "properties.plan_unique_id: String",properties.plan_unique_id, "properties.html_field: String", properties.html_field,"properties.type_of_items_type: Object",properties.type_of_items_type,"stringified",JSON.stringify(properties.type_of_items_type),"DAS",DAS,DASV,"TOAS",TOAS,TOASV);
+     "properties.plan_unique_id: String",properties.plan_unique_id, "properties.html_field: String", properties.html_field,"properties.type_of_items_type: Object",properties.type_of_items_type,"stringified",JSON.stringify(properties.type_of_items_type),"DAS",DAS,DASV,"TOAS",TOAS,TOASV,"APS",APS);
 }
     //end CSP add
     if(instance.data.focused){
