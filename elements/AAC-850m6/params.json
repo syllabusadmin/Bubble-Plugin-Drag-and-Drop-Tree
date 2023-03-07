@@ -97,6 +97,14 @@
             "name": "hierarchycontent",
             "rank": 6,
             "value": "text"
+        },
+        "AAr": {
+            "caption": "Newly Added Card",
+            "editor": "DynamicValue",
+            "name": "newly_added_card",
+            "optional": true,
+            "rank": 7,
+            "value": "_any_thing"
         }
     },
     "icon": "ion-android-list",

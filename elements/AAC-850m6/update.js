@@ -26,7 +26,7 @@ function callNestedSortable() {
             //console.log('relocate');
                 //instance.publishState("htmlobject", instance.canvas.html());
                 //instance.triggerEvent("relocated");
-                hierarchy();
+                //hierarchy();
                    }
     });
 }
@@ -275,7 +275,7 @@ callNestedSortable();
 
 //Call toHierarchy function to update the hierarchy object
 	console.log('toHierarchy Called');
-	hierarchy()
+	setTimeout(hierarchy,100) ;
     
 //Calling DeleteFoldCollapse
     console.log('Delete,Fold and Collapse Functions Called');
