@@ -1,9 +1,19 @@
 function(instance, properties, context) {
+    //start update
+    //triggers selection of snippet
+    if (!instance.data.halted) {
+    //CSP Add for actions
+instance.data.plan_unique_id = properties.plan_unique_id;
+    //CSP end
  	    const keyListDataSource = properties.data_source.get(0, properties.data_source.length())[0];
     console.log("DS",keyListDataSource.listProperties());
    
 function callNestedSortable() {
     console.log('NestedSortable Declared');
+    //CSP Add
+    //super dumb but seems to require it to be added first
+        $('ol.sortable#' + instance.data.plan_unique_id).nestedSortable();
+    //CSP End
     instance.data.ns = $('ol.sortable#' + properties.plan_unique_id).nestedSortable({
         forcePlaceholderSize: true,
         handle: '.dragHandle',
@@ -23,24 +33,26 @@ function callNestedSortable() {
             //console.log('Relocated item')
         },
         relocate: function () {
-            //console.log('relocate');
-                //instance.publishState("htmlobject", instance.canvas.html());
-                //instance.triggerEvent("relocated");
-                //hierarchy();
+            console.log('relocate');
+                instance.publishState("hierarchycontent", instance.canvas.html());
+                instance.triggerEvent("relocated");
+                hierarchy();
                    }
     });
 }
     
     
    function hierarchy() {
-    console.log('toHierarchy Declared');        
+    console.log('toHierarchy Declared'); 
+       //CSP Add
+    //super dumb but seems to require it to be added first
+    $('ol.sortable#' + instance.data.plan_unique_id).nestedSortable();
+       //CSP End
 	let hierarchyContent = $('ol.sortable#' + properties.plan_unique_id).nestedSortable('toHierarchy', { startDepthCount: 0 });
-	if(!hierarchyContent.prevObject){ 
         setTimeout(function () {
         instance.publishState("hierarchycontent", JSON.stringify(hierarchyContent));
         instance.triggerEvent("relocated");
         }, 100);
-	}
     //save hierarchyContent object to the Plan
 } 
     
@@ -63,14 +75,16 @@ function callNestedSortable() {
 //To create the html of a single card from data source. Keeping the loop outside the function so that this can be used for new added cards also.
 
 //Add </li> in the end for add new card
-function generateListItemHtml(attributeplansnippet) {
-    console.log('GenerateListItem Declared');
-    let cardItemHtml = '<li id="menuItem_' + attributeplansnippet.get("_id") + '" style="display: list-item;" class="mjs-nestedSortable-leaf" data-foo="bar"><div class = "parentContainer highlightable highlight-' + attributeplansnippet.get("attribute_id_text") + '" id="' + attributeplansnippet.get("attribute_id_text") + '"><div class = "dragContainer"><span class="dragHandle material-icons">drag_indicator</span></div><div class="contentContainer"><div class ="menuContainer"><span title="Click to show/hide children" class="disclose ui-icon ui-icon-minusthick"><span></span></span><span title="Click to show/hide description" data-id="' + attributeplansnippet.get("_id") + '" class = "expandEditor material-icons" >expand_more</span><input  type="text" class = "itemTitle" data-id="' + attributeplansnippet.get("_id") + '"value="' + attributeplansnippet.get("attribute_name_text") + '"><span class="deleteMenu material-icons" title="Click to delete item." data-id="' + attributeplansnippet.get("_id") + '">close</span></div><div class = "quillContainer" id="' + attributeplansnippet.get("_id") + '"><div class="quillEditor" id="' + attributeplansnippet.get("_id") + '">' + attributeplansnippet.get("quill_description_text") + '</div></div></div></div>';
+ 
+        function generateListItemHtml(attributeplansnippet) {
+    console.log('ANLI GenerateListItem Declared');
+        let quilltext = "";
+    if (attributeplansnippet.get("quill_description_text")) {quilltext = attributeplansnippet.get("quill_description_text")} 
+    let cardItemHtml = '<li id="menuItem_' + attributeplansnippet.get("_id") + '" style="display: list-item;" class="mjs-nestedSortable-leaf" data-foo="bar"><div class = "parentContainer highlightable highlight-' + attributeplansnippet.get("attribute_id_text") + '" id="' + attributeplansnippet.get("attribute_id_text") + '"><div class = "dragContainer"><span class="dragHandle material-icons">drag_indicator</span></div><div class="contentContainer"><div class ="menuContainer"><span title="Click to show/hide children" class="disclose ui-icon ui-icon-minusthick"><span></span></span><span title="Click to show/hide description" data-id="' + attributeplansnippet.get("_id") + '" class = "expandEditor material-icons" >expand_more</span><input  type="text" class = "itemTitle" data-id="' + attributeplansnippet.get("_id") + '"value="' + attributeplansnippet.get("attribute_name_text") + '"><span class="deleteMenu material-icons" title="Click to delete item." data-id="' + attributeplansnippet.get("_id") + '">close</span></div><div class = "quillContainer" id="' + attributeplansnippet.get("_id") + '"><div class="quillEditor" id="' + attributeplansnippet.get("_id") + '">' + quilltext + '</div></div></div></div>';
     //console.log("Quill Description Text" + attributeplansnippet.get("description_text"));
 	//console.log(cardItemHtml);
     return cardItemHtml;
-
-}
+	}
 
 
 function addQuillEditor(editor) {
@@ -280,4 +294,5 @@ callNestedSortable();
 //Calling DeleteFoldCollapse
     console.log('Delete,Fold and Collapse Functions Called');
     deleteFoldCollapse();
+}
 }

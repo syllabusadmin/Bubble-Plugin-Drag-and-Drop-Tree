@@ -1,5 +1,6 @@
 function(instance, context) {
     instance.data.listcount = 0;
+    instance.data.halted = false;
 	instance.data.data_source_length = 0;
 	instance.data.hierarchycontent = "null";
    	
