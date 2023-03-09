@@ -184,18 +184,18 @@ function deleteFoldCollapse() {
     //$('.deleteMenu').unbind();
     $('.deleteMenu').click(function () {
         let uniqueId = $(this).attr('data-id');
-        if ($('#' + uniqueId).length == 0) { return; }
+		let card_id = "#menuItem_"+uniqueId;
+        if ($(card_id).length == 0) { return; }
         if (window.confirm("Are you sure you want to delete this card ?")) {
-            let childCardsIdList = $('#' + uniqueId).find('li');
+            let childCardsIdList = $(card_id).find('li');
             let idArray = [];
             childCardsIdList.each(function (index) {
                 idArray.push($(this).attr('id'));
             });
-            instance.publishState("htmlobject", instance.canvas.html());
-            $('#' + uniqueId).remove();
+            $(card_id).remove();
             setTimeout(function () {
                 instance.publishState("htmlobject", instance.canvas.html());
-                instance.triggerEvent("relocated");
+                hierarchy();
             }, 10);
             setTimeout(function () {
                 instance.publishState("deletedcard_id", uniqueId);
@@ -216,6 +216,13 @@ function deleteFoldCollapse() {
             $('.expandEditor[data-id=' + uniqueId + ']').html('expand_more');
         }
     });
+
+	 $(".itemTitle").on("input", function(){
+      let editedCardId = $(this).attr('data-id');
+      instance.publishState("changedname", $(this).val());
+      instance.publishState("editedcard_id", editedCardId);
+      instance.triggerEvent("namechange");
+   });
 }
 
 
