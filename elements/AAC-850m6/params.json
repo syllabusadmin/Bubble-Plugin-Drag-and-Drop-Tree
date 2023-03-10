@@ -8,7 +8,7 @@
         "height": 800,
         "width": 400
     },
-    "display": "dragdrop-tree-CSP1",
+    "display": "dragdrop-tree-CSP",
     "events": {
         "AAO": {
             "caption": "change",
@@ -95,7 +95,7 @@
             "doc": "toHierarchy function's output saved at Plan level",
             "editor": "DynamicValue",
             "name": "hierarchycontent",
-            "rank": 14,
+            "rank": 6,
             "value": "text"
         },
         "AAr": {
@@ -103,53 +103,8 @@
             "editor": "DynamicValue",
             "name": "newly_added_card",
             "optional": true,
-            "rank": 10,
-            "value": "_any_thing"
-        },
-        "AAs": {
-            "caption": "APS",
-            "editor": "DynamicValue",
-            "is_list": true,
-            "name": "aps",
-            "rank": 13
-        },
-        "AAt": {
-            "caption": "Attribute Plan Snippets Type",
-            "editor": "custom_type",
-            "name": "attribute_plan_snippets",
-            "rank": 9
-        },
-        "AAu": {
-            "caption": "Text Only Attribute Snippets Volume",
-            "name": "text_only_attribute_snippets_volume",
-            "rank": 11
-        },
-        "AAv": {
-            "caption": "TOAS",
-            "name": "toas",
-            "rank": 12
-        },
-        "AAw": {
-            "caption": "Drawn Attribute Snippets Volume",
-            "editor": "DynamicValue",
-            "is_list": true,
-            "name": "drawn_attribute_snippets_volume",
-            "rank": 8,
-            "value": "number"
-        },
-        "AAx": {
-            "caption": "das",
-            "editor": "DynamicValue",
-            "is_list": true,
-            "name": "das",
             "rank": 7,
-            "value": "custom_data_AAw"
-        },
-        "AAy": {
-            "caption": "Drawn Attribute Snippets Type",
-            "editor": "custom_type",
-            "name": "drawn_attribute_snippets",
-            "rank": 6
+            "value": "_any_thing"
         }
     },
     "icon": "ion-android-list",
