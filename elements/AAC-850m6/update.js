@@ -1,305 +1,286 @@
 function(instance, properties, context) {
     //start update
-    //triggers selection of snippet
-    if (!instance.data.halted) {
-    //CSP Add for actions
-instance.data.plan_unique_id = properties.plan_unique_id;
-    //CSP end
- 	    const keyListDataSource = properties.data_source.get(0, properties.data_source.length())[0];
-    console.log("DS",keyListDataSource.listProperties());
-   
-function callNestedSortable() {
-    console.log('NestedSortable Declared');
-    //CSP Add
-    //super dumb but seems to require it to be added first
-        $('ol.sortable#' + instance.data.plan_unique_id).nestedSortable();
-    //CSP End
-    instance.data.ns = $('ol.sortable#' + properties.plan_unique_id).nestedSortable({
-        forcePlaceholderSize: true,
-        handle: '.dragHandle',
-        helper: 'clone',
-        items: 'li',
-        opacity: .6,
-        placeholder: 'placeholder',
-        revert: 250,
-        tabSize: 25,
-        tolerance: 'pointer',
-        toleranceElement: '> div',
-        maxLevels: 4,
-        isTree: true,
-        expandOnHover: 700,
-        startCollapsed: false,
-        change: function () {
-            //console.log('Relocated item')
-        },
-        relocate: function () {
-            console.log('relocate');
-                instance.publishState("hierarchycontent", instance.canvas.html());
-                instance.triggerEvent("relocated");
-                hierarchy();
-                   }
-    });
-}
-    
-    
-   function hierarchy() {
-    console.log('toHierarchy Declared'); 
-       //CSP Add
-    //super dumb but seems to require it to be added first
-    $('ol.sortable#' + instance.data.plan_unique_id).nestedSortable();
-       //CSP End
-	let hierarchyContent = $('ol.sortable#' + properties.plan_unique_id).nestedSortable('toHierarchy', { startDepthCount: 0 });
-        setTimeout(function () {
-        instance.publishState("hierarchycontent", JSON.stringify(hierarchyContent));
-        instance.triggerEvent("relocated");
-        }, 100);
-    //save hierarchyContent object to the Plan
-} 
-    
-    if(properties.html_field && !properties.hierarchycontent){
-        console.log('Checking for JQuery Html');
-		instance.canvas.html(properties.html_field);
-        hierarchy();
-	    }
-
-    if(properties.data_source.length() == instance.data.data_source_length && properties.hierarchycontent == instance.data.hierarchycontent && instance.canvas.innerHtml != "" && properties.hierarchycontent != ""){        
-      		      
-			return;
-	}
-    
-    instance.data.data_source_length = properties.data_source.length();
-	instance.data.hierarchycontent = properties.hierarchycontent;
-    instance.data.attplansnippets = properties.data_source.get(0, properties.data_source.length());
-        
-
-//To create the html of a single card from data source. Keeping the loop outside the function so that this can be used for new added cards also.
-
-//Add </li> in the end for add new card
- 
-        function generateListItemHtml(attributeplansnippet) {
-    console.log('ANLI GenerateListItem Declared');
-        let quilltext = "";
-    if (attributeplansnippet.get("quill_description_text")) {quilltext = attributeplansnippet.get("quill_description_text")} 
-    let cardItemHtml = '<li id="menuItem_' + attributeplansnippet.get("_id") + '" style="display: list-item;" class="mjs-nestedSortable-leaf" data-foo="bar"><div class = "parentContainer highlightable highlight-' + attributeplansnippet.get("attribute_id_text") + '" id="' + attributeplansnippet.get("attribute_id_text") + '"><div class = "dragContainer"><span class="dragHandle material-icons">drag_indicator</span></div><div class="contentContainer"><div class ="menuContainer"><span title="Click to show/hide children" class="disclose ui-icon ui-icon-minusthick"><span></span></span><span title="Click to show/hide description" data-id="' + attributeplansnippet.get("_id") + '" class = "expandEditor material-icons" >expand_more</span><input  type="text" class = "itemTitle" data-id="' + attributeplansnippet.get("_id") + '"value="' + attributeplansnippet.get("attribute_name_text") + '"><span class="deleteMenu material-icons" title="Click to delete item." data-id="' + attributeplansnippet.get("_id") + '">close</span></div><div class = "quillContainer" id="' + attributeplansnippet.get("_id") + '"><div class="quillEditor" id="' + attributeplansnippet.get("_id") + '">' + quilltext + '</div></div></div></div>';
-    //console.log("Quill Description Text" + attributeplansnippet.get("description_text"));
-	//console.log(cardItemHtml);
-    return cardItemHtml;
-	}
-
-
-function addQuillEditor(editor) {
-    console.log('AddQuillEditor Declared');
-    const quill = new Quill(editor, {
-        modules: {
-            toolbar: [
-                [{ font: [] }, { size: [] }],
-                ['bold', 'italic', 'underline', 'strike'],
-                [{ color: [] }, { background: [] }],
-                [{ script: 'super' }, { script: 'sub' }],
-                [{ header: '1' }, { header: '2' }, 'blockquote', 'code-block'],
-                [{ list: 'ordered' }, { list: 'bullet' }, { indent: '-1' }, { indent: '+1' }],
-                ['link', 'video'],
-                ['clean']
-            ]
-        },
-        theme: 'snow',
-        debug: 'warn',
-        bounds: editor
-    });
-
-    const toolbar = quill.root.parentElement.previousSibling;
-    toolbar.setAttribute('hidden', true);
-    quill.root.parentElement.style.borderTop = `1px`;
-
-    quill.root.addEventListener('focus', e => {
-        instance.data.focused = true
-        toolbar.removeAttribute('hidden', false)
-    })
-
+    if (!instance.data.halt) {
        
-    
-     quill.root.addEventListener('blur', e => {
-          
-              instance.data.focused = false
-
-             if (!toolbar.contains(e.relatedTarget)) {
-                toolbar.setAttribute('hidden', true)
-              } 
-                
-                
-            });
-    
-    
-   /* quill.root.addEventListener('blur', e => {
-         console.log('blur');   
-        instance.data.focused = false;
-        const tooltip = e.find('.ql-tooltip');
-        const tooltipStyle = window.getComputedStyle(tooltip);
-        if (!toolbar.contains(e.relatedTarget) && tooltipStyle.display === 'none') {
-            toolbar.setAttribute('hidden', true);
-            const toolbars = document.querySelectorAll('.toolbar');
-            toolbars.forEach(toolbar => {
-                toolbar.setAttribute('hidden', true);
-            });
-        }
-    }); */
-
-    quill.on('editor-change', (eventName, ...args) => {
-        if (eventName === 'text-change') {
-            instance.data.handleStopTyping(editor.id);
-        } else if (eventName === 'selection-change') {
-            // Handle selection change
-        }
-    });
-};
-
-
-instance.data.handleStopTyping = (id) => {
-    // Clear the timeout and set a new one to handle the typing change
-    clearTimeout(instance.data.typingTimeout);    
-    instance.data.typingTimeout = setTimeout(() => instance.data.handleTypingChange(id), 100);
-    };
-
-instance.data.handleTypingChange = (id) => {
-    // When the typing has stopped, trigger the "stopped_typing" event and update the Quill contents
-    console.log('typingchange');
-    
-    instance.data.typingTimeout = null;
-    // Expose html of edtitor as state
-    instance.publishState('editedcard_id', id);
-    //instance.publishState('htmlobject', instance.canvas.html());
-    instance.publishState('quill_editor_content',$("#menuItem_" + id).find(".quillEditor").html());  
-    instance.triggerEvent('stopped_typing');
-    instance.triggerEvent('relocated');
-};
-
-
-function deleteFoldCollapse() {
-    $('.disclose').on('click', function () {
-        $(this).closest('li').toggleClass('mjs-nestedSortable-collapsed').toggleClass('mjs-nestedSortable-expanded');
-        $(this).toggleClass('ui-icon-plusthick').toggleClass('ui-icon-minusthick');
-    });
-
-
-    //$('.deleteMenu').unbind();
-    $('.deleteMenu').click(function () {
-        let uniqueId = $(this).attr('data-id');
-		let card_id = "#menuItem_"+uniqueId;
-        if ($(card_id).length == 0) { return; }
-        if (window.confirm("Are you sure you want to delete this card ?")) {
-            let childCardsIdList = $(card_id).find('li');
-            let idArray = [];
-            childCardsIdList.each(function (index) {
-                idArray.push($(this).attr('id'));
-            });
-            $(card_id).remove();
-            setTimeout(function () {
-                instance.publishState("htmlobject", instance.canvas.html());
-                hierarchy();
-            }, 10);
-            setTimeout(function () {
-                instance.publishState("deletedcard_id", uniqueId);
-
-                instance.publishState("deletedchildren_id_list", idArray.toString());
-                instance.triggerEvent("deleted");
-            }, 10);
-        }
-    });
-
-
-    $('.expandEditor').click(function () {
-        let uniqueId = $(this).attr('data-id');
-        $('#' + uniqueId + '.quillEditor').toggle('fast', 'swing');
-        if ($('.expandEditor[data-id=' + uniqueId + ']').html() === 'expand_more') {
-            $('.expandEditor[data-id=' + uniqueId + ']').html('expand_less');
-        } else {
-            $('.expandEditor[data-id=' + uniqueId + ']').html('expand_more');
-        }
-    });
-
-	 $(".itemTitle").on("input", function(){
-      let editedCardId = $(this).attr('data-id');
-      instance.publishState("changedname", $(this).val());
-      instance.publishState("editedcard_id", editedCardId);
-      instance.triggerEvent("namechange");
-   });
-}
-
-
-function buildHierarchyHtml(hierarchy) {
-    console.log(hierarchy)
-    hierarchy = JSON.parse(hierarchy);
-    console.log('buildHierarchyHtml Declared');
-    let cardListHtml = '';
-
-    for (let i = 0; i < hierarchy.length; i++) {
-        let hierarchyItem = hierarchy[i];
-        let hierarchyItemId = hierarchyItem.id;
-		console.log('hierarchyitem and id' + hierarchy[i] + hierarchyItem.id);
-        //Get the snippet that corresponds to this item
-        let thesnippet = instance.data.attplansnippets.filter((snippet) => {
-        if(hierarchyItemId == snippet.get("_id"))
-        return snippet;
-        })[0];
-  
-        //Pass thesnippet to html generator
-        cardListHtml += generateListItemHtml(thesnippet);  
-        //console.log(cardListHtml);     
-        let childCardHtml = '';
-        if (hierarchyItem.children) {
-            childCardHtml += '<ol>'
-            childCardHtml += buildHierarchyHtml(JSON.stringify(hierarchyItem.children));
-            childCardHtml += '</ol>';
+        function buildHierarchyHtml(hierarchy) {
+            console.log("heirBuild", hierarchy);
+            hierarchy = JSON.parse(hierarchy);
+            console.log('buildHierarchyHtml Declared');
+            let cardListHtml = '';
+            for (let i = 0; i < hierarchy.length; i++) {
+                let hierarchyItem = hierarchy[i];
+                let hierarchyItemId = hierarchyItem.id;
+                console.log('hierarchyitem and id' + hierarchy[i] + hierarchyItem.id);
+                //Get the snippet that corresponds to this item
+                let thesnippet = instance.data.APS.filter((snippet) => {
+                    if (hierarchyItemId == snippet._id) return snippet;
+                })[0];
+                //Pass thesnippet to html generator
+                console.log("theSnippet",thesnippet);
+                if (thesnippet) {
+                cardListHtml += instance.data.generateListItemHtml(thesnippet);
+                }
+                //console.log(cardListHtml);     
+                let childCardHtml = '';
+                if (hierarchyItem.children) {
+                    childCardHtml += '<ol>'
+                    childCardHtml += buildHierarchyHtml(JSON.stringify(hierarchyItem.children));
+                    childCardHtml += '</ol>';
+                }
+                cardListHtml += childCardHtml;
             }
-			cardListHtml += childCardHtml;
-
-         }   
             cardListHtml += '</li>';
-    
-    return cardListHtml;
-    
+            return cardListHtml;
+        }
+//triggers selection of snippet
+instance.data.selectSnippet = (evt) => {
+    console.log('selectSnippet', evt.currentTarget.id);
+    instance.publishState('selectedsnippet', `${evt.currentTarget.id}|||${evt.currentTarget.type}`);
+    instance.triggerEvent('select_snippet');
 }
 
+///add stragglers 
 
-//We create the html from the attribute plan snippets only in the first render, for all subsequent renders, we use the hierarchy object (hierarchyContent)
+if (!instance.data.start) {
 
-// Looping through all the attribute plan snippets and creating their markup the first time when its loaded when theres no hierarchy data
-if (!properties.hierarchycontent) {
-     console.log('hierarchyContent not present. Rendering from data_source');
-    let cardsListHtml = '';
-    for (let i = 0; i < properties.data_source.length(); i++) {
-        cardsListHtml += generateListItemHtml(instance.data.attplansnippets[i]) + '</li>';
-        console.log('GenrateListHtml Called');
-        //console.log(cardsListHtml);
-    };
-
-    let cardStackHtml = '<ol id="' + properties.plan_unique_id + '" class="sortable ui-sortable mjs-nestedSortable-branch mjs-nestedSortable-expanded">' + cardsListHtml + "</ol>";
-	//console.log(cardStackHtml);
-    instance.canvas.html(cardStackHtml)
-   
-} else if (instance.data.hierarchycontent) {
-	let cardStackHtml = '<ol id="' + properties.plan_unique_id + '" class="sortable ui-sortable mjs-nestedSortable-branch mjs-nestedSortable-expanded">' + buildHierarchyHtml(instance.data.hierarchycontent) + "</ol>";
-    console.log('hierarchyContent present. BuildHierarchy HTML Called');
-    instance.canvas.html(cardStackHtml);
-   }
-
-
-//After generating the html, we call Nested Sortable and Quill on it
-callNestedSortable();
-    console.log('NestedSortable Called');
-
-//$(".ql-toolbar").remove() ***NOTE*** - Check if needed or not
-	document.querySelectorAll(".quillEditor").forEach(editor => {
-    console.log('AddQuillEditor Called');
-    addQuillEditor(editor);
+instance.data.DASAdd = properties.das.get(0, properties.das.length());
+instance.data.TOASAdd = properties.toas.get(0, properties.toas.length());
+        
+instance.data.DASAdd.forEach((das) => {
+    console.log("checking das", das);
+    let id = das.get('_id');
+        let found = $(`.crop-das-${id}`).length;
+        if (!found) {
+            console.log("das Add", das);
+            let apsID = das.get('attribute_custom_attribute').get('_id');
+            const aps1 = instance.data.APS.filter((aps2) => aps2.attribute_id_text === apsID);
+            instance.data.addSingleDAS(das, aps1[0]);
+        } else {
+            console.log("das Found");
+        }
 });
 
-//Call toHierarchy function to update the hierarchy object
-	console.log('toHierarchy Called');
-	setTimeout(hierarchy,100) ;
+instance.data.TOASAdd.forEach((toas) => {
+    console.log("checking toas",toas);
+            let id = toas.get('_id');
+            let found = $(`.crop-das-${id}`).length;
+            if (!found) {
+                console.log("toas Add",toas);
+                let apsID = toas.get('attribute_custom_attribute').get('_id');
+                const aps1 = instance.data.APS.filter((aps2) => aps2.attribute_id_text === apsID);    
+                instance.data.addSingleTOAS(toas,aps1[0]);
+            } else {console.log("das Found");}
+        });
+
+    }
     
-//Calling DeleteFoldCollapse
-    console.log('Delete,Fold and Collapse Functions Called');
-    deleteFoldCollapse();
+        
+//CSP add for data purposes,bubble
+console.log("instance.data.isBubble instance.data.start", instance.data.isBubble, instance.data.start);
+if (instance.data.isBubble && instance.data.start) {
+    instance.data.plan_unique_id = properties.plan_unique_id;
+    instance.data.hierarchyInitial = properties.hierarchycontent;
+    instance.data.html_field = properties.html_field;
+    let DAS = properties.das.get(0, properties.das.length());
+    let TOAS = properties.toas.get(0, properties.toas.length());
+
+    instance.data.DASTOASCount = DAS.length + TOAS.length;
+    let DASProperties = ['account_webpage_custom_account_webpage', 'attribute_custom_attribute',
+        'box_height_number', 'box_width_number', 'corner_roundness_number', 'initial_drawn_scale_number',
+        'mobile_screenshot_custom_webpage_screenshot', 'stroke_width_number', 'syllabus_box_side_number',
+        'syllabus_box_width_number', 'webpage_screenshot_custom_webpage_screenshot', 'x_coordinate_number',
+        'y_coordinate_number', 'Created By', 'Slug', 'Created Date', 'Modified Date', '_id'
+    ];
+    let TOASProperties = ['attribute_custom_attribute',
+        'highlighted_text_detail_api_1644871875958x568208585554657300_plugin_api_ABO',
+        'rangy_highlight_data_api_1665429109854x993084194572730400_plugin_api_ACp', 'text_snippet__text',
+        'webpage_custom_account_webpage', 'Created By', 'Slug', 'Created Date', 'Modified Date', '_id'
+    ];
+    let APSProperties = ['attribute_custom_attribute', 'attribute_id_text', 'attribute_name_text',
+        'description_text', 'parent_plan_snippet_custom_attribute_plan_snippet', 'plan_custom_zplan',
+        'quill_description_text', 'rank_in_plan_number', 'Created By', 'Slug', 'Created Date',
+        'Modified Date', '_id'
+    ];
+    instance.data.DASProperties = DASProperties;
+    instance.data.TOASProperties = TOASProperties;
+    instance.data.APSProperties = APSProperties;
+    const keyListDataSource = properties.data_source.get(0, properties.data_source.length())[0];
+    let dSList = properties.data_source.get(0, properties.data_source.length());
+    let DASV = properties.drawn_attribute_snippets_volume.get(0, properties.drawn_attribute_snippets_volume
+        .length());
+    let TOASV = properties.text_only_attribute_snippets_volume.get(0, properties
+        .text_only_attribute_snippets_volume.length());
+    let APS = properties.aps.get(0, properties.aps.length());
+    ///add new arrays and processs
+    instance.data.DAS = [];
+    instance.data.TOAS = [];
+    instance.data.APS = [];
+    instance.data.addDASTOAS(DAS, TOAS, instance.data.DAS, instance.data.TOAS, DASV, TOASV, APS, instance.data
+        .APS);
+    console.log("starting isBubble main");
+    console.log("APS modified", instance.data.APS);
+    instance.data.data_source_length = instance.data.APS.length;
+    instance.data.data_source_initial = instance.data.APS.length;
+    main();
 }
+//////////Experimental Data grab from API
+if (!instance.data.isBubble) {
+    console.log("!isBubble");
+    var planId = '1676060419773x473669207853629400';
+    //
+    instance.data.getAPS = function(plan) {
+        // Create a form data object
+        let bodyContent = new FormData();
+        bodyContent.append("plan_id", plan);
+        let headersList = {
+            "Accept": "*\/*",
+        };
+        // Fetch the data from the API endpoint using POST method
+        console.log("fetchstarting");
+        fetch(`https://d110.bubble.is/site/proresults/version-chris-sprint-38-feb-23/api/1.1/wf/get_aps`, {
+            method: "POST",
+            body: bodyContent,
+            headers: headersList
+        }).then(response => response.json()).then(result => {
+            console.log("response", result.response);
+            instance.data.result = result.response;
+            instance.data.APS_result = result.response.APS;
+            onDataLoaded();
+            return result
+        }).catch(error => {
+            console.log("error", error);
+            throw error
+        });
+    }
+    //
+    instance.data.properties = properties;
+    instance.data.getAPS(planId);
+}
+///load function
+function onDataLoaded() {
+    console.log("results", instance.data.result, "instance.data.APS_result", instance.data.APS_result);
+    ///update variables
+    properties.data_source = instance.data.APS_result;
+    console.log("log results",instance.data.result['APS'], instance.data.result.APS, properties.data_source);
+   /* properties.type_of_items = '';
+
+    properties.html_field = 
+    properties.type_of_items_type = {};
+    instance.data.data_source_length = instance.data.APS_result.length;
+    instance.data.snippetsTransform = instance.data.result['APS'];
+    let snippetsData = ["Attribute", "Attribute ID", "Attribute Name", "Created By", "Created Date",
+        "Modified Date", "Plan", "_id"
+    ];
+    */
+
+    ///
+    instance.data.data_source_length = instance.data.APS_result.length;
+    instance.data.plan_unique_id = instance.data.result.Plan['_id'];
+    //instance.data.hierarchyInitial = instance.data.result.Plan['JQTree HTML'];
+    instance.data.hierarchyInitial = "";
+    instance.data.html_field = instance.data.hierarchyInitial;
+    let DAS = instance.data.result['DAS'];
+    let TOAS = instance.data.result['TOAS'];
+    let DASV = instance.data.result['DASV'];
+    let TOASV = instance.data.result['TOASV'];
+    let APS = instance.data.result['APS'];
+    let DASProperties = ['Desktop Screenshot', 'Modified Date', 'Created Date', 'Created By', 'Y Coordinate', 'X Coordinate', 'Box Width', 'Box Height', 'Attribute', 'Account Webpage', 'Initial drawn scale', '_id'];
+    let TOASProperties = ['Created Date', 'Attribute', 'Webpage', 'Text Snippet ', 'Created By', 'Modified Date', '_id'];
+    let APSProperties = ['Plan', 'Modified Date', 'Created By', 'Created Date', 'Attribute', 'Attribute Name', 'Attribute ID', '_id'];
+    console.log("props",DASProperties,TOASProperties,APSProperties);
+    instance.data.DASProperties = DASProperties;
+    instance.data.TOASProperties = TOASProperties;
+    instance.data.APSProperties = APSProperties;
+
+
+    ///add new arrays and processs
+    instance.data.DAS = [];
+    instance.data.TOAS = [];
+    instance.data.APS = [];
+    instance.data.addDASTOASAPI(DAS, TOAS, instance.data.DAS, instance.data.TOAS, DASV, TOASV, APS, instance.data
+        .APS);
+    console.log("starting isBubble main");
+    console.log("APS modified", instance.data.APS);
+    instance.data.data_source_length = instance.data.APS.length;
+    instance.data.data_source_initial = instance.data.APS.length;
+
+main();
+setTimeout(instance.data.deleteFoldCollapse, 200);
+};
+        //get data
+        
+        //end experimental
+        //end CSP data add
+
+        //We create the html from the attribute plan snippets only in the first render, for all subsequent renders, we use the hierarchy object (hierarchyContent)
+        //used to allow for data processing before startup
+        function main() {
+            window.CSP = instance;
+            // Looping through all the attribute plan snippets and creating their markup the first time when its loaded when theres no hierarchy data
+            if (!instance.data.hierarchyInitial) {
+                console.log('hierarchyContent not present. Rendering from data_source');
+                let cardsListHtml = '';
+                for (let i = 0; i < instance.data.APS.length; i++) {
+                    //console.log("attsnipgen", instance.data.APS[i]);
+                    cardsListHtml += instance.data.generateListItemHtml(instance.data.APS[i]) + '</li>';
+                    //console.log('GenrateListHtml Called');
+                    //console.log(cardsListHtml);
+                };
+                let cardStackHtml = '<ol id="' + instance.data.plan_unique_id +
+                    '" class="sortable ui-sortable mjs-nestedSortable-branch mjs-nestedSortable-expanded">' +
+                    cardsListHtml + "</ol>";
+                //console.log(cardStackHtml);
+                instance.canvas.html(cardStackHtml)
+            } else if (instance.data.hierarchyInitial) {
+                let cardStackHtml = '<ol id="' + instance.data.plan_unique_id +
+                    '" class="sortable ui-sortable mjs-nestedSortable-branch mjs-nestedSortable-expanded">' +
+                    buildHierarchyHtml(instance.data.hierarchyInitial) + "</ol>";
+                console.log('hierarchyContent present. BuildHierarchy HTML Called');
+                instance.canvas.html(cardStackHtml);
+            }
+
+
+            //CSP Add create sliders
+            console.log("sliderpoint",instance.data.APS);
+            instance.data.addSlider(instance.data.APS);
+            
+            //After generating the html, we call Nested Sortable and Quill on it
+            instance.data.callNestedSortable();
+            console.log('NestedSortable Called');
+            //$(".ql-toolbar").remove() ***NOTE*** - Check if needed or not
+            document.querySelectorAll(".quillEditor").forEach(editor => {
+                console.log('AddQuillEditor Called');
+                instance.data.addQuillEditor(editor);
+            });
+            //Call toHierarchy function to update the hierarchy object
+            //CSP needs to be at end of main()
+            if (instance.data.start) {
+                if (instance.data.html_field && !instance.data.hierarchyInitial) {
+                    console.log('Checking for JQuery Html');
+                    instance.canvas.html(instance.data.html_field);
+                    instance.data.hierarchy();
+                    setTimeout(instance.data.deleteFoldCollapse, 1000);
+                }
+                if (instance.data.data_source_initial == instance.data.data_source_length && instance.data
+                    .hierarchyInitial == instance.data.hierarchycontent && instance.canvas.innerHtml !=
+                    "" && instance.data.hierarchyInitial != "") {
+                    setTimeout(instance.data.deleteFoldCollapse, 1000);
+                    return;
+                }
+                setTimeout(instance.data.hierarchy, 100);
+                
+            }
+
+            
+        }
+        
+        //Calling DeleteFoldCollapse listeners
+        console.log('Delete,Fold and Collapse Functions Called - Update');
+
+
+
+        instance.data.start = false;
+    }
+    
+    //end update
 }
