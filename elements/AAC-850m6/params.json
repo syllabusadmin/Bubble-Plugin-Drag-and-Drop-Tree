@@ -8,7 +8,7 @@
         "height": 800,
         "width": 400
     },
-    "display": "dragdrop-tree-CSP1",
+    "display": "Drag Drop Tree",
     "events": {
         "AAO": {
             "caption": "change",
@@ -135,7 +135,7 @@
             "is_list": true,
             "name": "drawn_attribute_snippets_volume",
             "rank": 8,
-            "value": "number"
+            "value": "_any_thing_bindable"
         },
         "AAx": {
             "caption": "das",
@@ -152,7 +152,7 @@
             "rank": 6
         }
     },
-    "icon": "ion-android-list",
+    "icon": "ion-android-funnel",
     "property_applications": {
         "Border": false,
         "BoxShadow": false,
