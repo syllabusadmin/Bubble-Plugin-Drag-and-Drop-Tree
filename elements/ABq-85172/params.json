@@ -8,81 +8,81 @@
         "height": 800,
         "width": 400
     },
-    "display": "Drag Drop Tree",
+    "display": "Drag Drop Tree with Slider",
     "events": {
-        "AAO": {
+        "ABL": {
             "caption": "change",
             "name": "change"
         },
-        "AAP": {
+        "ABM": {
             "caption": "sort",
             "name": "sort"
         },
-        "AAQ": {
+        "ABN": {
             "caption": "revert",
             "name": "revert"
         },
-        "AAR": {
+        "ABO": {
             "caption": "relocated",
             "name": "relocated"
         },
-        "AAa": {
+        "ABP": {
             "caption": "deleted",
             "name": "deleted"
         },
-        "AAd": {
+        "ABQ": {
             "caption": "Stopped typing",
             "doc": "Triggers after a user stops typing",
             "name": "stopped_typing"
         },
-        "AAg": {
+        "ABR": {
             "caption": "namechange",
             "doc": "Triggers when user changes the name(Title) of the Card",
             "name": "namechange"
         },
-        "AAn": {
-            "caption": "Save Hierarchy Content",
-            "name": "save_hierarchy_content"
+        "ABS": {
+            "caption": "Select Snippet",
+            "name": "select_snippet"
         }
     },
     "fields": {
-        "AAD": {
-            "caption": "data source",
+        "ABT": {
+            "caption": "Attribute Plan Snippets",
             "editor": "DynamicValue",
             "is_list": true,
             "name": "data_source",
             "rank": 2,
             "value": "_any_thing"
         },
-        "AAJ": {
+        "ABU": {
             "caption": "Type Of Items",
             "editor": "custom_type",
             "name": "type_of_items",
             "rank": 0,
             "value": "_any_thing"
         },
-        "AAT": {
+        "ABV": {
             "caption": "Plan Unique ID",
             "editor": "DynamicValue",
             "name": "plan_unique_id",
             "rank": 4,
             "value": "text"
         },
-        "AAU": {
+        "ABW": {
             "caption": "HTML field",
             "editor": "DynamicValue",
             "name": "html_field",
             "rank": 3,
             "value": "text"
         },
-        "AAW": {
+        "ABX": {
             "caption": "type of items type",
             "editor": "DynamicValue",
             "name": "type_of_items_type",
             "rank": 1,
             "value": "custom_data_AAJ"
         },
-        "AAl": {
+        "ABY": {
             "caption": "logging",
             "default_val": false,
             "editor": "DynamicValue",
@@ -90,57 +90,74 @@
             "rank": 5,
             "value": "boolean"
         },
-        "AAm": {
-            "caption": "hierarchyContent",
-            "doc": "toHierarchy function's output saved at Plan level",
-            "editor": "DynamicValue",
-            "name": "hierarchycontent",
-            "rank": 12,
-            "value": "text"
-        },
-        "AAr": {
-            "caption": "Newly Added Card",
-            "editor": "DynamicValue",
-            "name": "newly_added_card",
-            "optional": true,
-            "rank": 8,
-            "value": "_any_thing"
-        },
-        "AAt": {
-            "caption": "drawn_attribute_snippets",
+        "ABZ": {
+            "caption": "Drawn Attribute Snippets Type",
             "editor": "custom_type",
             "name": "drawn_attribute_snippets",
-            "rank": 7
+            "rank": 6
         },
-        "AAu": {
-            "caption": "text_only_attribute_snippets_volume",
-            "editor": "StaticNumber",
-            "name": "text_only_attribute_snippets_volume",
+        "ABa": {
+            "caption": "Text Only Attribute Snippets Type",
+            "editor": "custom_type",
+            "name": "text_only_attribute_snippets",
             "rank": 9
         },
-        "AAv": {
-            "caption": "text_only_attribute_snippets_type",
-            "editor": "custom_type",
-            "name": "text_only_attribute_snippets_type",
-            "rank": 10
-        },
-        "AAw": {
-            "caption": "toas",
-            "editor": "DynamicValue",
-            "name": "toas",
-            "rank": 11,
-            "value": "custom_data_AAv"
-        },
-        "AAx": {
-            "caption": "das",
+        "ABb": {
+            "caption": "DAS",
             "editor": "DynamicValue",
             "is_list": true,
             "name": "das",
-            "rank": 6,
-            "value": "custom_data_AAt"
+            "rank": 7,
+            "value": "custom_data_AAm"
+        },
+        "ABc": {
+            "caption": "TOAS",
+            "editor": "DynamicValue",
+            "is_list": true,
+            "name": "toas",
+            "rank": 10,
+            "value": "custom_data_AAn"
+        },
+        "ABd": {
+            "caption": "Drawn Attribute Snippets Volume",
+            "editor": "DynamicValue",
+            "is_list": true,
+            "name": "drawn_attribute_snippets_volume",
+            "rank": 8,
+            "value": "number"
+        },
+        "ABe": {
+            "caption": "Text Only Attribute Snippets Volume",
+            "editor": "DynamicValue",
+            "is_list": true,
+            "name": "text_only_attribute_snippets_volume",
+            "rank": 11,
+            "value": "number"
+        },
+        "ABf": {
+            "caption": "Attribute Plan Snippets Type",
+            "editor": "custom_type",
+            "name": "attribute_plan_snippets",
+            "rank": 12
+        },
+        "ABg": {
+            "caption": "APS",
+            "doc": "data_source Swap Out",
+            "editor": "DynamicValue",
+            "is_list": true,
+            "name": "aps",
+            "rank": 13,
+            "value": "custom_data_AAs"
+        },
+        "ABh": {
+            "caption": "hierarchycontent",
+            "editor": "DynamicValue",
+            "name": "hierarchycontent",
+            "rank": 14,
+            "value": "text"
         }
     },
-    "icon": "ion-android-funnel",
+    "icon": "ion-android-list",
     "property_applications": {
         "Border": false,
         "BoxShadow": false,
@@ -149,7 +166,7 @@
         "resizable": true
     },
     "states": {
-        "AAE": {
+        "ABi": {
             "caption": "htmlobject",
             "initialization_code": {
                 "fn": "function(properties, context) {\n\n\n\n}"
@@ -158,7 +175,7 @@
             "name": "htmlobject",
             "value": "text"
         },
-        "AAb": {
+        "ABj": {
             "caption": "deletedcard_id",
             "doc": "The deletd item's id will be exposed, to be selected in the 'deleted' action.",
             "initialization_code": {
@@ -167,7 +184,7 @@
             "name": "deletedcard_id",
             "value": "text"
         },
-        "AAc": {
+        "ABk": {
             "caption": "deletedchildren_id_list",
             "doc": "The deleted item's childrens ids will be exposed",
             "initialization_code": {
@@ -177,7 +194,7 @@
             "name": "deletedchildren_id_list",
             "value": "text"
         },
-        "AAe": {
+        "ABl": {
             "caption": "delta",
             "doc": "",
             "initialization_code": {
@@ -186,7 +203,7 @@
             "name": "delta",
             "value": "text"
         },
-        "AAf": {
+        "ABm": {
             "caption": "editedcard_id",
             "doc": "The edited card's unique id wille be exposed",
             "initialization_code": {
@@ -195,7 +212,7 @@
             "name": "editedcard_id",
             "value": "text"
         },
-        "AAh": {
+        "ABn": {
             "caption": "changedname",
             "doc": "The edited title of the card will be exposed",
             "initialization_code": {
@@ -204,21 +221,20 @@
             "name": "changedname",
             "value": "text"
         },
-        "AAo": {
-            "caption": "hierarchyContent",
+        "ABo": {
+            "caption": "selectedSnippet",
+            "initialization_code": {
+                "fn": "function(properties, context) {\n\n\n\n}"
+            },
+            "name": "selectedsnippet",
+            "value": "text"
+        },
+        "ABp": {
+            "caption": "hierarchycontent",
             "initialization_code": {
                 "fn": "function(properties, context) {\n\n\n\n}"
             },
             "name": "hierarchycontent",
-            "value": "text"
-        },
-        "AAp": {
-            "caption": "Quill Editor Content",
-            "doc": "Inner HTML of the Quill Editor",
-            "initialization_code": {
-                "fn": "function(properties, context) {\n\n\n\n}"
-            },
-            "name": "quill_editor_content",
             "value": "text"
         }
     },

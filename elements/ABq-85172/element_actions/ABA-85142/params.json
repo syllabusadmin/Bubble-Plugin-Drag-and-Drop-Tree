@@ -1,0 +1,13 @@
+{
+    "caption": "Expand/Collapse All Cards",
+    "fields": {
+        "ABB": {
+            "caption": "expand",
+            "default_val": true,
+            "editor": "DynamicValue",
+            "name": "expand",
+            "rank": 0,
+            "value": "boolean"
+        }
+    }
+}

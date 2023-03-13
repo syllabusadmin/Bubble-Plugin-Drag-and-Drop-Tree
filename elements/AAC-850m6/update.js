@@ -46,7 +46,7 @@ function(instance, properties, context) {
             console.log('toHierarchy Declared');
             //CSP Add
             //super dumb but seems to require it to be added first
-            $('ol.sortable#' + instance.data.plan_unique_id).nestedSortable();
+            callNestedSortable()
             //CSP End
             let hierarchyContent = $('ol.sortable#' + properties.plan_unique_id).nestedSortable('toHierarchy', { startDepthCount: 0 });
             setTimeout(function () {
@@ -56,10 +56,34 @@ function(instance, properties, context) {
             //save hierarchyContent object to the Plan
         }
 
+        
+        instance.data.savecard = (card, index) =>{
+            instance.publishState('editedcard_id', card.id);
+            //instance.publishState('htmlobject', instance.canvas.html());
+            instance.publishState('quill_editor_content', card.content);
+            setTimeout(()=>{instance.triggerEvent('stopped_typing')},100*index);
+        }
+        
+		instance.data.saveAllCards = (editors_array)=>{
+            for(let i = 0;i < editors_array.length;i++){
+                instance.data.savecard(editors_array[i],i);
+            }
+
+        }
+
         if (properties.html_field && !properties.hierarchycontent) {
             console.log('Checking for JQuery Html');
             instance.canvas.html(properties.html_field);
-            hierarchy();
+            instance.data.editor_contents = new Array();
+			instance.data.allcards = $('ol.sortable#' + properties.plan_unique_id + " li")
+            for (let i = 0; i < instance.data.allcards.length; i++) {
+				if(instance.data.allcards[i].id){
+				instance.data.editor_contents.push({id:instance.data.allcards[i].id,content:$("#"+instance.data.allcards[i].id).find(".ql-editor").html()})
+                instance.data.allcards[i].id = "menuItem_"+instance.data.allcards[i].id;
+                }
+            }
+            instance.data.saveAllCards(instance.data.editor_contents);
+            setTimeout(hierarchy,3000);
         }
 
         if (properties.data_source.length() == instance.data.data_source_length && properties.hierarchycontent == instance.data.hierarchycontent && instance.canvas.innerHtml != "" && properties.hierarchycontent != "") {
