@@ -80,7 +80,7 @@
             "editor": "DynamicValue",
             "name": "type_of_items_type",
             "rank": 1,
-            "value": "custom_data_AAJ"
+            "value": "custom_data_ABU"
         },
         "ABY": {
             "caption": "logging",
@@ -108,7 +108,7 @@
             "is_list": true,
             "name": "das",
             "rank": 7,
-            "value": "custom_data_AAm"
+            "value": "custom_data_ABZ"
         },
         "ABc": {
             "caption": "TOAS",
@@ -116,7 +116,7 @@
             "is_list": true,
             "name": "toas",
             "rank": 10,
-            "value": "custom_data_AAn"
+            "value": "custom_data_ABa"
         },
         "ABd": {
             "caption": "Drawn Attribute Snippets Volume",
@@ -147,7 +147,7 @@
             "is_list": true,
             "name": "aps",
             "rank": 13,
-            "value": "custom_data_AAs"
+            "value": "custom_data_ABf"
         },
         "ABh": {
             "caption": "hierarchycontent",
