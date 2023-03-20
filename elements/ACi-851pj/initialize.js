@@ -103,21 +103,20 @@ data-id="${aps}">close</span></div><div class = "quillContainer" id="${aps}"><di
         });
     }
     instance.data.hierarchy = () => {
-        console.log('toHierarchy Declared');
-        //super dumb but seems to require it to be added first
-        $('ol.sortable#' + instance.data.plan_unique_id).nestedSortable();
-        let hierarchyContent = $('ol.sortable#' + instance.data.plan_unique_id).nestedSortable('toHierarchy', {
-            startDepthCount: 0
-        });
-        console.log("hierarchyContent,hierarchyContent.prevObject", hierarchyContent, hierarchyContent.prevObject);
-        if (!hierarchyContent.prevObject) {
-            setTimeout(function() {
+            console.log('toHierarchy Declared');
+            //CSP Add
+            //super dumb but seems to require it to be added first
+            callNestedSortable()
+            //CSP End
+            let hierarchyContent = instance.canvas.find('ol.sortable').nestedSortable('toHierarchy', {
+                startDepthCount: 0
+            });
+            setTimeout(function () {
                 instance.publishState("hierarchycontent", JSON.stringify(hierarchyContent));
                 instance.triggerEvent("relocated");
             }, 100);
+            //save hierarchyContent object to the Plan
         }
-        //save hierarchyContent object to the Plan
-    }
     instance.data.dataPrepper = (typeArray, propArray, finishArray, volume) => {
         typeArray.forEach(function(item, index) {
             var newItem = {};
@@ -352,119 +351,100 @@ data-id="${aps}">close</span></div><div class = "quillContainer" id="${aps}"><di
     }
     //addQuill
     instance.data.addQuillEditor = (editor) => {
-
-        console.log('AddQuillEditor Declared');
-        const quill = new Quill(editor, {
-            modules: {
-                toolbar: [
-                    [{
-                        font: []
-                    }, {
-                        size: []
-                    }],
-                    ['bold', 'italic', 'underline', 'strike'],
-                    [{
-                        color: []
-                    }, {
-                        background: []
-                    }],
-                    [{
-                        script: 'super'
-                    }, {
-                        script: 'sub'
-                    }],
-                    [{
-                        header: '1'
-                    }, {
-                        header: '2'
-                    }, 'blockquote', 'code-block'],
-                    [{
-                        list: 'ordered'
-                    }, {
-                        list: 'bullet'
-                    }, {
-                        indent: '-1'
-                    }, {
-                        indent: '+1'
-                    }],
-                    ['link', 'video'],
-                    ['clean']
-                ]
-            },
-            theme: 'snow',
-            debug: 'warn',
-            bounds: editor
-        });
-
-        const toolbar = quill.root.parentElement.previousSibling;
-        toolbar.setAttribute('hidden', true);
-        quill.root.parentElement.style.borderTop = `1px`;
-
-        quill.root.addEventListener('focus', e => {
-            instance.data.focused = true
-            toolbar.removeAttribute('hidden', false)
-        })
-
-
-        const handleClick = (e) => {
-            console.log(`editor`, editor.parentElement.id)
-
-            if (!e.target.closest(`[id="${editor.parentElement.id}"]`)) {
-                console.log(`hiding toolbar: the target is`, e.target, `and the toolbar is`, toolbar, `and the preview is`, e.target.classList.contains('ql-preview'))
-                toolbar.setAttribute('hidden', true)
+            console.log('AddQuillEditor Declared');
+            const quill = new Quill(editor, {
+                modules: {
+                    toolbar: [
+                        [{
+                            font: []
+                        }, {
+                            size: []
+                        }],
+                        ['bold', 'italic', 'underline', 'strike'],
+                        [{
+                            color: []
+                        }, {
+                            background: []
+                        }],
+                        [{
+                            script: 'super'
+                        }, {
+                            script: 'sub'
+                        }],
+                        [{
+                            header: '1'
+                        }, {
+                            header: '2'
+                        }, 'blockquote', 'code-block'],
+                        [{
+                            list: 'ordered'
+                        }, {
+                            list: 'bullet'
+                        }, {
+                            indent: '-1'
+                        }, {
+                            indent: '+1'
+                        }],
+                        ['link', 'video'],
+                        ['clean']
+                    ]
+                },
+                theme: 'snow',
+                debug: 'warn',
+                bounds: editor
+            });
+            const toolbar = quill.root.parentElement.previousSibling;
+            toolbar.setAttribute('hidden', true);
+            quill.root.parentElement.style.borderTop = `1px`;
+            quill.root.addEventListener('focus', (e) => {
+                instance.data.focused = true
+                toolbar.removeAttribute('hidden', false)
+            })
+            const handleClick = (e) => {
+                console.log(`editor`, editor.parentElement.id)
+                if (!e.target.closest(`[id="${editor.parentElement.id}"]`)) {
+                    console.log(`hiding toolbar: the target is`, e.target, `and the toolbar is`, toolbar,
+                        `and the preview is`, e.target.classList.contains('ql-preview'))
+                    toolbar.setAttribute('hidden', true)
+                }
             }
-        }
-        window.addEventListener('click', handleClick)
-
-
-
-
-        quill.root.addEventListener('blur', e => {
-
-
-            // instance.data.focused = false
-
-            // if (e.relatedTarget == null) {
-            //     toolbar.setAttribute('hidden', true)
-            // }
-            // else if (!toolbar.contains(e.relatedTarget) && !e.relatedTarget.classList.contains('ql-preview')) {
-            //     toolbar.setAttribute('hidden', true)
-            // }
-
-
-        });
-
-
-        /* quill.root.addEventListener('blur', e => {
-              console.log('blur');   
-             instance.data.focused = false;
-             const tooltip = e.find('.ql-tooltip');
-             const tooltipStyle = window.getComputedStyle(tooltip);
-             if (!toolbar.contains(e.relatedTarget) && tooltipStyle.display === 'none') {
-                 toolbar.setAttribute('hidden', true);
-                 const toolbars = document.querySelectorAll('.toolbar');
-                 toolbars.forEach(toolbar => {
+            window.addEventListener('click', handleClick)
+            quill.root.addEventListener('blur', (e) => {
+                // instance.data.focused = false
+                // if (e.relatedTarget == null) {
+                //     toolbar.setAttribute('hidden', true)
+                // }
+                // else if (!toolbar.contains(e.relatedTarget) && !e.relatedTarget.classList.contains('ql-preview')) {
+                //     toolbar.setAttribute('hidden', true)
+                // }
+            });
+            /* quill.root.addEventListener('blur', e => {
+                  console.log('blur');   
+                 instance.data.focused = false;
+                 const tooltip = e.find('.ql-tooltip');
+                 const tooltipStyle = window.getComputedStyle(tooltip);
+                 if (!toolbar.contains(e.relatedTarget) && tooltipStyle.display === 'none') {
                      toolbar.setAttribute('hidden', true);
-                 });
-             }
-         }); */
-
-        quill.on('editor-change', (eventName, ...args) => {
-            if (eventName === 'text-change') {
-                instance.data.handleStopTyping(editor.id);
-            } else if (eventName === 'selection-change') {
-                // Handle selection change
+                     const toolbars = document.querySelectorAll('.toolbar');
+                     toolbars.forEach(toolbar => {
+                         toolbar.setAttribute('hidden', true);
+                     });
+                 }
+             }); */
+            quill.on('editor-change', (eventName, ...args) => {
+                if (eventName === 'text-change') {
+                    instance.data.handleStopTyping(editor.id);
+                } else if (eventName === 'selection-change') {
+                    // Handle selection change
+                }
+            });
+            const removeEventListener = window[`removeEventListener_${editor.parentElement.id}`] = () => {
+                window.removeEventListener('click', handleClick);
             }
-        });
-
-        const removeEventListener = window[`removeEventListener_${editor.parentElement.id}`] = () => {
-            window.removeEventListener('click', handleClick);
-        }
-
-        return {
-            removeEventListener
+            return {
+                removeEventListener
+            };
         };
-    };
     //deletefold
 instance.data.deleteFoldCollapse = () => {
     console.log("deleteFoldInitiated");

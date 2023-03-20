@@ -80,7 +80,7 @@
             "editor": "DynamicValue",
             "name": "type_of_items_type",
             "rank": 1,
-            "value": "custom_data_ABU"
+            "value": "custom_data_ACL"
         },
         "ACP": {
             "caption": "logging",
@@ -108,7 +108,7 @@
             "is_list": true,
             "name": "das",
             "rank": 7,
-            "value": "custom_data_ABZ"
+            "value": "custom_data_ACQ"
         },
         "ACT": {
             "caption": "TOAS",
@@ -116,7 +116,7 @@
             "is_list": true,
             "name": "toas",
             "rank": 10,
-            "value": "custom_data_ABa"
+            "value": "custom_data_ACR"
         },
         "ACU": {
             "caption": "Drawn Attribute Snippets Volume",
@@ -147,7 +147,7 @@
             "is_list": true,
             "name": "aps",
             "rank": 13,
-            "value": "custom_data_ABf"
+            "value": "custom_data_ACW"
         },
         "ACY": {
             "caption": "hierarchycontent",

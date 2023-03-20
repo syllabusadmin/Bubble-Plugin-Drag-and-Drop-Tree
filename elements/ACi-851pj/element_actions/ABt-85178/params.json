@@ -9,7 +9,7 @@
             "is_list": true,
             "name": "das",
             "rank": 1,
-            "value": "custom_data_element_ABZ"
+            "value": "custom_data_element_ACQ"
         },
         "ABv": {
             "caption": "TOAS for Attribute Plan Snippet",
@@ -18,7 +18,7 @@
             "is_list": true,
             "name": "toas",
             "rank": 3,
-            "value": "custom_data_element_ABa"
+            "value": "custom_data_element_ACR"
         },
         "ABw": {
             "caption": "Text Only Attribute Snippets Volume",
@@ -43,7 +43,7 @@
             "is_list": true,
             "name": "aps",
             "rank": 0,
-            "value": "custom_data_element_ABf"
+            "value": "custom_data_element_ACW"
         }
     }
 }

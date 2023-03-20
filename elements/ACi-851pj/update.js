@@ -260,7 +260,7 @@ function(instance, properties, context) {
             //Call toHierarchy function to update the hierarchy object
             //CSP needs to be at end of main()
             if (instance.data.start) {
-                if (instance.data.html_field && !instance.data.hierarchyInitial) {
+if (instance.data.html_field && !instance.data.hierarchyInitial) {
                     console.log('Checking for JQuery Html');
                     instance.canvas.html(instance.data.html_field);
                     instance.data.editor_contents = new Array();
@@ -284,11 +284,10 @@ function(instance, properties, context) {
                     setTimeout(instance.data.deleteFoldCollapse, 1000);
                     return;
                 }
-                setTimeout(instance.data.hierarchy, 100);
 
             }
 
-    setTimeout(instance.data.deleteFoldCollapse, 200);
+    
         }
 
         //Calling DeleteFoldCollapse listeners
