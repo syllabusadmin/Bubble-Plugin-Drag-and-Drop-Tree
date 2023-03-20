@@ -95,6 +95,7 @@
             "doc": "toHierarchy function's output saved at Plan level",
             "editor": "DynamicValue",
             "name": "hierarchycontent",
+            "optional": false,
             "rank": 12,
             "value": "text"
         },
@@ -138,6 +139,14 @@
             "name": "das",
             "rank": 6,
             "value": "custom_data_AAt"
+        },
+        "AAz": {
+            "caption": "bubbleVersion",
+            "editor": "DynamicValue",
+            "name": "bubbleversion",
+            "optional": true,
+            "rank": 13,
+            "value": "text"
         }
     },
     "icon": "ion-android-funnel",

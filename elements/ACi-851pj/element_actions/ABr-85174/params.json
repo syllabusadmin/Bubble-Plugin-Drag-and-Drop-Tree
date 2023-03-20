@@ -1,7 +1,7 @@
 {
     "caption": "Expand/Collapse All Cards",
     "fields": {
-        "ABB": {
+        "ABs": {
             "caption": "expand",
             "default_val": true,
             "editor": "DynamicValue",

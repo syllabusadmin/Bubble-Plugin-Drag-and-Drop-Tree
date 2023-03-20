@@ -4,11 +4,11 @@ function(instance, properties, context) {
     //2. Render its html
     //3. Append that to the bottom of the list
     //4. Call hierarchy function
-    
+
     //initialize variables
     let DAS = properties.das.get(0, properties.das.length());
     let TOAS = properties.toas.get(0, properties.toas.length());
-   //console.log("DAS,TOAS", DAS, TOAS);
+    //console.log("DAS,TOAS", DAS, TOAS);
     let DASV = properties.drawn_attribute_snippets_volume.get(0, properties.drawn_attribute_snippets_volume.length());
     let TOASV = properties.text_only_attribute_snippets_volume.get(0, properties.text_only_attribute_snippets_volume
         .length());
@@ -20,7 +20,7 @@ function(instance, properties, context) {
     instance.data.APSnew = [];
     //console.log(`BeforeSend-(DAS, TOAS, instance.data.DASnew, instance.data.TOASnew, DASV, TOASV, APS, instance.data.APSnew)`, DAS, TOAS, instance.data.DASnew, instance.data.TOASnew, DASV, TOASV, APS, instance.data.APSnew);
     instance.data.addDASTOAS(DAS, TOAS, instance.data.DASnew, instance.data.TOASnew, DASV, TOASV, APS, instance.data.APSnew);
-    
+
     console.log('Add New List Item Ran', instance.data.plan_unique_id);
     //Call generatelist item on newly dropped card
     let newlyDroppedCardHtml = instance.data.generateListItemHtml(instance.data.APSnew[0]);
@@ -32,7 +32,8 @@ function(instance, properties, context) {
     console.log("prepended");
     instance.data.addSlider(instance.data.APSnew);
     instance.data.APS = instance.data.APSnew.concat(instance.data.APS);
-    
+
     //Call hierarchy
     setTimeout(instance.data.hierarchy, 100);
+    setTimeout(instance.data.deleteFoldCollapse, 200);
 }

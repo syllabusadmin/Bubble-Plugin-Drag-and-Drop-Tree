@@ -1,7 +1,7 @@
 {
     "caption": "Halt Update",
     "fields": {
-        "ABK": {
+        "ACA": {
             "caption": "Stop Update",
             "default_val": false,
             "editor": "Checkbox",

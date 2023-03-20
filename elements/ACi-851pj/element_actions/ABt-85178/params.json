@@ -2,25 +2,25 @@
     "caption": "Add New List Item",
     "doc": "",
     "fields": {
-        "ABE": {
+        "ABu": {
             "caption": "DAS for Attribute Plan Snippet",
             "doc": "Drawn attribute snippets",
             "editor": "DynamicValue",
             "is_list": true,
             "name": "das",
             "rank": 1,
-            "value": "custom_data_element_AAm"
+            "value": "custom_data_element_ABZ"
         },
-        "ABF": {
+        "ABv": {
             "caption": "TOAS for Attribute Plan Snippet",
             "doc": "Text Only  attribute snippets",
             "editor": "DynamicValue",
             "is_list": true,
             "name": "toas",
             "rank": 3,
-            "value": "custom_data_element_AAn"
+            "value": "custom_data_element_ABa"
         },
-        "ABG": {
+        "ABw": {
             "caption": "Text Only Attribute Snippets Volume",
             "editor": "DynamicValue",
             "is_list": true,
@@ -28,7 +28,7 @@
             "rank": 4,
             "value": "number"
         },
-        "ABH": {
+        "ABx": {
             "caption": "Drawn Attribute Snippets Volume",
             "editor": "DynamicValue",
             "is_list": true,
@@ -36,14 +36,14 @@
             "rank": 2,
             "value": "number"
         },
-        "ABI": {
+        "ABy": {
             "caption": "Attribute Plan Snippet",
             "doc": "Old-notUsed-must be a list to be an array which functions with existing data prep",
             "editor": "DynamicValue",
             "is_list": true,
-            "name": "attribute_plan_snippets",
+            "name": "aps",
             "rank": 0,
-            "value": "custom_data_element_AAs"
+            "value": "custom_data_element_ABf"
         }
     }
 }

@@ -1,5 +1,5 @@
 function(instance, context) {
-     //start initialize
+    //start initialize
     var isBubble = true;
     var randomElementID =
         `ddt-${Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)}`
@@ -9,8 +9,12 @@ function(instance, context) {
         instance.data.start = true;
         instance.data.halt = false;
         instance.data.listcount = 0;
-        instance.triggerEvent = (a) => {console.log("triggerevent",a)};;
-        instance.publishState = (a,b) => {console.log(a,b)};
+        instance.triggerEvent = (a) => {
+            console.log("triggerevent", a)
+        };;
+        instance.publishState = (a, b) => {
+            console.log(a, b)
+        };
         instance.data.isBubble = isBubble;
         instance.data.randomElementID = randomElementID;
         var properties = {};
@@ -25,7 +29,7 @@ function(instance, context) {
         instance.data.halt = false;
         instance.canvas.append(
             `<div id="cardstack${instance.data.randomElementID}"></div> <div id="temp${instance.data.randomElementID}" class="invisible"></div>`
-            );
+        );
         instance.data.mainElement = $(`#cardstack${instance.data.randomElementID}`);
         instance.data.temp = $(`#temp${instance.data.randomElementID}`);
         instance.data.isBubble = isBubble;
@@ -230,12 +234,12 @@ data-id="${aps}">close</span></div><div class = "quillContainer" id="${aps}"><di
                 newItem['y_coordinate_number'] = value['Y Coordinate'];
                 newItem['attribute_id'] = value['Attribute'];
                 newItem['initial_drawn_scale_number'] = value['Initial drawn scale'];
-                
+
                 //newItem['attribute_name'] = value['attribute_custom_attribute'].get('name_text');
                 //newItem['webpage_screenshot_custom_webpage_screenshot'] = value['attribute_custom_attribute'].get('webpage_screenshot_custom_webpage_screenshot');
                 newItem['webpage_screenshot_custom_webpage_screenshot'] = 'https://via.placeholder.com/150';
                 instance.data.DASTOAS.push(newItem);
-                console.log("newItemDAS",newItem);
+                console.log("newItemDAS", newItem);
             });
         }
         console.log("DAS -instance.data.DASTOAS", instance.data.DASTOAS);
@@ -252,7 +256,7 @@ data-id="${aps}">close</span></div><div class = "quillContainer" id="${aps}"><di
                 newItem['attribute_id'] = value['Attribute'];
                 newItem['text_snippet__text'] = value['Text Snippet '];
                 instance.data.DASTOAS.push(newItem);
-                console.log("newItemTOAS",newItem);
+                console.log("newItemTOAS", newItem);
             });
         }
         console.log("TOAS-instance.data.DASTOAS", instance.data.DASTOAS);
@@ -348,126 +352,161 @@ data-id="${aps}">close</span></div><div class = "quillContainer" id="${aps}"><di
     }
     //addQuill
     instance.data.addQuillEditor = (editor) => {
-     
-            console.log('AddQuillEditor Declared');
-            const quill = new Quill(editor, {
-                modules: {
-                    toolbar: [
-                        [{ font: [] }, { size: [] }],
-                        ['bold', 'italic', 'underline', 'strike'],
-                        [{ color: [] }, { background: [] }],
-                        [{ script: 'super' }, { script: 'sub' }],
-                        [{ header: '1' }, { header: '2' }, 'blockquote', 'code-block'],
-                        [{ list: 'ordered' }, { list: 'bullet' }, { indent: '-1' }, { indent: '+1' }],
-                        ['link', 'video'],
-                        ['clean']
-                    ]
-                },
-                theme: 'snow',
-                debug: 'warn',
-                bounds: editor
-            });
 
-            const toolbar = quill.root.parentElement.previousSibling;
-            toolbar.setAttribute('hidden', true);
-            quill.root.parentElement.style.borderTop = `1px`;
+        console.log('AddQuillEditor Declared');
+        const quill = new Quill(editor, {
+            modules: {
+                toolbar: [
+                    [{
+                        font: []
+                    }, {
+                        size: []
+                    }],
+                    ['bold', 'italic', 'underline', 'strike'],
+                    [{
+                        color: []
+                    }, {
+                        background: []
+                    }],
+                    [{
+                        script: 'super'
+                    }, {
+                        script: 'sub'
+                    }],
+                    [{
+                        header: '1'
+                    }, {
+                        header: '2'
+                    }, 'blockquote', 'code-block'],
+                    [{
+                        list: 'ordered'
+                    }, {
+                        list: 'bullet'
+                    }, {
+                        indent: '-1'
+                    }, {
+                        indent: '+1'
+                    }],
+                    ['link', 'video'],
+                    ['clean']
+                ]
+            },
+            theme: 'snow',
+            debug: 'warn',
+            bounds: editor
+        });
 
-            quill.root.addEventListener('focus', e => {
-                instance.data.focused = true
-                toolbar.removeAttribute('hidden', false)
-            })
+        const toolbar = quill.root.parentElement.previousSibling;
+        toolbar.setAttribute('hidden', true);
+        quill.root.parentElement.style.borderTop = `1px`;
+
+        quill.root.addEventListener('focus', e => {
+            instance.data.focused = true
+            toolbar.removeAttribute('hidden', false)
+        })
 
 
-            const handleClick = (e) => {
-                console.log(`editor`, editor.parentElement.id)
+        const handleClick = (e) => {
+            console.log(`editor`, editor.parentElement.id)
 
-                if (!e.target.closest(`[id="${editor.parentElement.id}"]`)) {
-                    console.log(`hiding toolbar: the target is`, e.target, `and the toolbar is`, toolbar, `and the preview is`, e.target.classList.contains('ql-preview'))
-                    toolbar.setAttribute('hidden', true)
-                }
+            if (!e.target.closest(`[id="${editor.parentElement.id}"]`)) {
+                console.log(`hiding toolbar: the target is`, e.target, `and the toolbar is`, toolbar, `and the preview is`, e.target.classList.contains('ql-preview'))
+                toolbar.setAttribute('hidden', true)
             }
-            window.addEventListener('click', handleClick)
+        }
+        window.addEventListener('click', handleClick)
 
 
 
 
-            quill.root.addEventListener('blur', e => {
+        quill.root.addEventListener('blur', e => {
 
 
-                // instance.data.focused = false
+            // instance.data.focused = false
 
-                // if (e.relatedTarget == null) {
-                //     toolbar.setAttribute('hidden', true)
-                // }
-                // else if (!toolbar.contains(e.relatedTarget) && !e.relatedTarget.classList.contains('ql-preview')) {
-                //     toolbar.setAttribute('hidden', true)
-                // }
-
-
-            });
+            // if (e.relatedTarget == null) {
+            //     toolbar.setAttribute('hidden', true)
+            // }
+            // else if (!toolbar.contains(e.relatedTarget) && !e.relatedTarget.classList.contains('ql-preview')) {
+            //     toolbar.setAttribute('hidden', true)
+            // }
 
 
-            /* quill.root.addEventListener('blur', e => {
-                  console.log('blur');   
-                 instance.data.focused = false;
-                 const tooltip = e.find('.ql-tooltip');
-                 const tooltipStyle = window.getComputedStyle(tooltip);
-                 if (!toolbar.contains(e.relatedTarget) && tooltipStyle.display === 'none') {
+        });
+
+
+        /* quill.root.addEventListener('blur', e => {
+              console.log('blur');   
+             instance.data.focused = false;
+             const tooltip = e.find('.ql-tooltip');
+             const tooltipStyle = window.getComputedStyle(tooltip);
+             if (!toolbar.contains(e.relatedTarget) && tooltipStyle.display === 'none') {
+                 toolbar.setAttribute('hidden', true);
+                 const toolbars = document.querySelectorAll('.toolbar');
+                 toolbars.forEach(toolbar => {
                      toolbar.setAttribute('hidden', true);
-                     const toolbars = document.querySelectorAll('.toolbar');
-                     toolbars.forEach(toolbar => {
-                         toolbar.setAttribute('hidden', true);
-                     });
-                 }
-             }); */
+                 });
+             }
+         }); */
 
-            quill.on('editor-change', (eventName, ...args) => {
-                if (eventName === 'text-change') {
-                    instance.data.handleStopTyping(editor.id);
-                } else if (eventName === 'selection-change') {
-                    // Handle selection change
-                }
-            });
-
-            const removeEventListener = window[`removeEventListener_${editor.parentElement.id}`] = () => {
-                window.removeEventListener('click', handleClick);
+        quill.on('editor-change', (eventName, ...args) => {
+            if (eventName === 'text-change') {
+                instance.data.handleStopTyping(editor.id);
+            } else if (eventName === 'selection-change') {
+                // Handle selection change
             }
+        });
 
-            return { removeEventListener };
+        const removeEventListener = window[`removeEventListener_${editor.parentElement.id}`] = () => {
+            window.removeEventListener('click', handleClick);
+        }
+
+        return {
+            removeEventListener
         };
+    };
     //deletefold
-    instance.data.deleteFoldCollapse = () => {
-        console.log("deleteFoldInitiated");
+instance.data.deleteFoldCollapse = () => {
+    console.log("deleteFoldInitiated");
+    waitForElm('.disclose').then((elm) => {
+        $('.disclose').unbind();
         $('.disclose').on('click', function() {
             console.log("disclose onclick");
             $(this).closest('li').toggleClass('mjs-nestedSortable-collapsed').toggleClass(
                 'mjs-nestedSortable-expanded');
             $(this).toggleClass('ui-icon-plusthick').toggleClass('ui-icon-minusthick');
         });
+    });
+    waitForElm('.deleteMenu').then((elm) => {
         $('.deleteMenu').unbind();
-        $('.deleteMenu').click(function () {
+        $('.deleteMenu').click(function() {
             let uniqueId = $(this).attr('data-id');
-            let card_id = "#menuItem_"+uniqueId;
-            if ($(card_id).length == 0) { return; }
+            let card_id = "#menuItem_" + uniqueId;
+            if ($(card_id).length == 0) {
+                return;
+            }
             if (window.confirm("Are you sure you want to delete this card ?")) {
                 let childCardsIdList = $(card_id).find('li');
                 let idArray = [];
-                childCardsIdList.each(function (index) {
+                childCardsIdList.each(function(index) {
                     idArray.push($(this).attr('id'));
                 });
                 $(card_id).remove();
-                setTimeout(function () {
+                setTimeout(function() {
                     instance.publishState("htmlobject", instance.canvas.html());
                     instance.data.hierarchy();
                 }, 10);
-                setTimeout(function () {
+                setTimeout(function() {
                     instance.publishState("deletedcard_id", uniqueId);
-    
+
                     instance.publishState("deletedchildren_id_list", idArray.toString());
                     instance.triggerEvent("deleted");
                 }, 10);
             }
         });
+    });
+    waitForElm('.expandEditor').then((elm) => {
+        $('.expandEditor').unbind();
         $('.expandEditor').click(function() {
             console.log("expand onclick");
             let uniqueId = $(this).attr('data-id');
@@ -485,47 +524,84 @@ data-id="${aps}">close</span></div><div class = "quillContainer" id="${aps}"><di
             }
             //end CSP Add
         });
-    }
+    });
+}
     //add single items
-    instance.data.addSingleDAS = (das,aps1) => {
-    let newDAS = das;
-    let aps2 = aps1;
-    let id = newDAS.get('_id');
-    let apsId = aps2._id;
-    
-    var newElement = document.createElement('div');
+    instance.data.addSingleDAS = (das, aps1) => {
+        console.log("addSingleDas", das, aps1)
+        let newDAS = das;
+        let aps2 = aps1;
+        let id = newDAS.get('_id');
+        let apsId = aps2._id;
 
-    newElement.classList.add('carousel-cell');
-    newElement.innerHTML = `<div class="image crop-das-${id}"><img class="carousel-img image"/></div>`;
-    newElement.id = id;
-    newElement.type = 'Image';
-    //console.log("newElement img", newElement);
-    //newElement.addEventListener("click", instance.data.selectSnippet);
+        var newElement = document.createElement('div');
 
-    var carousel = $(`#slider-aps-${apsId}`).flickity({
-        initialIndex: 1
+        newElement.classList.add('carousel-cell');
+        newElement.innerHTML = `<div class="image crop-das-${id}"><img class="carousel-img image"/></div>`;
+        newElement.id = id;
+        newElement.type = 'Image';
+        //console.log("newElement img", newElement);
+        //newElement.addEventListener("click", instance.data.selectSnippet);
+
+        var carousel = $(`#slider-aps-${apsId}`).flickity({
+            initialIndex: 1
+        });
+
+        carousel.flickity('append', newElement);
+    }
+    instance.data.addSingleTOAS = (toas, aps1) => {
+        let newTOAS = toas;
+        let aps = aps1;
+        let id = newTOAS.get('_id');
+        let text = newTOAS.get('text_snippet__text');
+        let apsId = aps._id;
+
+        var newElement = document.createElement('div');
+        newElement.classList.add('carousel-cell');
+        newElement.innerHTML = `<div class="div-text crop-das-${id} carousel-text">${text}</div>`;
+        newElement.id = id;
+        newElement.type = 'Text';
+        //console.log("newElement text", newElement);
+        newElement.addEventListener("click", instance.data.selectSnippet);
+        var carousel = $(`#slider-aps-${apsId}`).flickity({
+            initialIndex: 1
+        });
+        carousel.flickity('append', newElement);
+    }
+    instance.data.savecard = (card, index) => {
+        instance.publishState('editedcard_id', card.id);
+        //instance.publishState('htmlobject', instance.canvas.html());
+        instance.publishState('quill_editor_content', card.content);
+        setTimeout(() => {
+            instance.triggerEvent('stopped_typing')
+        }, 100 * index);
+    }
+
+    instance.data.saveAllCards = (editors_array) => {
+        for (let i = 0; i < editors_array.length; i++) {
+            instance.data.savecard(editors_array[i], i);
+        }
+
+    }
+function waitForElm(selector) {
+    return new Promise(resolve => {
+        if (document.querySelector(selector)) {
+            return resolve(document.querySelector(selector));
+        }
+
+        const observer = new MutationObserver(mutations => {
+            if (document.querySelector(selector)) {
+                resolve(document.querySelector(selector));
+                observer.disconnect();
+            }
+        });
+
+        observer.observe(document.body, {
+            childList: true,
+            subtree: true
+        });
     });
+}
 
-    carousel.flickity('append', newElement);
-}
-instance.data.addSingleTOAS = (toas,aps1) => {
-    let newTOAS = toas;
-    let aps = aps1;
-    let id = newTOAS.get('_id');
-    let text = newTOAS.get('text_snippet__text');
-    let apsId = aps._id;
-        
-    var newElement = document.createElement('div');
-    newElement.classList.add('carousel-cell');
-    newElement.innerHTML = `<div class="div-text crop-das-${id} carousel-text">${text}</div>`;
-    newElement.id = id;
-    newElement.type = 'Text';
-    //console.log("newElement text", newElement);
-    newElement.addEventListener("click", instance.data.selectSnippet);
-    var carousel = $(`#slider-aps-${apsId}`).flickity({
-        initialIndex: 1
-    });
-    carousel.flickity('append', newElement);
-}
     //end initialize
 }

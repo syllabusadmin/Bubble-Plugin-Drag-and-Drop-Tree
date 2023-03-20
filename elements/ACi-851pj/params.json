@@ -10,43 +10,43 @@
     },
     "display": "Drag Drop Tree with Slider",
     "events": {
-        "ABL": {
+        "ACC": {
             "caption": "change",
             "name": "change"
         },
-        "ABM": {
+        "ACD": {
             "caption": "sort",
             "name": "sort"
         },
-        "ABN": {
+        "ACE": {
             "caption": "revert",
             "name": "revert"
         },
-        "ABO": {
+        "ACF": {
             "caption": "relocated",
             "name": "relocated"
         },
-        "ABP": {
+        "ACG": {
             "caption": "deleted",
             "name": "deleted"
         },
-        "ABQ": {
+        "ACH": {
             "caption": "Stopped typing",
             "doc": "Triggers after a user stops typing",
             "name": "stopped_typing"
         },
-        "ABR": {
+        "ACI": {
             "caption": "namechange",
             "doc": "Triggers when user changes the name(Title) of the Card",
             "name": "namechange"
         },
-        "ABS": {
+        "ACJ": {
             "caption": "Select Snippet",
             "name": "select_snippet"
         }
     },
     "fields": {
-        "ABT": {
+        "ACK": {
             "caption": "Attribute Plan Snippets",
             "editor": "DynamicValue",
             "is_list": true,
@@ -54,35 +54,35 @@
             "rank": 2,
             "value": "_any_thing"
         },
-        "ABU": {
+        "ACL": {
             "caption": "Type Of Items",
             "editor": "custom_type",
             "name": "type_of_items",
             "rank": 0,
             "value": "_any_thing"
         },
-        "ABV": {
+        "ACM": {
             "caption": "Plan Unique ID",
             "editor": "DynamicValue",
             "name": "plan_unique_id",
             "rank": 4,
             "value": "text"
         },
-        "ABW": {
+        "ACN": {
             "caption": "HTML field",
             "editor": "DynamicValue",
             "name": "html_field",
             "rank": 3,
             "value": "text"
         },
-        "ABX": {
+        "ACO": {
             "caption": "type of items type",
             "editor": "DynamicValue",
             "name": "type_of_items_type",
             "rank": 1,
             "value": "custom_data_ABU"
         },
-        "ABY": {
+        "ACP": {
             "caption": "logging",
             "default_val": false,
             "editor": "DynamicValue",
@@ -90,19 +90,19 @@
             "rank": 5,
             "value": "boolean"
         },
-        "ABZ": {
+        "ACQ": {
             "caption": "Drawn Attribute Snippets Type",
             "editor": "custom_type",
             "name": "drawn_attribute_snippets",
             "rank": 6
         },
-        "ABa": {
+        "ACR": {
             "caption": "Text Only Attribute Snippets Type",
             "editor": "custom_type",
             "name": "text_only_attribute_snippets",
             "rank": 9
         },
-        "ABb": {
+        "ACS": {
             "caption": "DAS",
             "editor": "DynamicValue",
             "is_list": true,
@@ -110,7 +110,7 @@
             "rank": 7,
             "value": "custom_data_ABZ"
         },
-        "ABc": {
+        "ACT": {
             "caption": "TOAS",
             "editor": "DynamicValue",
             "is_list": true,
@@ -118,7 +118,7 @@
             "rank": 10,
             "value": "custom_data_ABa"
         },
-        "ABd": {
+        "ACU": {
             "caption": "Drawn Attribute Snippets Volume",
             "editor": "DynamicValue",
             "is_list": true,
@@ -126,7 +126,7 @@
             "rank": 8,
             "value": "number"
         },
-        "ABe": {
+        "ACV": {
             "caption": "Text Only Attribute Snippets Volume",
             "editor": "DynamicValue",
             "is_list": true,
@@ -134,13 +134,13 @@
             "rank": 11,
             "value": "number"
         },
-        "ABf": {
+        "ACW": {
             "caption": "Attribute Plan Snippets Type",
             "editor": "custom_type",
             "name": "attribute_plan_snippets",
             "rank": 12
         },
-        "ABg": {
+        "ACX": {
             "caption": "APS",
             "doc": "data_source Swap Out",
             "editor": "DynamicValue",
@@ -149,7 +149,7 @@
             "rank": 13,
             "value": "custom_data_ABf"
         },
-        "ABh": {
+        "ACY": {
             "caption": "hierarchycontent",
             "editor": "DynamicValue",
             "name": "hierarchycontent",
@@ -166,7 +166,7 @@
         "resizable": true
     },
     "states": {
-        "ABi": {
+        "ACZ": {
             "caption": "htmlobject",
             "initialization_code": {
                 "fn": "function(properties, context) {\n\n\n\n}"
@@ -175,7 +175,7 @@
             "name": "htmlobject",
             "value": "text"
         },
-        "ABj": {
+        "ACa": {
             "caption": "deletedcard_id",
             "doc": "The deletd item's id will be exposed, to be selected in the 'deleted' action.",
             "initialization_code": {
@@ -184,7 +184,7 @@
             "name": "deletedcard_id",
             "value": "text"
         },
-        "ABk": {
+        "ACb": {
             "caption": "deletedchildren_id_list",
             "doc": "The deleted item's childrens ids will be exposed",
             "initialization_code": {
@@ -194,7 +194,7 @@
             "name": "deletedchildren_id_list",
             "value": "text"
         },
-        "ABl": {
+        "ACc": {
             "caption": "delta",
             "doc": "",
             "initialization_code": {
@@ -203,7 +203,7 @@
             "name": "delta",
             "value": "text"
         },
-        "ABm": {
+        "ACd": {
             "caption": "editedcard_id",
             "doc": "The edited card's unique id wille be exposed",
             "initialization_code": {
@@ -212,7 +212,7 @@
             "name": "editedcard_id",
             "value": "text"
         },
-        "ABn": {
+        "ACe": {
             "caption": "changedname",
             "doc": "The edited title of the card will be exposed",
             "initialization_code": {
@@ -221,7 +221,7 @@
             "name": "changedname",
             "value": "text"
         },
-        "ABo": {
+        "ACf": {
             "caption": "selectedSnippet",
             "initialization_code": {
                 "fn": "function(properties, context) {\n\n\n\n}"
@@ -229,12 +229,21 @@
             "name": "selectedsnippet",
             "value": "text"
         },
-        "ABp": {
+        "ACg": {
             "caption": "hierarchycontent",
             "initialization_code": {
                 "fn": "function(properties, context) {\n\n\n\n}"
             },
             "name": "hierarchycontent",
+            "value": "text"
+        },
+        "ACh": {
+            "caption": "Quill Editor Content",
+            "doc": "Inner HTML of the Quill Editor",
+            "initialization_code": {
+                "fn": "function(properties, context) {\n\n\n\n}"
+            },
+            "name": "quill_editor_content",
             "value": "text"
         }
     },
