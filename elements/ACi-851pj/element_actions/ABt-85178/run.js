@@ -32,8 +32,11 @@ function(instance, properties, context) {
     console.log("prepended");
     instance.data.addSlider(instance.data.APSnew);
     instance.data.APS = instance.data.APSnew.concat(instance.data.APS);
-
+    instance.data.cardstack = cardStackInnerHtml;
+    instance.data.addQuillEditor(instance.data.cardstack.find(".quillEditor")[0]);
+    window.CS = instance;
     //Call hierarchy
     setTimeout(instance.data.hierarchy, 100);
     setTimeout(instance.data.deleteFoldCollapse, 200);
 }
+    

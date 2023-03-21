@@ -9,13 +9,14 @@ function(instance, context) {
         instance.data.start = true;
         instance.data.halt = false;
         instance.data.listcount = 0;
+        instance.data.logging = false;
         instance.triggerEvent = (a) => {
-            console.log("triggerevent", a)
+            console.log("triggerevent", a);
         };;
         instance.publishState = (a, b) => {
-            console.log(a, b)
+            console.log("publishState", a, b);
         };
-        instance.data.isBubble = isBubble;
+        instance.data.isBubble = false;
         instance.data.randomElementID = randomElementID;
         var properties = {};
         properties.data_source = [];
@@ -23,34 +24,38 @@ function(instance, context) {
         instance.data.mainElement.append(`<div id="temp" class="invisible"></div>`);
         instance.data.temp = $('#temp');
         instance.canvas = $('#cardstack');
-        console.log("instance canvas", instance.data.mainElement);
+        instance.data.logging ? console.log("instance canvas", instance.data.mainElement) : null;
     } else {
         instance.data.start = true;
         instance.data.halt = false;
+        instance.data.logging = true;
         instance.canvas.append(
             `<div id="cardstack${instance.data.randomElementID}"></div> <div id="temp${instance.data.randomElementID}" class="invisible"></div>`
-        );
+            );
         instance.data.mainElement = $(`#cardstack${instance.data.randomElementID}`);
         instance.data.temp = $(`#temp${instance.data.randomElementID}`);
-        instance.data.isBubble = isBubble;
+        instance.data.isBubble = true;
     }
     ///end CSP initialize
     instance.data.listcount = 0;
-    instance.data.handleTypingChange = (content, id) => {
+    instance.data.handleTypingChange = (editor) => {
         // When the typing has stopped, trigger the "stopped_typing" event and update the Quill contents
+        let content = JSON.stringify(editor.innerHTML);
+        instance.data.logging ? console.log('stopped_typing', content, editor.id) : null;
         instance.triggerEvent('stopped_typing');
         instance.data.typingTimeout = null;
         // Expose Delta as state
         instance.publishState('delta', content);
-        instance.publishState('editedcard_id', id);
+        instance.publishState('editedcard_id', editor.id);
         instance.publishState('htmlobject', instance.canvas.html());
+        instance.publishState('quill_editor_content', content.substring(1, content.length - 1));
         instance.triggerEvent('relocated');
     };
-    instance.data.handleStopTyping = (content, id) => {
+    instance.data.handleStopTyping = (editor) => {
         // Clear the timeout and set a new one to handle the typing change
+        //console.log('handle stopped_typing',editor.innerHTML,editor.id);
         clearTimeout(instance.data.typingTimeout);
-        instance.data.typingTimeout = setTimeout(() => instance.data.handleTypingChange(JSON.stringify(content),
-            id), 250);
+        instance.data.typingTimeout = setTimeout(() => instance.data.handleTypingChange(editor), 250);
     };
     instance.data.generateListItemHtml = (attributeplansnippet) => {
         let aps = attributeplansnippet._id;
@@ -59,9 +64,13 @@ function(instance, context) {
         //QUESTION HERE
         let aps_quill_text = attributeplansnippet.quill_description_text ? attributeplansnippet
             .quill_description_text : "";
+        if (aps_quill_text === "null") {
+            aps_quill_text = "";
+        }
         //let aps_quill_text = "quill_description_text Placeholder";
-        console.log('GenerateListItem Declared,aps, aps_id_text, aps_name_text, aps_quill_text', aps,
-            aps_att_id_text, aps_name_text, aps_quill_text);
+        instance.data.logging ? console.log(
+            'GenerateListItem Declared,aps, aps_id_text, aps_name_text, aps_quill_text', aps, aps_att_id_text,
+            aps_name_text, aps_quill_text) : null;
         let cardItemHtml = `<li id="menuItem_${aps}" style="display: list-item;" class="mjs-nestedSortable-leaf" data-foo="bar">
 <div class = "parentContainer highlightable highlight-${aps_att_id_text}" id="${aps_att_id_text}"><div class = "dragContainer">
 <span class="dragHandle material-icons">drag_indicator</span></div><div class="contentContainer">
@@ -75,7 +84,7 @@ data-id="${aps}">close</span></div><div class = "quillContainer" id="${aps}"><di
         return cardItemHtml;
     }
     instance.data.callNestedSortable = () => {
-        //console.log('ANLI NestedSortable Declared');   
+        instance.data.logging ? console.log('ANLI NestedSortable Declared') : null;
         instance.data.ns = $('ol.sortable#' + instance.data.plan_unique_id).nestedSortable({
             forcePlaceholderSize: true,
             handle: '.dragHandle',
@@ -92,10 +101,10 @@ data-id="${aps}">close</span></div><div class = "quillContainer" id="${aps}"><di
             expandOnHover: 700,
             startCollapsed: false,
             change: function() {
-                console.log('Relocated item')
+                instance.data.logging ? console.log('Relocated item') : null;
             },
             relocate: function() {
-                console.log('relocate');
+                instance.data.logging ? console.log('relocate') : null;
                 instance.publishState("htmlobject", instance.canvas.html());
                 instance.triggerEvent("relocated");
                 setTimeout(instance.data.hierarchy, 100);
@@ -103,20 +112,20 @@ data-id="${aps}">close</span></div><div class = "quillContainer" id="${aps}"><di
         });
     }
     instance.data.hierarchy = () => {
-            console.log('toHierarchy Declared');
-            //CSP Add
-            //super dumb but seems to require it to be added first
-            callNestedSortable()
-            //CSP End
-            let hierarchyContent = instance.canvas.find('ol.sortable').nestedSortable('toHierarchy', {
-                startDepthCount: 0
-            });
-            setTimeout(function () {
-                instance.publishState("hierarchycontent", JSON.stringify(hierarchyContent));
-                instance.triggerEvent("relocated");
-            }, 100);
-            //save hierarchyContent object to the Plan
-        }
+        instance.data.logging ? console.log('toHierarchy Declared') : null;
+        //CSP Add
+        //super dumb but seems to require it to be added first
+        instance.data.callNestedSortable()
+        //CSP End
+        let hierarchyContent = instance.canvas.find('ol.sortable').nestedSortable('toHierarchy', {
+            startDepthCount: 0
+        });
+        setTimeout(function() {
+            instance.publishState("hierarchycontent", JSON.stringify(hierarchyContent));
+            instance.triggerEvent("relocated");
+        }, 100);
+        //save hierarchyContent object to the Plan
+    }
     instance.data.dataPrepper = (typeArray, propArray, finishArray, volume) => {
         typeArray.forEach(function(item, index) {
             var newItem = {};
@@ -132,8 +141,8 @@ data-id="${aps}">close</span></div><div class = "quillContainer" id="${aps}"><di
         //console.log("FA",JSON.stringify(finishArray));
     }
     instance.data.addDASTOAS = (DAS, TOAS, DASArray, TOASArray, DASV, TOASV, APS, APSArray) => {
-        console.log("Begin-DAS, TOAS, DASArray, TOASArray, DASV, TOASV, APS, APSArray", DAS, TOAS, DASArray,
-            TOASArray, DASV, TOASV, APS, APSArray);
+        instance.data.logging ? console.log("Begin-DAS, TOAS, DASArray, TOASArray, DASV, TOASV, APS, APSArray", DAS,
+            TOAS, DASArray, TOASArray, DASV, TOASV, APS, APSArray) : null;
         if (DAS.length != 0) {
             instance.data.dataPrepper(DAS, instance.data.DASProperties, DASArray, DASV);
         }
@@ -163,7 +172,7 @@ data-id="${aps}">close</span></div><div class = "quillContainer" id="${aps}"><di
                 instance.data.DASTOAS.push(newItem);
             });
         }
-        console.log("DAS -instance.data.DASTOAS", instance.data.DASTOAS);
+        instance.data.logging ? console.log("DAS -instance.data.DASTOAS", instance.data.DASTOAS) : null;
         //could be combined with above
         if (TOAS.length != 0) {
             TOASArray.forEach((value) => {
@@ -179,7 +188,7 @@ data-id="${aps}">close</span></div><div class = "quillContainer" id="${aps}"><di
                 instance.data.DASTOAS.push(newItem);
             });
         }
-        console.log("TOAS-instance.data.DASTOAS", instance.data.DASTOAS);
+        instance.data.logging ? console.log("TOAS-instance.data.DASTOAS", instance.data.DASTOAS) : null;
         //add dastoas to APS data    
         APSArray.forEach((aps) => {
             //console.log("Start array filter");
@@ -189,8 +198,8 @@ data-id="${aps}">close</span></div><div class = "quillContainer" id="${aps}"><di
                 aps.DASTOAS = matchingObjs;
             }
         });
-        console.log("End-DAS, TOAS, DASArray, TOASArray, DASV, TOASV, APS, APSArray", DAS, TOAS, DASArray,
-            TOASArray, DASV, TOASV, APS, APSArray);
+        instance.data.logging ? console.log("End-DAS, TOAS, DASArray, TOASArray, DASV, TOASV, APS, APSArray", DAS,
+            TOAS, DASArray, TOASArray, DASV, TOASV, APS, APSArray) : null;
     }
     instance.data.dataPrepperAPI = (typeArray, propArray, finishArray, volume) => {
         typeArray.forEach(function(item, index) {
@@ -207,8 +216,8 @@ data-id="${aps}">close</span></div><div class = "quillContainer" id="${aps}"><di
         //console.log("FA",JSON.stringify(finishArray));
     }
     instance.data.addDASTOASAPI = (DAS, TOAS, DASArray, TOASArray, DASV, TOASV, APS, APSArray) => {
-        console.log("Begin-DAS, TOAS, DASArray, TOASArray, DASV, TOASV, APS, APSArray", DAS, TOAS, DASArray,
-            TOASArray, DASV, TOASV, APS, APSArray);
+        instance.data.logging ? console.log("Begin-DAS, TOAS, DASArray, TOASArray, DASV, TOASV, APS, APSArray", DAS,
+            TOAS, DASArray, TOASArray, DASV, TOASV, APS, APSArray) : null;
         if (DAS.length != 0) {
             instance.data.dataPrepperAPI(DAS, instance.data.DASProperties, DASArray, DASV);
         }
@@ -233,15 +242,14 @@ data-id="${aps}">close</span></div><div class = "quillContainer" id="${aps}"><di
                 newItem['y_coordinate_number'] = value['Y Coordinate'];
                 newItem['attribute_id'] = value['Attribute'];
                 newItem['initial_drawn_scale_number'] = value['Initial drawn scale'];
-
                 //newItem['attribute_name'] = value['attribute_custom_attribute'].get('name_text');
                 //newItem['webpage_screenshot_custom_webpage_screenshot'] = value['attribute_custom_attribute'].get('webpage_screenshot_custom_webpage_screenshot');
                 newItem['webpage_screenshot_custom_webpage_screenshot'] = 'https://via.placeholder.com/150';
                 instance.data.DASTOAS.push(newItem);
-                console.log("newItemDAS", newItem);
+                instance.data.logging ? console.log("newItemDAS", newItem) : null;
             });
         }
-        console.log("DAS -instance.data.DASTOAS", instance.data.DASTOAS);
+        instance.data.logging ? console.log("DAS -instance.data.DASTOAS", instance.data.DASTOAS) : null;
         //could be combined with above
         if (TOAS.length != 0) {
             TOASArray.forEach((value) => {
@@ -255,10 +263,10 @@ data-id="${aps}">close</span></div><div class = "quillContainer" id="${aps}"><di
                 newItem['attribute_id'] = value['Attribute'];
                 newItem['text_snippet__text'] = value['Text Snippet '];
                 instance.data.DASTOAS.push(newItem);
-                console.log("newItemTOAS", newItem);
+                instance.data.logging ? console.log("newItemTOAS", newItem) : null;
             });
         }
-        console.log("TOAS-instance.data.DASTOAS", instance.data.DASTOAS);
+        instance.data.logging ? console.log("TOAS-instance.data.DASTOAS", instance.data.DASTOAS) : null;
         APSArray.forEach((value) => {
             value.attribute_id_text = value['Attribute'];
             value.attribute_name_text = value['Attribute Name'];
@@ -272,26 +280,26 @@ data-id="${aps}">close</span></div><div class = "quillContainer" id="${aps}"><di
                 aps.DASTOAS = matchingObjs;
             }
         });
-        console.log("End-DAS, TOAS, DASArray, TOASArray, DASV, TOASV, APS, APSArray", DAS, TOAS, DASArray,
-            TOASArray, DASV, TOASV, APS, APSArray);
+        instance.data.logging ? console.log("End-DAS, TOAS, DASArray, TOASArray, DASV, TOASV, APS, APSArray", DAS,
+            TOAS, DASArray, TOASArray, DASV, TOASV, APS, APSArray) : null;
     }
     //Add slider function
     instance.data.addSlider = (aps) => {
         if (instance.data.isBubble || !instance.data.isBubble) {
-            console.log("start addslider", aps);
+            instance.data.logging ? console.log("start addslider", aps) : null;
             aps.forEach((aps) => {
-                console.log("slider-create", aps._id);
+                instance.data.logging ? console.log("slider-create", aps._id) : null;
                 var mainElement = $(`#slider-aps-${aps._id}`);
                 mainElement.addClass('carousel');
-                //console.log("mainElement", mainElement);
+                //instance.data.logging ? console.log("mainElement", mainElement):null;
                 //   slider.classList.add('carousel', `slider-buttons-aps-${aps._id}`);
                 ///new
                 var carousel = document.createElement('div');
                 carousel.id = aps._id;
                 carousel.classList.add('carousel');
-                //console.log("carousel", carousel);
+                //instance.data.logging ? console.log("carousel", carousel):null;
                 mainElement.append(carousel);
-                //console.log("mainElement-after carousel", mainElement);
+                //instance.data.logging ? console.log("mainElement-after carousel", mainElement):null;
                 var slider = new Flickity(`#slider-aps-${aps._id}`, {
                     wrapAround: true,
                     prevNextButtons: true,
@@ -312,7 +320,7 @@ data-id="${aps}">close</span></div><div class = "quillContainer" id="${aps}"><di
                             `<div class="div-text crop-das-${dastoas._id} carousel-text">${dastoas.text_snippet__text}</div>`;
                         newElement.id = dastoas._id;
                         newElement.type = 'Text';
-                        //console.log("newElement text", newElement);
+                        //instance.data.logging ? console.log("newElement text", newElement):null;
                         newElement.addEventListener("click", instance.data.selectSnippet);
                         slider.append(newElement);
                         /* OLD
@@ -332,7 +340,7 @@ data-id="${aps}">close</span></div><div class = "quillContainer" id="${aps}"><di
                             `<div class="image crop-das-${dastoas._id}"><img class="carousel-img image"/></div>`;
                         newElement.id = dastoas._id;
                         newElement.type = 'Image';
-                        //console.log("newElement img", newElement);
+                        //instance.data.logging ? console.log("newElement img", newElement):null;
                         newElement.addEventListener("click", instance.data.selectSnippet);
                         slider.append(newElement);
                         /* OLD
@@ -345,188 +353,186 @@ data-id="${aps}">close</span></div><div class = "quillContainer" id="${aps}"><di
                     });
                 }
                 //mainElement.append(slider);
-                //console.log("mainElement-after,slider ", mainElement, slider);
+                //instance.data.logging ? console.log("mainElement-after,slider ", mainElement, slider);
             })
         }
     }
     //addQuill
     instance.data.addQuillEditor = (editor) => {
-            console.log('AddQuillEditor Declared');
-            const quill = new Quill(editor, {
-                modules: {
-                    toolbar: [
-                        [{
-                            font: []
-                        }, {
-                            size: []
-                        }],
-                        ['bold', 'italic', 'underline', 'strike'],
-                        [{
-                            color: []
-                        }, {
-                            background: []
-                        }],
-                        [{
-                            script: 'super'
-                        }, {
-                            script: 'sub'
-                        }],
-                        [{
-                            header: '1'
-                        }, {
-                            header: '2'
-                        }, 'blockquote', 'code-block'],
-                        [{
-                            list: 'ordered'
-                        }, {
-                            list: 'bullet'
-                        }, {
-                            indent: '-1'
-                        }, {
-                            indent: '+1'
-                        }],
-                        ['link', 'video'],
-                        ['clean']
-                    ]
-                },
-                theme: 'snow',
-                debug: 'warn',
-                bounds: editor
-            });
-            const toolbar = quill.root.parentElement.previousSibling;
-            toolbar.setAttribute('hidden', true);
-            quill.root.parentElement.style.borderTop = `1px`;
-            quill.root.addEventListener('focus', (e) => {
-                instance.data.focused = true
-                toolbar.removeAttribute('hidden', false)
-            })
-            const handleClick = (e) => {
-                console.log(`editor`, editor.parentElement.id)
-                if (!e.target.closest(`[id="${editor.parentElement.id}"]`)) {
-                    console.log(`hiding toolbar: the target is`, e.target, `and the toolbar is`, toolbar,
-                        `and the preview is`, e.target.classList.contains('ql-preview'))
-                    toolbar.setAttribute('hidden', true)
-                }
+        instance.data.logging ? console.log('AddQuillEditor Declared') : null;
+        const quill = new Quill(editor, {
+            modules: {
+                toolbar: [
+                    [{
+                        font: []
+                    }, {
+                        size: []
+                    }],
+                    ['bold', 'italic', 'underline', 'strike'],
+                    [{
+                        color: []
+                    }, {
+                        background: []
+                    }],
+                    [{
+                        script: 'super'
+                    }, {
+                        script: 'sub'
+                    }],
+                    [{
+                        header: '1'
+                    }, {
+                        header: '2'
+                    }, 'blockquote', 'code-block'],
+                    [{
+                        list: 'ordered'
+                    }, {
+                        list: 'bullet'
+                    }, {
+                        indent: '-1'
+                    }, {
+                        indent: '+1'
+                    }],
+                    ['link', 'video'],
+                    ['clean']
+                ]
+            },
+            theme: 'snow',
+            debug: 'warn',
+            bounds: editor
+        });
+        const toolbar = quill.root.parentElement.previousSibling;
+        toolbar.setAttribute('hidden', true);
+        quill.root.parentElement.style.borderTop = `1px`;
+        quill.root.addEventListener('focus', (e) => {
+            instance.data.focused = true
+            toolbar.removeAttribute('hidden', false)
+        })
+        const handleClick = (e) => {
+            instance.data.logging ? console.log(`editor`, editor.parentElement.id) : null;
+            if (!e.target.closest(`[id="${editor.parentElement.id}"]`)) {
+                instance.data.logging ? console.log(`hiding toolbar: the target is`, e.target,
+                    `and the toolbar is`, toolbar, `and the preview is`, e.target.classList.contains(
+                        'ql-preview')) : null;
+                toolbar.setAttribute('hidden', true);
             }
-            window.addEventListener('click', handleClick)
-            quill.root.addEventListener('blur', (e) => {
-                // instance.data.focused = false
-                // if (e.relatedTarget == null) {
-                //     toolbar.setAttribute('hidden', true)
-                // }
-                // else if (!toolbar.contains(e.relatedTarget) && !e.relatedTarget.classList.contains('ql-preview')) {
-                //     toolbar.setAttribute('hidden', true)
-                // }
-            });
-            /* quill.root.addEventListener('blur', e => {
-                  console.log('blur');   
-                 instance.data.focused = false;
-                 const tooltip = e.find('.ql-tooltip');
-                 const tooltipStyle = window.getComputedStyle(tooltip);
-                 if (!toolbar.contains(e.relatedTarget) && tooltipStyle.display === 'none') {
+        }
+        window.addEventListener('click', handleClick)
+        quill.root.addEventListener('blur', (e) => {
+            // instance.data.focused = false
+            // if (e.relatedTarget == null) {
+            //     toolbar.setAttribute('hidden', true)
+            // }
+            // else if (!toolbar.contains(e.relatedTarget) && !e.relatedTarget.classList.contains('ql-preview')) {
+            //     toolbar.setAttribute('hidden', true)
+            // }
+        });
+        /* quill.root.addEventListener('blur', e => {
+              instance.data.logging ? console.log('blur'):null;   
+             instance.data.focused = false;
+             const tooltip = e.find('.ql-tooltip');
+             const tooltipStyle = window.getComputedStyle(tooltip);
+             if (!toolbar.contains(e.relatedTarget) && tooltipStyle.display === 'none') {
+                 toolbar.setAttribute('hidden', true);
+                 const toolbars = document.querySelectorAll('.toolbar');
+                 toolbars.forEach(toolbar => {
                      toolbar.setAttribute('hidden', true);
-                     const toolbars = document.querySelectorAll('.toolbar');
-                     toolbars.forEach(toolbar => {
-                         toolbar.setAttribute('hidden', true);
-                     });
-                 }
-             }); */
-            quill.on('editor-change', (eventName, ...args) => {
-                if (eventName === 'text-change') {
-                    instance.data.handleStopTyping(editor.id);
-                } else if (eventName === 'selection-change') {
-                    // Handle selection change
+                 });
+             }
+         }); */
+        quill.on('editor-change', (eventName, ...args) => {
+            if (eventName === 'text-change') {
+                instance.data.handleStopTyping(editor);
+                instance.data.logging ? console.log("editor", editor) : null;
+            } else if (eventName === 'selection-change') {
+                // Handle selection change
+            }
+        });
+        const removeEventListener = window[`removeEventListener_${editor.parentElement.id}`] = () => {
+            window.removeEventListener('click', handleClick);
+        }
+        return {
+            removeEventListener
+        };
+    };
+    //deletefold
+    instance.data.deleteFoldCollapse = () => {
+        instance.data.logging ? console.log("deleteFoldInitiated") : null;
+        waitForElm('.disclose').then((elm) => {
+            $('.disclose').unbind();
+            $('.disclose').on('click', function() {
+                instance.data.logging ? console.log("disclose onclick") : null;
+                $(this).closest('li').toggleClass('mjs-nestedSortable-collapsed').toggleClass(
+                    'mjs-nestedSortable-expanded');
+                $(this).toggleClass('ui-icon-plusthick').toggleClass('ui-icon-minusthick');
+            });
+        });
+        waitForElm('.deleteMenu').then((elm) => {
+            $('.deleteMenu').unbind();
+            $('.deleteMenu').click(function() {
+                let uniqueId = $(this).attr('data-id');
+                let card_id = "#menuItem_" + uniqueId;
+                if ($(card_id).length == 0) {
+                    return;
+                }
+                if (window.confirm("Are you sure you want to delete this card ?")) {
+                    let childCardsIdList = $(card_id).find('li');
+                    let idArray = [];
+                    childCardsIdList.each(function(index) {
+                        idArray.push($(this).attr('id'));
+                    });
+                    $(card_id).remove();
+                    setTimeout(function() {
+                        instance.publishState("htmlobject", instance.canvas.html());
+                        instance.data.hierarchy();
+                    }, 10);
+                    setTimeout(function() {
+                        instance.publishState("deletedcard_id", uniqueId);
+                        instance.publishState("deletedchildren_id_list", idArray
+                    .toString());
+                        instance.triggerEvent("deleted");
+                    }, 10);
                 }
             });
-            const removeEventListener = window[`removeEventListener_${editor.parentElement.id}`] = () => {
-                window.removeEventListener('click', handleClick);
-            }
-            return {
-                removeEventListener
-            };
-        };
-    //deletefold
-instance.data.deleteFoldCollapse = () => {
-    console.log("deleteFoldInitiated");
-    waitForElm('.disclose').then((elm) => {
-        $('.disclose').unbind();
-        $('.disclose').on('click', function() {
-            console.log("disclose onclick");
-            $(this).closest('li').toggleClass('mjs-nestedSortable-collapsed').toggleClass(
-                'mjs-nestedSortable-expanded');
-            $(this).toggleClass('ui-icon-plusthick').toggleClass('ui-icon-minusthick');
         });
-    });
-    waitForElm('.deleteMenu').then((elm) => {
-        $('.deleteMenu').unbind();
-        $('.deleteMenu').click(function() {
-            let uniqueId = $(this).attr('data-id');
-            let card_id = "#menuItem_" + uniqueId;
-            if ($(card_id).length == 0) {
-                return;
-            }
-            if (window.confirm("Are you sure you want to delete this card ?")) {
-                let childCardsIdList = $(card_id).find('li');
-                let idArray = [];
-                childCardsIdList.each(function(index) {
-                    idArray.push($(this).attr('id'));
-                });
-                $(card_id).remove();
-                setTimeout(function() {
-                    instance.publishState("htmlobject", instance.canvas.html());
-                    instance.data.hierarchy();
-                }, 10);
-                setTimeout(function() {
-                    instance.publishState("deletedcard_id", uniqueId);
-
-                    instance.publishState("deletedchildren_id_list", idArray.toString());
-                    instance.triggerEvent("deleted");
-                }, 10);
-            }
+        waitForElm('.expandEditor').then((elm) => {
+            $('.expandEditor').unbind();
+            $('.expandEditor').click(function() {
+                instance.data.logging ? console.log("expand onclick") : null;
+                let uniqueId = $(this).attr('data-id');
+                $('#' + uniqueId + '.quillEditor').toggle('fast', 'swing');
+                if ($('.expandEditor[data-id=' + uniqueId + ']').html() === 'expand_more') {
+                    $('.expandEditor[data-id=' + uniqueId + ']').html('expand_less');
+                } else {
+                    $('.expandEditor[data-id=' + uniqueId + ']').html('expand_more');
+                }
+                //CSP Add for Slider
+                if ($(`#slider-aps-${uniqueId}`).hasClass('slider_invisible')) {
+                    $(`#slider-aps-${uniqueId}`).removeClass('slider_invisible');
+                } else {
+                    $(`#slider-aps-${uniqueId}`).addClass('slider_invisible');
+                }
+                //end CSP Add
+            });
         });
-    });
-    waitForElm('.expandEditor').then((elm) => {
-        $('.expandEditor').unbind();
-        $('.expandEditor').click(function() {
-            console.log("expand onclick");
-            let uniqueId = $(this).attr('data-id');
-            $('#' + uniqueId + '.quillEditor').toggle('fast', 'swing');
-            if ($('.expandEditor[data-id=' + uniqueId + ']').html() === 'expand_more') {
-                $('.expandEditor[data-id=' + uniqueId + ']').html('expand_less');
-            } else {
-                $('.expandEditor[data-id=' + uniqueId + ']').html('expand_more');
-            }
-            //CSP Add for Slider
-            if ($(`#slider-aps-${uniqueId}`).hasClass('slider_invisible')) {
-                $(`#slider-aps-${uniqueId}`).removeClass('slider_invisible');
-            } else {
-                $(`#slider-aps-${uniqueId}`).addClass('slider_invisible');
-            }
-            //end CSP Add
-        });
-    });
-}
+    }
     //add single items
     instance.data.addSingleDAS = (das, aps1) => {
-        console.log("addSingleDas", das, aps1)
+        instance.data.logging ? console.log("addSingleDas", das, aps1) : null;
         let newDAS = das;
         let aps2 = aps1;
         let id = newDAS.get('_id');
         let apsId = aps2._id;
-
         var newElement = document.createElement('div');
-
         newElement.classList.add('carousel-cell');
         newElement.innerHTML = `<div class="image crop-das-${id}"><img class="carousel-img image"/></div>`;
         newElement.id = id;
         newElement.type = 'Image';
-        //console.log("newElement img", newElement);
-        //newElement.addEventListener("click", instance.data.selectSnippet);
-
+        //instance.data.logging ? console.log("newElement img", newElement):null;
+        newElement.addEventListener("click", instance.data.selectSnippet);
         var carousel = $(`#slider-aps-${apsId}`).flickity({
             initialIndex: 1
         });
-
         carousel.flickity('append', newElement);
     }
     instance.data.addSingleTOAS = (toas, aps1) => {
@@ -535,13 +541,12 @@ instance.data.deleteFoldCollapse = () => {
         let id = newTOAS.get('_id');
         let text = newTOAS.get('text_snippet__text');
         let apsId = aps._id;
-
         var newElement = document.createElement('div');
         newElement.classList.add('carousel-cell');
         newElement.innerHTML = `<div class="div-text crop-das-${id} carousel-text">${text}</div>`;
         newElement.id = id;
         newElement.type = 'Text';
-        //console.log("newElement text", newElement);
+        //instance.data.logging ? console.log("newElement text", newElement):null;
         newElement.addEventListener("click", instance.data.selectSnippet);
         var carousel = $(`#slider-aps-${apsId}`).flickity({
             initialIndex: 1
@@ -556,32 +561,29 @@ instance.data.deleteFoldCollapse = () => {
             instance.triggerEvent('stopped_typing')
         }, 100 * index);
     }
-
     instance.data.saveAllCards = (editors_array) => {
-        for (let i = 0; i < editors_array.length; i++) {
+        for (i = 0; i < editors_array.length; i++) {
             instance.data.savecard(editors_array[i], i);
         }
-
     }
-function waitForElm(selector) {
-    return new Promise(resolve => {
-        if (document.querySelector(selector)) {
-            return resolve(document.querySelector(selector));
-        }
 
-        const observer = new MutationObserver(mutations => {
+    function waitForElm(selector) {
+        return new Promise((resolve) => {
             if (document.querySelector(selector)) {
-                resolve(document.querySelector(selector));
-                observer.disconnect();
+                return resolve(document.querySelector(selector));
             }
+            const observer = new MutationObserver((mutations) => {
+                if (document.querySelector(selector)) {
+                    resolve(document.querySelector(selector));
+                    observer.disconnect();
+                }
+            });
+            observer.observe(document.body, {
+                childList: true,
+                subtree: true
+            });
         });
-
-        observer.observe(document.body, {
-            childList: true,
-            subtree: true
-        });
-    });
-}
-
+    }
+    window.CSP = instance;
     //end initialize
 }
