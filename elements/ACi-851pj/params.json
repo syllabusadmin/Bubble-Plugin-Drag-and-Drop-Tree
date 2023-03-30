@@ -155,6 +155,14 @@
             "name": "hierarchycontent",
             "rank": 14,
             "value": "text"
+        },
+        "ACj": {
+            "caption": "Slider Enabled",
+            "default_val": true,
+            "editor": "DynamicValue",
+            "name": "slider_enabled",
+            "rank": 15,
+            "value": "boolean"
         }
     },
     "icon": "ion-android-list",

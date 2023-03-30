@@ -284,12 +284,15 @@ data-id="${aps}">close</span></div><div class = "quillContainer" id="${aps}"><di
             TOAS, DASArray, TOASArray, DASV, TOASV, APS, APSArray) : null;
     }
     //Add slider function
-    instance.data.addSlider = (aps) => {
-        if (instance.data.isBubble || !instance.data.isBubble) {
-            instance.data.logging ? console.log("start addslider", aps) : null;
-            aps.forEach((aps) => {
-                instance.data.logging ? console.log("slider-create", aps._id) : null;
-                var mainElement = $(`#slider-aps-${aps._id}`);
+ instance.data.addSlider = (aps) => {
+    if (instance.data.isBubble || !instance.data.isBubble) {
+        instance.data.logging ? console.log("start addslider", aps) : null;
+        aps.forEach((aps) => {
+            instance.data.logging ? console.log("slider-create", aps._id) : null;
+            var mainElement = $(`#slider-aps-${aps._id}`);
+            //instance.data.mainElement = mainElement;
+            //console.log("mainELement", mainElement);
+            if (!mainElement.length === 0) {
                 mainElement.addClass('carousel');
                 //instance.data.logging ? console.log("mainElement", mainElement):null;
                 //   slider.classList.add('carousel', `slider-buttons-aps-${aps._id}`);
@@ -322,13 +325,15 @@ data-id="${aps}">close</span></div><div class = "quillContainer" id="${aps}"><di
                         newElement.type = 'Text';
                         //instance.data.logging ? console.log("newElement text", newElement):null;
                         newElement.addEventListener("click", instance.data.selectSnippet);
-                        slider.append(newElement);
+                        if (slider) {
+                            slider.append(newElement);
+                        }
                         /* OLD
-                    const newElement = document.createElement('div');
-                    newElement.innerHTML =
-                        `<div class="div-text" width="100px">${dastoas.text_snippet__text}</div>`;
-                    slider.appendChild(newElement);
-                    */
+                const newElement = document.createElement('div');
+                newElement.innerHTML =
+                    `<div class="div-text" width="100px">${dastoas.text_snippet__text}</div>`;
+                slider.appendChild(newElement);
+                */
                     });
                 }
                 // iterate through imageDastoas
@@ -342,21 +347,18 @@ data-id="${aps}">close</span></div><div class = "quillContainer" id="${aps}"><di
                         newElement.type = 'Image';
                         //instance.data.logging ? console.log("newElement img", newElement):null;
                         newElement.addEventListener("click", instance.data.selectSnippet);
-                        slider.append(newElement);
-                        /* OLD
-                    const newElement = document.createElement('div');
-                    //newElement.innerHTML = `<div class="image screenshot-${dastoas.webpage}" width="100px"><img src="${dastoas.webpage_screenshot_custom_webpage_screenshot}" class=""/></div>`;
-				newElement.innerHTML = `<div class="image" width="100px"><img class="image screenshot-container-${dastoas.webpage} crop-das-${dastoas._id}"/></div>`;
-                    slider.appendChild(newElement);
-                    */
-                        ///add to css NEEDED
+                        if (slider) {
+                            slider.append(newElement);
+                        }
+
                     });
                 }
                 //mainElement.append(slider);
                 //instance.data.logging ? console.log("mainElement-after,slider ", mainElement, slider);
-            })
-        }
+            }
+        })
     }
+}
     //addQuill
     instance.data.addQuillEditor = (editor) => {
         instance.data.logging ? console.log('AddQuillEditor Declared') : null;
@@ -507,12 +509,14 @@ data-id="${aps}">close</span></div><div class = "quillContainer" id="${aps}"><di
                     $('.expandEditor[data-id=' + uniqueId + ']').html('expand_more');
                 }
                 //CSP Add for Slider
+                if (instance.data.sliderEnabled) {
                 if ($(`#slider-aps-${uniqueId}`).hasClass('slider_invisible')) {
                     $(`#slider-aps-${uniqueId}`).removeClass('slider_invisible');
                 } else {
                     $(`#slider-aps-${uniqueId}`).addClass('slider_invisible');
                 }
                 //end CSP Add
+                }
             });
         });
     }
@@ -562,7 +566,7 @@ data-id="${aps}">close</span></div><div class = "quillContainer" id="${aps}"><di
         }, 100 * index);
     }
     instance.data.saveAllCards = (editors_array) => {
-        for (i = 0; i < editors_array.length; i++) {
+        for (let i = 0; i < editors_array.length; i++) {
             instance.data.savecard(editors_array[i], i);
         }
     }
