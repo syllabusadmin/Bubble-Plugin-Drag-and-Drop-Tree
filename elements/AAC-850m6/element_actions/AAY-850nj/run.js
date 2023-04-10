@@ -1,11 +1,5 @@
 function(instance, properties, context) {
 
-    //When a new card is dropped, it has to become part of the hierarchy object 
-    //1. Pass that Attribute Plan Snippet to the Plugin 
-    //2. Render its html
-    //3. Append that to the bottom of the list
-    //4. Call hierarchy function
-
     console.log('Add New List Item Ran', instance.data.plan_unique_id);
     //Declare all the functions again
 
@@ -13,7 +7,8 @@ function(instance, properties, context) {
         console.log('ANLI GenerateListItem Declared');
         let quilltext = "";
         if (attributeplansnippet.get("quill_description_text")) { quilltext = attributeplansnippet.get("quill_description_text") }
-        let cardItemHtml = '<li id="menuItem_' + attributeplansnippet.get("_id") + '" style="display: list-item;" class="mjs-nestedSortable-leaf" data-foo="bar"><div class = "parentContainer highlightable highlight-' + attributeplansnippet.get("attribute_id_text") + '" id="' + attributeplansnippet.get("attribute_id_text") + '"><div class = "dragContainer"><span class="dragHandle material-icons">drag_indicator</span></div><div class="contentContainer"><div class ="menuContainer"><span title="Click to show/hide children" class="disclose ui-icon ui-icon-minusthick"><span></span></span><span title="Click to show/hide description" data-id="' + attributeplansnippet.get("_id") + '" class = "expandEditor material-icons" >expand_more</span><input  type="text" class = "itemTitle" data-id="' + attributeplansnippet.get("_id") + '"value="' + attributeplansnippet.get("attribute_name_text") + '"><span class="deleteMenu material-icons" title="Click to delete item." data-id="' + attributeplansnippet.get("_id") + '">close</span></div><div class = "quillContainer" id="' + attributeplansnippet.get("_id") + '"><div class="quillEditor" id="' + attributeplansnippet.get("_id") + '">' + quilltext + '</div></div></div></div>';
+        let cardItemHtml = '<li id="menuItem_' + attributeplansnippet.get("_id") +
+                '" style="display: list-item;" class="mjs-nestedSortable-leaf" data-foo="bar"><div class = "parentContainer highlightable highlight-' +        attributeplansnippet.get("attribute_id_text") + '" id="' + attributeplansnippet.get("attribute_id_text") + '"><div class = "dragContainer"><span class="dragHandle material-icons">drag_indicator</span></div><div class="contentContainer"><div class ="menuContainer"><span title="Click to show/hide children" class="disclose ui-icon ui-icon-minusthick"><span></span></span><span title="Click to show/hide description" data-id="' + attributeplansnippet.get("_id") + '" class = "expandEditor material-icons" >expand_more</span><textarea class = "itemTitle" rows = "3" data-id="' + attributeplansnippet.get("_id") + '">' + attributeplansnippet.get("attribute_name_text") + '</textarea><span class="deleteMenu material-icons" title="Click to delete item." data-id="' + attributeplansnippet.get("_id") + '">close</span></div><div class = "quillContainer" id="' + attributeplansnippet.get("_id") + '"><div class="quillEditor" id="' + attributeplansnippet.get("_id") + '">' + quilltext + '</div></div></div></div>';
         //console.log("Quill Description Text" + attributeplansnippet.get("description_text"));
         //console.log(cardItemHtml);
         return cardItemHtml;
@@ -115,7 +110,7 @@ function(instance, properties, context) {
     console.log("newlyDroppedCardHtml", newlyDroppedCardHtml);
     //Append that to the innerhtml of the ol.sortable list
 
-    let cardStackInnerHtml = $('ol.sortable#' + instance.data.plan_unique_id);
+    let cardStackInnerHtml = instance.canvas.find("ol.sortable");
 
     //Append the new li item to the existing cardstack
     cardStackInnerHtml.prepend(newlyDroppedCardHtml);
@@ -125,6 +120,25 @@ function(instance, properties, context) {
     let newEditor = $(`#${id} .quillEditor`)[0];
     addQuillEditor(newEditor);
     //Call hierarchy
-    setTimeout(hierarchy, 100);
-
+    
+    let newCardTextArea = $(`textarea.itemTitle[data-id="${id}"]`);
+    console.log(newCardTextArea);
+    let cardTitle = properties.attribute_plan_snippet.get("attribute_name_text");
+    console.log(cardTitle);
+            
+    newCardTextArea.on("focus", () => {
+        console.log('Focus - Value set from db');
+       newCardTextArea.value = properties.attribute_plan_snippet.get("attribute_name_text");  
+    });
+    newCardTextArea.on("blur", () => {
+       if (cardTitle.length > 150){
+           console.log(' Blur - Trimmed Value');
+            newCardTextArea.value = properties.attribute_plan_snippet.get("attribute_name_text").slice(0,150) + "....";
+        }
+       else {
+           console.log('Blur - Untrimmed Value');
+             newCardTextArea.value = properties.attribute_plan_snippet.get("attribute_name_text");  
+        }
+    });
+	setTimeout(hierarchy, 100);
 }

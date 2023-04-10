@@ -147,6 +147,14 @@
             "optional": true,
             "rank": 13,
             "value": "text"
+        },
+        "ACk": {
+            "caption": "disabled",
+            "default_val": false,
+            "editor": "DynamicValue",
+            "name": "disabled",
+            "rank": 14,
+            "value": "boolean"
         }
     },
     "icon": "ion-android-funnel",

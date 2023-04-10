@@ -74,14 +74,25 @@
         background: #FFF;
     }
 
-    input.itemTitle {
-        vertical-align: middle;
-        cursor: text;
-        width: 100%;
-        border-style: none !important;
-        font-size: 20px;
-        background-color: inherit;
+    .itemTitle {
+  vertical-align: middle;
+  cursor: text;
+  width: 100%;
+  border-style: none !important;
+  font-size: 20px;
+  background-color: inherit;
+  resize: none;
+  overflow: hidden;
+  transition: height 0.2s ease-out;
+  height: auto;
+  max-height: 100px;
     }
+    
+    .itemTitle.overflow-ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 
     .deleteMenu {
         float: right;

@@ -1,5 +1,6 @@
 function(instance, properties, context) {
     console.log(properties.data_source);
+    instance.data.disabled = properties.disabled;
     //start update
     //triggers selection of snippet
     if (!instance.data.halted) {
@@ -16,6 +17,7 @@ function(instance, properties, context) {
             $('ol.sortable#' + instance.data.plan_unique_id).nestedSortable();
             //CSP End
             instance.data.ns = $('ol.sortable#' + properties.plan_unique_id).nestedSortable({
+                disabled: instance.data.disabled,
                 forcePlaceholderSize: true,
                 handle: '.dragHandle',
                 helper: 'clone',
@@ -124,134 +126,120 @@ function(instance, properties, context) {
                 quilltext = attributeplansnippet.get("quill_description_text")
             }
             let cardItemHtml = '<li id="menuItem_' + attributeplansnippet.get("_id") +
-                '" style="display: list-item;" class="mjs-nestedSortable-leaf" data-foo="bar"><div class = "parentContainer highlightable highlight-' +
-                attributeplansnippet.get("attribute_id_text") + '" id="' + attributeplansnippet.get(
-                    "attribute_id_text") +
-                '"><div class = "dragContainer"><span class="dragHandle material-icons">drag_indicator</span></div><div class="contentContainer"><div class ="menuContainer"><span title="Click to show/hide children" class="disclose ui-icon ui-icon-minusthick"><span></span></span><span title="Click to show/hide description" data-id="' +
-                attributeplansnippet.get("_id") +
-                '" class = "expandEditor material-icons" >expand_more</span><input  type="text" class = "itemTitle" data-id="' +
-                attributeplansnippet.get("_id") + '"value="' + attributeplansnippet.get("attribute_name_text") +
-                '"><span class="deleteMenu material-icons" title="Click to delete item." data-id="' +
-                attributeplansnippet.get("_id") + '">close</span></div><div class = "quillContainer" id="' +
-                attributeplansnippet.get("_id") + '"><div class="quillEditor" id="' + attributeplansnippet.get("_id") +
-                '">' + quilltext + '</div></div></div></div>';
+                '" style="display: list-item;" class="mjs-nestedSortable-leaf" data-foo="bar"><div class = "parentContainer highlightable highlight-' +        attributeplansnippet.get("attribute_id_text") + '" id="' + attributeplansnippet.get("attribute_id_text") + '"><div class = "dragContainer"><span class="dragHandle material-icons">drag_indicator</span></div><div class="contentContainer"><div class ="menuContainer"><span title="Click to show/hide children" class="disclose ui-icon ui-icon-minusthick"><span></span></span><span title="Click to show/hide description" data-id="' + attributeplansnippet.get("_id") + '" class = "expandEditor material-icons" >expand_more</span><textarea class = "itemTitle" rows = "3" data-id="' + attributeplansnippet.get("_id") + '">' + attributeplansnippet.get("attribute_name_text") +
+                '</textarea><span class="deleteMenu material-icons" title="Click to delete item." data-id="' + attributeplansnippet.get("_id") + '">close</span></div><div class = "quillContainer" id="' + attributeplansnippet.get("_id") + '"><div class="quillEditor" id="' + attributeplansnippet.get("_id") + '">' + quilltext + '</div></div></div></div>';
             //console.log("Quill Description Text" + attributeplansnippet.get("description_text"));
             //console.log(cardItemHtml);
             return cardItemHtml;
         }
 
         function addQuillEditor(editor) {
-            console.log('AddQuillEditor Declared');
-            const quill = new Quill(editor, {
-                modules: {
-                    toolbar: [
-                        [{
-                            font: []
-                        }, {
-                            size: []
-                        }],
-                        ['bold', 'italic', 'underline', 'strike'],
-                        [{
-                            color: []
-                        }, {
-                            background: []
-                        }],
-                        [{
-                            script: 'super'
-                        }, {
-                            script: 'sub'
-                        }],
-                        [{
-                            header: '1'
-                        }, {
-                            header: '2'
-                        }, 'blockquote', 'code-block'],
-                        [{
-                            list: 'ordered'
-                        }, {
-                            list: 'bullet'
-                        }, {
-                            indent: '-1'
-                        }, {
-                            indent: '+1'
-                        }],
-                        ['link', 'video'],
-                        ['clean']
-                    ]
-                },
-                theme: 'snow',
-                debug: 'warn',
-                bounds: editor
-            });
-            const toolbar = quill.root.parentElement.previousSibling;
-            toolbar.setAttribute('hidden', true);
-            quill.root.parentElement.style.borderTop = `1px`;
-            quill.root.addEventListener('focus', e => {
-                instance.data.focused = true
-                toolbar.removeAttribute('hidden', false)
-            })
-            const handleClick = (e) => {
-                console.log(`editor`, editor.parentElement.id)
-                if (!e.target.closest(`[id="${editor.parentElement.id}"]`)) {
-                    console.log(`hiding toolbar: the target is`, e.target, `and the toolbar is`, toolbar,
-                        `and the preview is`, e.target.classList.contains('ql-preview'))
-                    toolbar.setAttribute('hidden', true)
-                }
-            }
-            window.addEventListener('click', handleClick)
-            quill.root.addEventListener('blur', e => {
-                // instance.data.focused = false
-                // if (e.relatedTarget == null) {
-                //     toolbar.setAttribute('hidden', true)
-                // }
-                // else if (!toolbar.contains(e.relatedTarget) && !e.relatedTarget.classList.contains('ql-preview')) {
-                //     toolbar.setAttribute('hidden', true)
-                // }
-            });
-            /* quill.root.addEventListener('blur', e => {
-                  console.log('blur');   
-                 instance.data.focused = false;
-                 const tooltip = e.find('.ql-tooltip');
-                 const tooltipStyle = window.getComputedStyle(tooltip);
-                 if (!toolbar.contains(e.relatedTarget) && tooltipStyle.display === 'none') {
-                     toolbar.setAttribute('hidden', true);
-                     const toolbars = document.querySelectorAll('.toolbar');
-                     toolbars.forEach(toolbar => {
-                         toolbar.setAttribute('hidden', true);
-                     });
-                 }
-             }); */
-            quill.on('editor-change', (eventName, ...args) => {
-                if (eventName === 'text-change') {
-                    instance.data.handleStopTyping(editor.id);
-                } else if (eventName === 'selection-change') {
-                    // Handle selection change
-                }
-            });
-            const removeEventListener = window[`removeEventListener_${editor.parentElement.id}`] = () => {
-                window.removeEventListener('click', handleClick);
-            }
-            return {
-                removeEventListener
-            };
-        };
-        instance.data.handleStopTyping = (id) => {
-            // Clear the timeout and set a new one to handle the typing change
-            clearTimeout(instance.data.typingTimeout);
-            instance.data.typingTimeout = setTimeout(() => instance.data.handleTypingChange(id), 100);
-        };
-        instance.data.handleTypingChange = (id) => {
-            // When the typing has stopped, trigger the "stopped_typing" event and update the Quill contents
-            console.log('typingchange');
-            instance.data.typingTimeout = null;
-            // Expose html of edtitor as state
-            instance.publishState('editedcard_id', id);
-            //instance.publishState('htmlobject', instance.canvas.html());
-            instance.publishState('quill_editor_content', $("#menuItem_" + id).find(".quillEditor").html());
-            instance.triggerEvent('stopped_typing');
-            instance.triggerEvent('relocated');
-        };
+    console.log('AddQuillEditor Declared');
+    const quill = new Quill(editor, {
+        modules: {
+            toolbar: [
+                [{
+                    font: []
+                }, {
+                    size: []
+                }],
+                ['bold', 'italic', 'underline', 'strike'],
+                [{
+                    color: []
+                }, {
+                    background: []
+                }],
+                [{
+                    script: 'super'
+                }, {
+                    script: 'sub'
+                }],
+                [{
+                    header: '1'
+                }, {
+                    header: '2'
+                }, 'blockquote', 'code-block'],
+                [{
+                    list: 'ordered'
+                }, {
+                    list: 'bullet'
+                }, {
+                    indent: '-1'
+                }, {
+                    indent: '+1'
+                }],
+                ['link', 'video'],
+                ['clean']
+            ]
+        },
+        theme: 'snow',
+        debug: 'warn',
+        bounds: editor
+    });
+    const toolbar = quill.root.parentElement.previousSibling;
+    toolbar.setAttribute('hidden', true);
+    quill.root.parentElement.style.borderTop = `1px`;
 
+    if (instance.data.disabled) {
+
+        quill.disable();
+        var toolbar1 = quill.getModule('toolbar');
+        toolbar1.container.style.display = 'none';
+    } else {
+        quill.enable();
+        var toolbar2 = quill.getModule('toolbar');
+        toolbar2.container.style.display = 'block';
+    }
+
+    quill.root.addEventListener('focus', (e) => {
+        instance.data.focused = true
+        toolbar.removeAttribute('hidden', false)
+    })
+    const handleClick = (e) => {
+        console.log(`editor`, editor.parentElement.id)
+        if (!e.target.closest(`[id="${editor.parentElement.id}"]`)) {
+            console.log(`hiding toolbar: the target is`, e.target, `and the toolbar is`, toolbar,
+                `and the preview is`, e.target.classList.contains('ql-preview'))
+            toolbar.setAttribute('hidden', true)
+        }
+    }
+    window.addEventListener('click', handleClick)
+    quill.root.addEventListener('blur', (e) => {
+        // instance.data.focused = false
+        // if (e.relatedTarget == null) {
+        //     toolbar.setAttribute('hidden', true)
+        // }
+        // else if (!toolbar.contains(e.relatedTarget) && !e.relatedTarget.classList.contains('ql-preview')) {
+        //     toolbar.setAttribute('hidden', true)
+        // }
+    });
+    /* quill.root.addEventListener('blur', e => {
+          console.log('blur');   
+         instance.data.focused = false;
+         const tooltip = e.find('.ql-tooltip');
+         const tooltipStyle = window.getComputedStyle(tooltip);
+         if (!toolbar.contains(e.relatedTarget) && tooltipStyle.display === 'none') {
+             toolbar.setAttribute('hidden', true);
+             const toolbars = document.querySelectorAll('.toolbar');
+             toolbars.forEach(toolbar => {
+                 toolbar.setAttribute('hidden', true);
+             });
+         }
+     }); */
+    quill.on('editor-change', (eventName, ...args) => {
+        if (eventName === 'text-change' && instance.data.disabled) {
+            instance.data.handleStopTyping(editor.id);
+        } else if (eventName === 'selection-change') {
+            // Handle selection change
+        }
+    });
+    const removeEventListener = window[`removeEventListener_${editor.parentElement.id}`] = () => {
+        window.removeEventListener('click', handleClick);
+    }
+    return {
+        removeEventListener
+    };
+}
         function deleteFoldCollapse() {
             $('.disclose').on('click', function () {
                 $(this).closest('li').toggleClass('mjs-nestedSortable-collapsed').toggleClass(
@@ -259,6 +247,7 @@ function(instance, properties, context) {
                 $(this).toggleClass('ui-icon-plusthick').toggleClass('ui-icon-minusthick');
             });
             //$('.deleteMenu').unbind();
+            if (!instance.data.disabled) {
             $('.deleteMenu').click(function () {
                 let uniqueId = $(this).attr('data-id');
                 let card_id = "#menuItem_" + uniqueId;
@@ -283,6 +272,7 @@ function(instance, properties, context) {
                     }, 10);
                 }
             });
+            }
             $('.expandEditor').click(function () {
                 let uniqueId = $(this).attr('data-id');
                 $('#' + uniqueId + '.quillEditor').toggle('fast', 'swing');
@@ -292,12 +282,15 @@ function(instance, properties, context) {
                     $('.expandEditor[data-id=' + uniqueId + ']').html('expand_more');
                 }
             });
-            $(".itemTitle").on("input", function () {
+            
+            $(".itemTitle").on("input", function () {                
                 let editedCardId = $(this).attr('data-id');
+                console.log('Input fired ' + editedCardId);
                 instance.publishState("changedname", $(this).val());
                 instance.publishState("editedcard_id", editedCardId);
                 instance.triggerEvent("namechange");
             });
+            
         }
 
         function buildHierarchyHtml(hierarchy) {
@@ -367,5 +360,34 @@ function(instance, properties, context) {
         //Calling DeleteFoldCollapse
         console.log('Delete,Fold and Collapse Functions Called');
         deleteFoldCollapse();
+        
+        
+        //Function for ellipsis
+       	// When the textarea is focussed, it's content will be whatever the description of that APS is. When it is not, it will show everything till the third line and then finish it with ellipsis
+        //Steps - Add event listeners for focus and unfocus evenents.
+                let cardTitles = document.querySelectorAll(".itemTitle")
+        cardTitles.forEach ((textarea) => {
+            let id = textarea.getAttribute("data-id");
+            let attplansnippet = instance.data.attplansnippets.find((item) => item.get("_id") === id);
+            let cardTitle = attplansnippet.get("attribute_name_text");
+            textarea.addEventListener("focus", () => {
+                console.log('Value set from db');
+                textarea.value = attplansnippet.get("attribute_name_text");  
+            });
+
+            textarea.addEventListener("blur", () => {
+                if (textarea.value.length > 150){
+                console.log('Trimmed Value');
+                textarea.value = textarea.value.slice(0,150) + "....";
+                }
+                else {
+                    console.log('Untrimmed Value');
+                 textarea.value = text;  
+                }
+            });
+
+        });
+        
     }
+    
 }
