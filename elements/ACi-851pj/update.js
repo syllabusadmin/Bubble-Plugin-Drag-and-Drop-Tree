@@ -1,9 +1,11 @@
 function(instance, properties, context) {
 //start update
+instance.data.resetPlan = () => {
+    console.log('reset start',instance.data.start,instance.data.isBubble,instance.data.halt);
 if (instance.data.isBubble) {
     instance.data.logging = properties.logging;
-    instance.data.sliderEnabled = properties.slider_enabled;
-    instance.data.disabled = properties.disabled;
+    //instance.data.sliderEnabled = properties.slider_enabled;
+    //instance.data.disabled = properties.disabled;
     //adds custom indents to child elements
     if (properties.custom_indents) {
         var newCss = `.sortable > li { margin-left: ${properties.level1}px; }` +
@@ -175,8 +177,12 @@ if (!instance.data.halt) {
     }
     //////////Experimental Data grab from API
     if (!instance.data.isBubble) {
-        instance.data.logging ? console.log("!isBubble") : null;
-        var planId = '1678808469407x515207012437458940';
+         instance.data.logging ? console.log("!isBubble") : null;
+ 
+        var input = document.querySelector('#myInput');
+
+        //var planId = '1681252732021x913202414712782800';
+        var planId = input.value;
         //
         instance.data.getAPS = function (plan) {
             // Create a form data object
@@ -205,7 +211,8 @@ if (!instance.data.halt) {
         //
         instance.data.properties = properties;
         instance.data.getAPS(planId);
-    }
+    
+}
     ///load function
     function onDataLoaded() {
         instance.data.logging ? console.log("results", instance.data.result, "instance.data.APS_result", instance.data.APS_result) : null;
@@ -297,7 +304,7 @@ if (!instance.data.halt) {
         //CSP Add create sliders
         instance.data.logging ? console.log("sliderpoint", instance.data.APS, instance.data.sliderEnabled) : null;
         if (instance.data.sliderEnabled) {
-            console.log("instance.data.addSlider", "sliderpoint");
+            instance.data.logging ? console.log("instance.data.addSlider", "sliderpoint"):null;
             instance.data.addSlider(instance.data.APS);
         }
 
@@ -342,6 +349,11 @@ if (!instance.data.halt) {
         }
 
         instance.data.start = false;
+        instance.data.reset = () => {
+            instance.canvas.innerHTML = '';
+            instance.data.start = true;
+            main();
+        }
     }
     instance.data.halt = false;
     //Calling DeleteFoldCollapse listeners
@@ -353,5 +365,13 @@ if (!instance.data.halt) {
 }
 setTimeout(instance.data.deleteFoldCollapse, 200);
 
+
+
+
+}
+if (instance.data.initialize) {
+    instance.data.initialize = false;
+    instance.data.resetPlan();
+}
     //end update
 }

@@ -28,6 +28,7 @@ if (!isBubble) {
     instance.data.logging ? console.log("instance canvas", instance.data.mainElement) : null;
     instance.data.sliderEnabled = true;
     instance.data.disabled = false;
+    instance.data.initialize = true;
 } else {
     instance.data.start = true;
     instance.data.halt = false;
@@ -38,7 +39,9 @@ if (!isBubble) {
     instance.data.mainElement = $(`#cardstack${instance.data.randomElementID}`);
     instance.data.temp = $(`#temp${instance.data.randomElementID}`);
     instance.data.isBubble = true;
+    instance.data.initialize = true;
 }
+
 ///end CSP initialize
 instance.data.listcount = 0;
 instance.data.handleTypingChange = (editor) => {
@@ -61,15 +64,12 @@ instance.data.handleStopTyping = (editor) => {
     instance.data.typingTimeout = setTimeout(() => instance.data.handleTypingChange(editor), 250);
 };
 instance.data.generateListItemHtml = (attributeplansnippet) => {
-    var disabled = '';
-    if (instance.data.disabled) {
-        disabled = 'disabled';
-    }
-    let aps = attributeplansnippet._id;
+let aps = attributeplansnippet._id;
     let aps_att_id_text = attributeplansnippet.attribute_id_text;
     let aps_name_text = attributeplansnippet.attribute_name_text;
     let aps_card_name_text = attributeplansnippet.attribute_card_name_text;
-    if (instance.data.isBubble) {aps_card_name_text = attributeplansnippet.card_name_text}
+    if (instance.data.isBubble) {aps_card_name_text = attributeplansnippet.card_name_text} 
+    if (!aps_card_name_text) {aps_card_name_text = attributeplansnippet.attribute_name_text}
     instance.data.logging ? console.log("apscard",attributeplansnippet) : null;
     instance.data.apscard = attributeplansnippet;
     //QUESTION HERE
@@ -77,6 +77,14 @@ instance.data.generateListItemHtml = (attributeplansnippet) => {
         .quill_description_text : "";
     if (aps_quill_text === "null") {
         aps_quill_text = "";
+    }
+    var disabled = '';
+    var deleteDisabled = '<span class="deleteMenu material-icons" title="Click to delete item." data-id="' +
+        aps + '">close</span>';
+    var inputDisabled = '';
+    if (instance.data.disabled) {
+        deleteDisabled = '';
+        disabled = ' disabled';
     }
     //let aps_quill_text = "quill_description_text Placeholder";
     instance.data.logging ? console.log(
@@ -87,8 +95,7 @@ instance.data.generateListItemHtml = (attributeplansnippet) => {
  <span class="dragHandle material-icons">drag_indicator</span></div><div class="contentContainer">
  <div class ="menuContainer"><span title="Click to show/hide children" class="disclose ui-icon ui-icon-minusthick"><span></span>
  </span><span title="Click to show/hide description" data-id="${aps}" class = "expandEditor material-icons" >expand_more</span>
- <input  type="text" class="cardTitle" data-id="${aps}" value="${aps_card_name_text}" ${disabled}><span class="deleteMenu material-icons" title="Click to delete item." 
- data-id="${aps}">close</span></div><div class="quillContainer quillTitleContainer" id="${aps}"><div class="quillEditor" id="${aps}">${aps_quill_text}</div></div>
+ <input  type="text" class="cardTitle" data-id="${aps}" value="${aps_card_name_text}" ${disabled}>${deleteDisabled}</div><div class="quillContainer quillTitleContainer" id="${aps}"><div class="quillEditor quillBorder" id="${aps}">${aps_quill_text}</div></div>
  <div id="labelTitle-${aps}" class="labelTitleContainer"><input  type="text" class="labelTitle" data-id="${aps}" value="${aps_name_text}" ${disabled}></div>
  <div id="slider-aps-${aps}"></div></div></div></li>`;
     //console.log("Quill Description Text" + attributeplansnippet.get("description_text"));
@@ -363,6 +370,7 @@ instance.data.addSlider = (aps) => {
                 // iterate through imageDastoas
                 if (imageDastoas) {
                     imageDastoas.forEach((dastoas) => {
+                        if (dastoas.snapshot) {
                         var newElement = document.createElement('div');
                         newElement.classList.add('carousel-cell-image');
                         //newElement.innerHTML = `<div class="image crop-das-${dastoas._id}"><img class="carousel-img image"/></div>`;
@@ -376,7 +384,7 @@ instance.data.addSlider = (aps) => {
                         if (slider) {
                             slider.append(newElement);
                         }
-
+                    }
                     });
                 }
                 //mainElement.append(slider);
@@ -663,5 +671,27 @@ function waitForElm(selector) {
     });
 }
 window.CSP = instance;
+if (!instance.data.isBubble) {
+    var button = document.getElementById('processButton');
+
+
+    button.addEventListener('click', function () {
+        instance.canvas.innerHTML = '';
+        instance.data.start = true;
+        instance.data.halt = false;
+        instance.data.resetPlan();
+        console.log('Process started!');
+    });
+    var input = document.querySelector('#myInput');
+    var sliderButton = document.getElementById('sliderButton');
+    sliderButton.addEventListener('click', function () {
+        instance.canvas.innerHTML = '';
+        instance.data.sliderEnabled = !instance.data.sliderEnabled;
+        instance.data.start = true;
+        instance.data.halt = false;
+        instance.data.resetPlan();
+        console.log('Process started!');
+    });
+}
 //end initialize
 }

@@ -1,0 +1,21 @@
+{
+    "caption": "Reset this cardstack",
+    "fields": {
+        "ACt": {
+            "caption": "Carousels Disabled",
+            "default_val": false,
+            "editor": "DynamicValue",
+            "name": "carousels_disabled",
+            "rank": 0,
+            "value": "boolean"
+        },
+        "ACu": {
+            "caption": "Read Only",
+            "default_val": false,
+            "editor": "DynamicValue",
+            "name": "read_only",
+            "rank": 1,
+            "value": "boolean"
+        }
+    }
+}
