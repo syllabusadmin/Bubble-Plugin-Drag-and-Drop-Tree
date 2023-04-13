@@ -8,7 +8,7 @@
         "height": 800,
         "width": 400
     },
-    "display": "Drag Drop Tree",
+    "display": "Drag Drop Tree Dev",
     "events": {
         "AAO": {
             "caption": "change",

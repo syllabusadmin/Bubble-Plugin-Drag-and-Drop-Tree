@@ -37,12 +37,17 @@
         },
         "ACI": {
             "caption": "namechange",
-            "doc": "Triggers when user changes the name(Title) of the Card",
+            "doc": "Triggers when user changes the name(Title) of the Label",
             "name": "namechange"
         },
         "ACJ": {
             "caption": "Select Snippet",
             "name": "select_snippet"
+        },
+        "ACp": {
+            "caption": "Card Name Changed",
+            "doc": "Triggers when user changes the name(Title) of the Card",
+            "name": "changedcard"
         }
     },
     "fields": {
@@ -163,6 +168,47 @@
             "name": "slider_enabled",
             "rank": 15,
             "value": "boolean"
+        },
+        "ACl": {
+            "caption": "Custom Child Indents",
+            "default_val": false,
+            "doc": "Allows for custom indentation",
+            "editor": "DynamicValue",
+            "name": "custom_indents",
+            "rank": 16,
+            "value": "boolean"
+        },
+        "ACm": {
+            "caption": "level1",
+            "editor": "DynamicValue",
+            "name": "level1",
+            "optional": true,
+            "rank": 17,
+            "value": "number"
+        },
+        "ACn": {
+            "caption": "level2",
+            "editor": "DynamicValue",
+            "name": "level2",
+            "optional": true,
+            "rank": 18,
+            "value": "number"
+        },
+        "ACo": {
+            "caption": "level3",
+            "editor": "DynamicValue",
+            "name": "level3",
+            "optional": true,
+            "rank": 19,
+            "value": "number"
+        },
+        "ACr": {
+            "caption": "disabled",
+            "default_val": false,
+            "editor": "DynamicValue",
+            "name": "disabled",
+            "rank": 20,
+            "value": "boolean"
         }
     },
     "icon": "ion-android-list",
@@ -252,6 +298,14 @@
                 "fn": "function(properties, context) {\n\n\n\n}"
             },
             "name": "quill_editor_content",
+            "value": "text"
+        },
+        "ACq": {
+            "caption": "changedcard",
+            "initialization_code": {
+                "fn": "function(properties, context) {\n\n\n\n}"
+            },
+            "name": "changedcard",
             "value": "text"
         }
     },

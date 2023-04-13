@@ -119,20 +119,33 @@ function(instance, properties, context) {
         instance.data.attplansnippets = properties.data_source.get(0, properties.data_source.length());
         //To create the html of a single card from data source. Keeping the loop outside the function so that this can be used for new added cards also.
         //Add </li> in the end for add new card
-        function generateListItemHtml(attributeplansnippet) {
-            console.log('ANLI GenerateListItem Declared');
-            let quilltext = "";
-            if (attributeplansnippet.get("quill_description_text")) {
-                quilltext = attributeplansnippet.get("quill_description_text")
-            }
-            let cardItemHtml = '<li id="menuItem_' + attributeplansnippet.get("_id") +
-                '" style="display: list-item;" class="mjs-nestedSortable-leaf" data-foo="bar"><div class = "parentContainer highlightable highlight-' +        attributeplansnippet.get("attribute_id_text") + '" id="' + attributeplansnippet.get("attribute_id_text") + '"><div class = "dragContainer"><span class="dragHandle material-icons">drag_indicator</span></div><div class="contentContainer"><div class ="menuContainer"><span title="Click to show/hide children" class="disclose ui-icon ui-icon-minusthick"><span></span></span><span title="Click to show/hide description" data-id="' + attributeplansnippet.get("_id") + '" class = "expandEditor material-icons" >expand_more</span><textarea class = "itemTitle" rows = "3" data-id="' + attributeplansnippet.get("_id") + '">' + attributeplansnippet.get("attribute_name_text") +
-                '</textarea><span class="deleteMenu material-icons" title="Click to delete item." data-id="' + attributeplansnippet.get("_id") + '">close</span></div><div class = "quillContainer" id="' + attributeplansnippet.get("_id") + '"><div class="quillEditor" id="' + attributeplansnippet.get("_id") + '">' + quilltext + '</div></div></div></div>';
-            //console.log("Quill Description Text" + attributeplansnippet.get("description_text"));
-            //console.log(cardItemHtml);
-            return cardItemHtml;
-        }
-
+function generateListItemHtml(attributeplansnippet) {
+    console.log('ANLI GenerateListItem Declared');
+    let quilltext = "";
+    if (attributeplansnippet.get("quill_description_text")) {
+        quilltext = attributeplansnippet.get("quill_description_text")
+    }
+    var deleteDisabled = '<span class="deleteMenu material-icons" title="Click to delete item." data-id="' +
+        attributeplansnippet.get("_id") + '">close</span>';
+    var inputDisabled = '';
+    if (instance.data.disabled) {
+        deleteDisabled = '';
+        inputDisabled = ' disabled';
+    }
+    let cardItemHtml = '<li id="menuItem_' + attributeplansnippet.get("_id") +
+        '" style="display: list-item;" class="mjs-nestedSortable-leaf" data-foo="bar"><div class = "parentContainer highlightable highlight-' +
+        attributeplansnippet.get("attribute_id_text") + '" id="' + attributeplansnippet.get("attribute_id_text") +
+        '"><div class = "dragContainer"><span class="dragHandle material-icons">drag_indicator</span></div><div class="contentContainer"><div class ="menuContainer"><span title="Click to show/hide children" class="disclose ui-icon ui-icon-minusthick"><span></span></span><span title="Click to show/hide description" data-id="' +
+        attributeplansnippet.get("_id") + '" class = "expandEditor material-icons" >expand_more</span>' +
+        '<textarea class = "itemTitle" rows = "3" data-id="' + attributeplansnippet.get("_id") + `" ${inputDisabled}>` +
+        attributeplansnippet.get("attribute_name_text") + `</textarea> ${deleteDisabled}` +
+        '</div><div class = "quillContainer" id="' + attributeplansnippet.get("_id") +
+        '"><div class="quillEditor" id="' + attributeplansnippet.get("_id") + '">' + quilltext +
+        '</div></div></div></div>';
+    //console.log("Quill Description Text" + attributeplansnippet.get("description_text"));
+    //console.log(cardItemHtml);
+    return cardItemHtml;
+}
         function addQuillEditor(editor) {
     console.log('AddQuillEditor Declared');
     const quill = new Quill(editor, {
@@ -227,7 +240,7 @@ function(instance, properties, context) {
          }
      }); */
     quill.on('editor-change', (eventName, ...args) => {
-        if (eventName === 'text-change' && instance.data.disabled) {
+        if (eventName === 'text-change' && !instance.data.disabled) {
             instance.data.handleStopTyping(editor.id);
         } else if (eventName === 'selection-change') {
             // Handle selection change

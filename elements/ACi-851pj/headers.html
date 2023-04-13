@@ -1,147 +1,5 @@
-<style type="text/css">
-    	.innertext{
-        	cursor:text;    
-    	}
-		
-		.placeholder {
-			outline: 1px dashed #4183C4;
-		}    
-		
-		.mjs-nestedSortable-error {
-			background: #fbe3e4;
-			border-color: transparent;
-		}
-		
-		#tree {
-			width: 550px;
-			margin: 0;
-		}
-				
-		ol.sortable,ol.sortable ol {
-			list-style-type: none;
-            max-width: 850px;
-			padding-left: 25px;
-		}
-    
-    	.sortable li{
-            margin-bottom: 10px;
-            
-    	}
-    
-		.sortable li div {
-			
-			-webkit-border-radius: 3px;
-			-moz-border-radius: 3px;
-			border-radius: 3px;
-			cursor: move;
-			border-color: #D4D4D4 #D4D4D4 #BCBCBC;
-			margin: 0;
-			padding: 3px;
-		}
-		
-		li.mjs-nestedSortable-collapsed.mjs-nestedSortable-hovering div {
-			border-color: #999;
-		}
-		.contentContainer{
-            background: inherit;
-            border: 1px solid #d4d4d4;
-            display: inline-block;
-            
-    	}
-		.disclose, .expandEditor {
-			cursor: pointer;
-			width: 20px;
-			display: none;
-		}
-		
-		.sortable li.mjs-nestedSortable-collapsed > ol {
-			display: none;
-		}
-		
-		.sortable li.mjs-nestedSortable-branch > div > .disclose {
-			display: inline-block;
-		}
-		
-		.sortable span.ui-icon {
-			display: inline-block;
-			margin: 0;
-			padding: 0;
-		}
-		
-		
-		
-		.menuEdit {
-			background: #FFF;
-		}
-		
-		input.itemTitle {
-			vertical-align: middle;
-			cursor: text;
-            width: 100%;
-			border-style: none!important;
-            font-size: 20px;
-			background-color: inherit;
-            
-		}
-		
-		.deleteMenu {
-			float: right;
-			cursor: pointer;
-		}
-				
-		p,ol,ul,pre,form {
-			margin-top: 0;
-			margin-bottom: 1em;
-		}
-		
-		
-		dd {
-			margin: 0;
-			padding: 0 0 0 1.5em;
-		}
-		
-		code {
-			background: #e5e5e5;
-		}
-		
-		
-		.notice {
-			color: #c33;
-		}
-    .menuContainer {
-        display: flex;
-        width: 100%;
-        
-    }
-    
-    span.dragHandle {
-        display: inline-block;
-      
-    }
-    
-    .parentContainer {  
-        display: flex;
-        flex-direction: row;
-    }
-    
-    .dragContainer {  
-        position: relative;
-        flex-grow: 1;
-    }
-    
-   .dragHandle {    
-       top: 50%;
-       position: absolute;
-       margin: 0;
-       left: 50%;
-       transform: translate(-50%, -50%);\
-    }
-    
-    .contentContainer {
-       flex-grow: 5;
-    }
-    
-            .innertext {
+    <style type="text/css">
+        .innertext {
             cursor: text;
         }
 
@@ -176,9 +34,9 @@
             border-radius: 3px;
             cursor: move;
             border-color: #D4D4D4 #D4D4D4 #BCBCBC;
-  margin: auto;
-    padding: 3px;
-    max-width: 100% !important;
+            margin: 0;
+            padding: 0px;
+            max-width: 99%;
         }
 
         li.mjs-nestedSortable-collapsed.mjs-nestedSortable-hovering div {
@@ -189,6 +47,7 @@
             background: inherit;
             border: 1px solid #d4d4d4;
             display: inline-block;
+            margin-left: 2px;
         }
 
         .disclose,
@@ -216,13 +75,59 @@
             background: #FFF;
         }
 
-        input.itemTitle {
+        .cardTitle {
             vertical-align: middle;
             cursor: text;
             width: 100%;
             border-style: none !important;
             font-size: 20px;
             background-color: inherit;
+            resize: none;
+            overflow: hidden;
+            transition: height 0.2s ease-out;
+            height: auto;
+            max-height: 100px;
+        }
+
+        .cardTitle.overflow-ellipsis {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .labelTitleContainer {
+            border: 1px solid black;
+            padding: 4px;
+        }
+
+        .quillTitleContainer {
+            box-sizing: border-box;
+            padding: 4px;
+        }
+        .contentContainer {
+  position: relative;
+}
+
+        .labelTitle {
+            vertical-align: middle;
+            cursor: text;
+            width: 100%;
+            border-style: none !important;
+            font-size: 20px;
+            background-color: inherit;
+            resize: none;
+            overflow: hidden;
+            transition: height 0.2s ease-out;
+            height: auto;
+            max-height: 100px;
+
+            margin-left: 4px;
+        }
+
+        .labelTitle.overflow-ellipsis {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
 
         .deleteMenu {
@@ -276,7 +181,7 @@
             position: absolute;
             margin: 0;
             left: 50%;
-            transform: translate(-50%, -50%);
+            transform: translate(-100%, -50%);
         }
 
         .contentContainer {
@@ -286,52 +191,66 @@
         .invisible {
             display: none;
         }
-        .div-image {    -webkit-text-size-adjust: 100%;
-    --font_default: Lato;
-    --color_primary_default: rgba(2, 5, 211, 1);
-    --color_primary_default_rgb: 2,5,211;
-    --color_primary_contrast_default: rgba(255, 255, 255, 1);
-    --color_primary_contrast_default_rgb: 255,255,255;
-    --color_text_default: rgba(9, 23, 71, 1);
-    --color_text_default_rgb: 9,23,71;
-    --color_surface_default: rgba(255, 255, 255, 1);
-    --color_surface_default_rgb: 255,255,255;
-    --color_background_default: rgba(255, 255, 255, 0);
-    --color_background_default_rgb: 255,255,255;
-    --color_destructive_default: rgba(255, 0, 0, 1);
-    --color_destructive_default_rgb: 255,0,0;
-    --color_success_default: rgba(23, 219, 78, 1);
-    --color_success_default_rgb: 23,219,78;
-    --color_alert_default: rgba(250, 181, 21, 1);
-    --color_alert_default_rgb: 250,181,21;
-    margin: 0;
-    padding: 0;
-    border: 0;
-    font: inherit;
-    vertical-align: baseline;
-    -webkit-font-smoothing: antialiased;
-    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-    pointer-events: auto;
-    overflow: visible;
-    box-sizing: border-box;
-    position: absolute;
-    z-index: 2;
-    top: 0px;
-    border-radius: 0px;
-    width: 132px;
-    left: 0px;
-    height: 117px;
-    background-color: rgba(255, 255, 255, 0);
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-image: url("https://d1muf25xaso8hp.cloudfront.net/https%3A%2F%2Fs3.amazonaws.com%2Fappforest_uf%2Fd110%2Ff1677264918015x724524660577431200%2Fimage%2520%2528328%2529.png?w=192&h=170&auto=compress&fit=crop&dpr=1");
+
+        .div-image {
+            -webkit-text-size-adjust: 100%;
+            --font_default: Lato;
+            --color_primary_default: rgba(2, 5, 211, 1);
+            --color_primary_default_rgb: 2, 5, 211;
+            --color_primary_contrast_default: rgba(255, 255, 255, 1);
+            --color_primary_contrast_default_rgb: 255, 255, 255;
+            --color_text_default: rgba(9, 23, 71, 1);
+            --color_text_default_rgb: 9, 23, 71;
+            --color_surface_default: rgba(255, 255, 255, 1);
+            --color_surface_default_rgb: 255, 255, 255;
+            --color_background_default: rgba(255, 255, 255, 0);
+            --color_background_default_rgb: 255, 255, 255;
+            --color_destructive_default: rgba(255, 0, 0, 1);
+            --color_destructive_default_rgb: 255, 0, 0;
+            --color_success_default: rgba(23, 219, 78, 1);
+            --color_success_default_rgb: 23, 219, 78;
+            --color_alert_default: rgba(250, 181, 21, 1);
+            --color_alert_default_rgb: 250, 181, 21;
+            margin: 0;
+            padding: 0;
+            border: 0;
+            font: inherit;
+            vertical-align: baseline;
+            -webkit-font-smoothing: antialiased;
+            -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+            pointer-events: auto;
+            overflow: visible;
+            box-sizing: border-box;
+            position: absolute;
+            z-index: 2;
+            top: 0px;
+            border-radius: 0px;
+            width: 132px;
+            left: 0px;
+            height: 117px;
+            background-color: rgba(255, 255, 255, 0);
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-image: url("https://d1muf25xaso8hp.cloudfront.net/https%3A%2F%2Fs3.amazonaws.com%2Fappforest_uf%2Fd110%2Ff1677264918015x724524660577431200%2Fimage%2520%2528328%2529.png?w=192&h=170&auto=compress&fit=crop&dpr=1");
         }
+
 
         .image {
+            width: 100%;
+            height: auto;
+            max-width: 132px;
+            /* or any other max-width you want */
+            max-height: 117px;
+            /* or any other max-height you want */
+            object-fit: contain;
+        }
 
+        /*
             height: 117px;
             width: 132px;
-        }
+            object-fit: contain;
+      */
+
 
         .div-text {
             -webkit-text-size-adjust: 100%;
@@ -367,113 +286,136 @@
             -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
             max-width: 100px;
         }
-    .container {
-        -webkit-text-size-adjust: 100%;
-    --font_default: Lato;
-    --color_primary_default: rgba(2, 5, 211, 1);
-    --color_primary_default_rgb: 2,5,211;
-    --color_primary_contrast_default: rgba(255, 255, 255, 1);
-    --color_primary_contrast_default_rgb: 255,255,255;
-    --color_text_default: rgba(9, 23, 71, 1);
-    --color_text_default_rgb: 9,23,71;
-    --color_surface_default: rgba(255, 255, 255, 1);
-    --color_surface_default_rgb: 255,255,255;
-    --color_background_default: rgba(255, 255, 255, 0);
-    --color_background_default_rgb: 255,255,255;
-    --color_destructive_default: rgba(255, 0, 0, 1);
-    --color_destructive_default_rgb: 255,0,0;
-    --color_success_default: rgba(23, 219, 78, 1);
-    --color_success_default_rgb: 23,219,78;
-    --color_alert_default: rgba(250, 181, 21, 1);
-    --color_alert_default_rgb: 250,181,21;
-    margin: 0;
-    padding: 0;
-    border: 0;
-    font: inherit;
-    vertical-align: baseline;
-    -webkit-font-smoothing: antialiased;
-    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-    pointer-events: auto;
-    overflow: visible;
-    box-sizing: border-box;
-    width: 700px;
-    left: 0px;
-    position: absolute;
-    z-index: 2;
-    top: 0px;
-    background-color: rgb(0, 0, 0);
-    border-radius: 0px;
-    height: 133px;
-    }
 
-    .slick-prev:before, .slick-next:before {
-      color: black !important;
-    }
-    
-
-.slider img {
-  display: inline-block; /* display the slider items as inline-block elements */
-  vertical-align: top; /* align the items to the top of the container */
-  max-height: 100%; /* prevent the items from overflowing vertically */
-  height: auto;
-  max-width: 100px;
-}
-    
-.slick-slide {
-  width: 200px; /* set the width to 200px */
-  height: 150px; /* set the height to 150px */
-}
-.slick-dotted.slick-slider {
-    margin-bottom: 30px;
-    width: auto;
-    
-    .slick-next:before, .slick-prev:before {
-    font-family: slick;
-    font-size: 20px;
-    line-height: 1;
-    opacity: .75;
-    color: #fff !important;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-}
-    
-  
-</style>
-<!--flickety styles -->
-    <style>
-      /* Style the carousel cells */
-      .carousel-cell {
-        width: 150px;
-        height: 150px;
-        margin-right: 10px;
-        background-color: #fff;
-        border: 1px solid #ccc;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-      
-      /* Style the carousel images */
-      .carousel-img {
-        max-width: 100%;
-        max-height: 100%;
-      }
-      .carousel-img:hover {
-        transform: scale(1.5);
-      }
-      
-      /* Style the carousel text */
-      .carousel-text {
-        text-align: center;
-        font-size: 18px;
-        font-weight: bold;
-          color:black;
-      }
-        .slider_invisible
-        {
-        display:none;
+        .container {
+            -webkit-text-size-adjust: 100%;
+            --font_default: Lato;
+            --color_primary_default: rgba(2, 5, 211, 1);
+            --color_primary_default_rgb: 2, 5, 211;
+            --color_primary_contrast_default: rgba(255, 255, 255, 1);
+            --color_primary_contrast_default_rgb: 255, 255, 255;
+            --color_text_default: rgba(9, 23, 71, 1);
+            --color_text_default_rgb: 9, 23, 71;
+            --color_surface_default: rgba(255, 255, 255, 1);
+            --color_surface_default_rgb: 255, 255, 255;
+            --color_background_default: rgba(255, 255, 255, 0);
+            --color_background_default_rgb: 255, 255, 255;
+            --color_destructive_default: rgba(255, 0, 0, 1);
+            --color_destructive_default_rgb: 255, 0, 0;
+            --color_success_default: rgba(23, 219, 78, 1);
+            --color_success_default_rgb: 23, 219, 78;
+            --color_alert_default: rgba(250, 181, 21, 1);
+            --color_alert_default_rgb: 250, 181, 21;
+            margin: 0;
+            padding: 0;
+            border: 0;
+            font: inherit;
+            vertical-align: baseline;
+            -webkit-font-smoothing: antialiased;
+            -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+            pointer-events: auto;
+            overflow: visible;
+            box-sizing: border-box;
+            width: 700px;
+            left: 0px;
+            position: absolute;
+            z-index: 2;
+            top: 0px;
+            background-color: rgb(0, 0, 0);
+            border-radius: 0px;
+            height: 133px;
         }
-        
+
+        .slick-prev:before,
+        .slick-next:before {
+            color: black !important;
+        }
+
+
+        .slider img {
+            display: inline-block;
+            /* display the slider items as inline-block elements */
+            vertical-align: top;
+            /* align the items to the top of the container */
+            max-height: 100%;
+            /* prevent the items from overflowing vertically */
+            height: auto;
+            max-width: 100px;
+        }
+
+        .slick-slide {
+            width: 200px;
+            /* set the width to 200px */
+            height: 150px;
+            /* set the height to 150px */
+        }
+
+        .slick-dotted.slick-slider {
+            margin-bottom: 30px;
+            width: auto;
+        }
+
+        .slick-next:before,
+        .slick-prev:before {
+            font-family: slick;
+            font-size: 20px;
+            line-height: 1;
+            opacity: .75;
+            color: #fff !important;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+    </style>
+    <!--flickety styles -->
+    <style>
+        /* Style the carousel cells */
+        /* Style the carousel cells */
+        .carousel-cell-text {
+            width: 150px;
+            height: 150px;
+            margin-right: 10px;
+            background-color: #fff;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .carousel-cell-image {
+            width: 150px;
+            height: 150px;
+            margin-right: 10px;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Style the carousel images */
+        .carousel-img {
+            max-width: 95%;
+            max-height: 95%;
+        }
+
+        .carousel-img:hover {
+            transform: scale(1.03);
+        }
+
+        /* Style the carousel text */
+        .carousel-text {
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            color: black;
+        }
+
+        .carousel-text:hover {
+            transform: scale(1.03);
+        }
+
+
+        .slider_invisible {
+            display: none;
+        }
     </style>
 
 <script src="https://code.jquery.com/ui/1.10.4/jquery-ui.min.js"></script>
@@ -491,3 +433,17 @@
 <!-- Flickety slider -->
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flickity/2.2.1/flickity.min.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flickity/2.2.1/flickity.pkgd.min.js"></script>
+
+    <style>
+        .sortable li {
+            margin-left: 20px;
+        }
+
+        .sortable li li {
+            margin-left: 40px;
+        }
+
+        .sortable li li li {
+            margin-left: 60px;
+        }
+    </style>
