@@ -325,26 +325,27 @@ instance.data.addSlider = (aps) => {
             console.log("mainELement", mainElement, mainElement.length);
             if (mainElement.length != 0) {
                 mainElement.addClass('carousel');
-                console.log("mainElementL", mainElement);
+                instance.data.logging ? console.log("mainElementL", mainElement):null;
                 //   slider.classList.add('carousel', `slider-buttons-aps-${aps._id}`);
                 ///new
                 var carousel = document.createElement('div');
                 carousel.id = aps._id;
                 carousel.classList.add('carousel');
-                console.log("carousel", carousel);
+                instance.data.logging ? console.log("carousel", carousel):null;
                 mainElement.append(carousel);
                 //instance.data.logging ? console.log("mainElement-after carousel", mainElement):null;
+                let textDastoas = [];
+                let imageDastoas = [];
+                if (aps.DASTOAS) {
+
+                    textDastoas = aps.DASTOAS.filter((dastoas) => dastoas.type === 'text');
+                    imageDastoas = aps.DASTOAS.filter((dastoas) => dastoas.type === 'image');
                 var slider = new Flickity(`#slider-aps-${aps._id}`, {
                     wrapAround: true,
                     prevNextButtons: true,
                     pageDots: false
                 });
-                let textDastoas = [];
-                let imageDastoas = [];
-                if (aps.DASTOAS) {
-                    textDastoas = aps.DASTOAS.filter((dastoas) => dastoas.type === 'text');
-                    imageDastoas = aps.DASTOAS.filter((dastoas) => dastoas.type === 'image');
-                }
+                instance.data.logging ? console.log("filter dastoas",textDastoas,imageDastoas):null;
                 // iterate through textDastoas
                 if (textDastoas) {
                     textDastoas.forEach((dastoas) => {
@@ -370,11 +371,11 @@ instance.data.addSlider = (aps) => {
                 // iterate through imageDastoas
                 if (imageDastoas) {
                     imageDastoas.forEach((dastoas) => {
-                        if (dastoas.snapshot) {
+                        if (dastoas.snapshot || dastoas.snapshot_image) {
                         var newElement = document.createElement('div');
                         newElement.classList.add('carousel-cell-image');
                         //newElement.innerHTML = `<div class="image crop-das-${dastoas._id}"><img class="carousel-img image"/></div>`;
-                        console.log('addind Das', dastoas, dastoas.snapshot)
+                        instance.data.logging ? console.log('addind Das', dastoas, dastoas.snapshot):null;
                         dastoas.snapshot_image ? dastoas.snapshot = dastoas.snapshot_image : null;
                         newElement.innerHTML = `<div><img class="image carousel-img image" src="https:${dastoas.snapshot}"/></div>`;
                         newElement.id = dastoas._id;
@@ -390,6 +391,7 @@ instance.data.addSlider = (aps) => {
                 //mainElement.append(slider);
                 //instance.data.logging ? console.log("mainElement-after,slider ", mainElement, slider);
             }
+        }
         })
     }
 }
@@ -683,6 +685,15 @@ if (!instance.data.isBubble) {
         console.log('Process started!');
     });
     var input = document.querySelector('#myInput');
+    var sliderButton = document.getElementById('sliderButton');
+    sliderButton.addEventListener('click', function () {
+        instance.canvas.innerHTML = '';
+        instance.data.sliderEnabled = !instance.data.sliderEnabled;
+        instance.data.start = true;
+        instance.data.halt = false;
+        instance.data.resetPlan();
+        console.log('Process started!');
+    });
     var sliderButton = document.getElementById('sliderButton');
     sliderButton.addEventListener('click', function () {
         instance.canvas.innerHTML = '';
