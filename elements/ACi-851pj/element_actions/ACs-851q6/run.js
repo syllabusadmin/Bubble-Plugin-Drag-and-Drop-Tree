@@ -5,7 +5,7 @@ function(instance, properties, context) {
 
 instance.canvas.innerHTML = '';
 instance.data.start = true;
-instance.data.halt = false;
+//instance.data.halt = false;
 instance.data.sliderEnabled = properties.carousels_disabled;
 instance.data.disabled = properties.read_only;
 instance.data.resetPlan();
