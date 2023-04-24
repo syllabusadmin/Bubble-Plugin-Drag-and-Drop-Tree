@@ -29,10 +29,12 @@ if (!isBubble) {
     instance.data.sliderEnabled = true;
     instance.data.disabled = false;
     instance.data.initialize = true;
+    instance.data.expander = false;
 } else {
     instance.data.start = true;
     instance.data.halt = false;
     instance.data.logging = true;
+    instance.canvas.html('');
     instance.canvas.append(
         `<div id="cardstack${instance.data.randomElementID}"></div> <div id="temp${instance.data.randomElementID}" class="invisible"></div>`
     );
@@ -40,6 +42,7 @@ if (!isBubble) {
     instance.data.temp = $(`#temp${instance.data.randomElementID}`);
     instance.data.isBubble = true;
     instance.data.initialize = true;
+    instance.data.expander = false;
 }
 
 ///end CSP initialize
@@ -53,9 +56,9 @@ instance.data.handleTypingChange = (editor) => {
     // Expose Delta as state
     instance.publishState('delta', content);
     instance.publishState('editedcard_id', editor.id);
-    instance.publishState('htmlobject', instance.canvas.html());
+    //instance.publishState('htmlobject', instance.canvas.html());
     instance.publishState('quill_editor_content', content.substring(1, content.length - 1));
-    instance.triggerEvent('relocated');
+    //instance.triggerEvent('relocated');
 };
 instance.data.handleStopTyping = (editor) => {
     // Clear the timeout and set a new one to handle the typing change
@@ -90,22 +93,55 @@ let aps = attributeplansnippet._id;
     instance.data.logging ? console.log(
         'GenerateListItem Declared,aps, aps_id_text, aps_name_text, aps_quill_text,aps_card_name_text', aps, aps_att_id_text,
         aps_name_text, aps_quill_text, aps_card_name_text) : null;
-    let cardItemHtml = `<li id="menuItem_${aps}" style="display: list-item;" class="mjs-nestedSortable-leaf" data-foo="bar">
+    let cardItemHtml = `<li id="menuItem_${aps}" style="display: list-item;" class="mjs-nestedSortable-leaf leaf1" data-foo="bar">
  <div class = "parentContainer highlightable highlight-${aps_att_id_text}" id="${aps_att_id_text}"><div class = "dragContainer">
  <span class="dragHandle material-icons">drag_indicator</span></div><div class="contentContainer">
  <div class ="menuContainer"><span title="Click to show/hide children" class="disclose ui-icon ui-icon-minusthick"><span></span>
  </span><span title="Click to show/hide description" data-id="${aps}" class = "expandEditor material-icons" >expand_more</span>
  <input  type="text" class="cardTitle" data-id="${aps}" value="${aps_card_name_text}" ${disabled}>${deleteDisabled}</div><div class="quillContainer quillTitleContainer" id="${aps}"><div class="quillEditor quillBorder" id="${aps}">${aps_quill_text}</div></div>
  <div id="labelTitle-${aps}" class="labelTitleContainer"><input  type="text" class="labelTitle" data-id="${aps}" value="${aps_name_text}" ${disabled}></div>
- <div id="slider-aps-${aps}"></div></div></div></li>`;
+ <div id="slider-aps-${aps}"></div></div></div>`;
     //console.log("Quill Description Text" + attributeplansnippet.get("description_text"));
     //console.log(cardItemHtml);
     return cardItemHtml;
 }
+instance.data.buildHierarchyHtml = (hierarchy1) => {
+    instance.data.logging ? console.log("heirBuild", hierarchy1) : null;
+    let hierarchy = JSON.parse(hierarchy1);
+    instance.data.logging ? console.log('buildHierarchyHtml Declared', hierarchy.length) : null;
+    let cardListHtml = '';
+    for (let i = 0; i < hierarchy.length; i++) {
+        let hierarchyItem = hierarchy[i];
+        let hierarchyItemId = hierarchyItem.id;
+        instance.data.logging ? console.log('hierarchyitem and id' + hierarchy[i] + hierarchyItem.id) : null;
+        //Get the snippet that corresponds to this item
+        let thesnippet = instance.data.APS.filter((snippet) => {
+            if (hierarchyItemId == snippet._id) {
+                return snippet;
+            }
+        })[0];
+        //Pass thesnippet to html generator
+        instance.data.logging ? console.log("theSnippet", thesnippet) : null;
+        if (thesnippet) {
+            cardListHtml += instance.data.generateListItemHtml(thesnippet);
+        }
+        //console.log('cardListHtml B4', cardListHtml, 'item', hierarchyItemId, 'hierarchy.children', hierarchyItem.children);
+        let childCardHtml = '';
+        if (hierarchyItem.children) {
+            childCardHtml += '<ol>'
+            childCardHtml += instance.data.buildHierarchyHtml(JSON.stringify(hierarchyItem.children));
+            childCardHtml += '</ol>';
+        }
+        cardListHtml += childCardHtml;
+    }
+    cardListHtml += '</li>';
+    instance.data.start = false;
+    return cardListHtml;
+}
 instance.data.callNestedSortable = () => {
     instance.data.logging ? console.log('ANLI NestedSortable Declared') : null;
     //super dumb but seems to require it to be added first
-    instance.canvas.find('ol.sortable#' + instance.data.plan_unique_id).nestedSortable();
+    //instance.canvas.find('ol.sortable#' + instance.data.plan_unique_id).nestedSortable();
     //CSP End
     instance.data.ns = instance.canvas.find('ol.sortable#' + instance.data.plan_unique_id).nestedSortable({
         disabled: instance.data.disabled,
@@ -123,6 +159,24 @@ instance.data.callNestedSortable = () => {
         isTree: true,
         expandOnHover: 700,
         startCollapsed: false,
+        isAllowed: function(currentItem, parentItem, levels) {
+            // Allow nesting as long as the parent is the root element or a leaf element
+            instance.data.logging ? console.log("leaf",currentItem, parentItem, levels):null;
+            if (!parentItem) {
+                var list = currentItem.closest('ol');
+                var isTopLevel = list.hasClass('sortable');
+                instance.data.logging ? console.log("leaf parentItem",list, isTopLevel):null;
+                if (isTopLevel) {
+                    // Allow drop on first level
+                    return true;
+                } else {
+                    // Prevent drop on all other levels
+                    return false;
+                }
+            }
+            var isLeaf = parentItem.hasClass('leaf1');
+            return isLeaf;
+        },
         change: function () {
             instance.data.logging ? console.log('Relocated item') : null;
         },
@@ -456,7 +510,7 @@ instance.data.addQuillEditor = (editor) => {
              var toolbar2 = quill.getModule('toolbar');
              toolbar2.container.style.display = 'block';
          }
-         */
+        */ 
 
     quill.root.addEventListener('focus', (e) => {
         instance.data.focused = true
@@ -465,9 +519,7 @@ instance.data.addQuillEditor = (editor) => {
     const handleClick = (e) => {
         instance.data.logging ? console.log(`editor`, editor.parentElement.id) : null;
         if (!e.target.closest(`[id="${editor.parentElement.id}"]`)) {
-            instance.data.logging ? console.log(`hiding toolbar: the target is`, e.target,
-                `and the toolbar is`, toolbar, `and the preview is`, e.target.classList.contains(
-                    'ql-preview')) : null;
+            //instance.data.logging ? console.log(`hiding toolbar: the target is`, e.target,`and the toolbar is`, toolbar, `and the preview is`, e.target.classList.contains('ql-preview')) : null;
             toolbar.setAttribute('hidden', true);
         }
     }
@@ -495,7 +547,7 @@ instance.data.addQuillEditor = (editor) => {
          }
      }); */
     quill.on('editor-change', (eventName, ...args) => {
-        if (eventName === 'text-change' && instance.data.disabled) {
+        if (eventName === 'text-change' && !instance.data.disabled) {
             instance.data.handleStopTyping(editor);
             instance.data.logging ? console.log("editor", editor) : null;
         } else if (eventName === 'selection-change') {
@@ -606,6 +658,7 @@ instance.data.deleteFoldCollapse = () => {
 }
 //add single items
 instance.data.addSingleDAS = (das, aps1) => {
+    /*
     instance.data.logging ? console.log("addSingleDas", das, aps1) : null;
     let newDAS = das;
     let aps2 = aps1;
@@ -614,6 +667,26 @@ instance.data.addSingleDAS = (das, aps1) => {
     var newElement = document.createElement('div');
     newElement.classList.add('carousel-cell');
     newElement.innerHTML = `<div class="image crop-das-${id}"><img class="carousel-img image"/></div>`;
+    newElement.id = id;
+    newElement.type = 'Image';
+    //instance.data.logging ? console.log("newElement img", newElement):null;
+    newElement.addEventListener("click", instance.data.selectSnippet);
+    var carousel = instance.canvas.find(`#slider-aps-${apsId}`).flickity({
+        initialIndex: 1
+    });
+    carousel.flickity('append', newElement);
+    */
+    instance.data.logging ? console.log("addSingleDas", das, aps1) : null;
+    let newDAS = das;
+    let aps2 = aps1;
+    let id = newDAS.get('_id');
+    let apsId = aps2._id;
+    var newElement = document.createElement('div');
+    newElement.classList.add('carousel-cell-image');
+    //newElement.innerHTML = `<div class="image crop-das-${dastoas._id}"><img class="carousel-img image"/></div>`;
+    instance.data.logging ? console.log('addind Das', newDAS, newDAS.snapshot):null;
+    newDAS.snapshot_image ? newDAS.snapshot = newDAS.snapshot_image : null;
+    newElement.innerHTML = `<div><img class="image carousel-img image" src="https:${newDAS.snapshot}"/></div>`;
     newElement.id = id;
     newElement.type = 'Image';
     //instance.data.logging ? console.log("newElement img", newElement):null;
@@ -672,11 +745,9 @@ function waitForElm(selector) {
         });
     });
 }
-window.CSP = instance;
+instance.data.logging ? window.CSP = instance:null;
 if (!instance.data.isBubble) {
     var button = document.getElementById('processButton');
-
-
     button.addEventListener('click', function () {
         instance.canvas.innerHTML = '';
         instance.data.start = true;
@@ -694,15 +765,62 @@ if (!instance.data.isBubble) {
         instance.data.resetPlan();
         console.log('Process started!');
     });
-    var sliderButton = document.getElementById('sliderButton');
-    sliderButton.addEventListener('click', function () {
-        instance.canvas.innerHTML = '';
-        instance.data.sliderEnabled = !instance.data.sliderEnabled;
-        instance.data.start = true;
-        instance.data.halt = false;
-        instance.data.resetPlan();
-        console.log('Process started!');
-    });
+    const expandButton = document.getElementById('expandButton'); 
+expandButton.addEventListener('click', () => {
+    instance.data.logging ? console.log("expand expander", instance.data.expander) : null;
+    if (instance.data.expander) {
+        instance.data.APS.forEach((aps) => {
+            const uniqueId = aps._id;
+            instance.canvas.find('#' + uniqueId + '.quillEditor').slideDown('fast', 'swing');
+            if (instance.canvas.find('.expandEditor[data-id=' + uniqueId + ']').html() === 'expand_more') {
+                instance.canvas.find('.expandEditor[data-id=' + uniqueId + ']').html('expand_less');
+            } 
+            //CSP Add for Slider
+            if (instance.data.sliderEnabled) {
+                instance.canvas.find(`#slider-aps-${uniqueId}`).removeClass('slider_invisible');
+            } 
+            //CSP Add for new Label Title
+            if (instance.canvas.find(`#labelTitle-${uniqueId}`).hasClass('slider_invisible')) {
+                instance.canvas.find(`#labelTitle-${uniqueId}`).removeClass('slider_invisible');
+            } 
+        })
+    } else {
+        instance.data.APS.forEach((aps) => {
+            const uniqueId = aps._id;
+            instance.canvas.find('#' + uniqueId + '.quillEditor').slideUp('fast', 'swing');
+            if (instance.canvas.find('.expandEditor[data-id=' + uniqueId + ']').html() === 'expand_less') {   
+                instance.canvas.find('.expandEditor[data-id=' + uniqueId + ']').html('expand_more');
+            }
+            if (instance.data.sliderEnabled) {
+                instance.canvas.find(`#slider-aps-${uniqueId}`).addClass('slider_invisible');
+            }
+            instance.canvas.find(`#labelTitle-${uniqueId}`).addClass('slider_invisible');
+        })
+    }
+    instance.data.expander = !instance.data.expander;
+});
+
 }
+// Observe for css changes
+const targetNode = document.body;
+const config = { childList: true, subtree: true };
+const callback = function(mutationsList, observer) {
+    for(let mutation of mutationsList) {
+        if (mutation.type === 'childList') {
+            // Check if the added nodes include an <ol> or <li> element
+            const addedNodes = mutation.addedNodes;
+            for (let node of addedNodes) {
+                if (node.nodeName === 'OL' || node.nodeName === 'LI') {
+                    // Set the margin-bottom of <li> elements as necessary
+                    $('ol > li').css('margin-bottom', '10px');
+                    $('ol > li > ol > li').css('margin-bottom', '0');
+                }
+            }
+        }
+    }
+};
+const observer = new MutationObserver(callback);
+observer.observe(targetNode, config);
+
 //end initialize
 }

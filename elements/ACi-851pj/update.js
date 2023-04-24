@@ -1,7 +1,7 @@
 function(instance, properties, context) {
-//start update
+///start update
 instance.data.resetPlan = () => {
-    console.log('reset start',instance.data.start,instance.data.isBubble,instance.data.halt);
+    instance.data.logging ? console.log('reset start',instance.data.start,instance.data.isBubble,instance.data.halt):null;
 if (instance.data.isBubble) {
     instance.data.logging = properties.logging;
     //instance.data.sliderEnabled = properties.slider_enabled;
@@ -20,56 +20,39 @@ if (instance.data.isBubble) {
 }
 if (!instance.data.isBubble) {
     properties.custom_indents = true;
-    properties.level1 = 30;
-    properties.level2 = 40;
-    properties.level3 = 50;
+    properties.level1 = 10;
+    properties.level2 = 50;
+    properties.level3 = 110;
     //adds custom indents to child elements
     if (properties.custom_indents) {
-        var newCss = `.sortable > li { margin-left: ${properties.level1}px; }` +
-            `.sortable > li > ul > li { margin-left: ${properties.level2}px; }` +
-            `.sortable > li > ul > li > ul > li { margin-left: ${properties.level3}px; }` +
+        var newCss = `.sortable ol { margin-left: ${properties.level1}px; }` +
+            `.sortable li { margin-left: ${properties.level1}px; }` +
+            `.sortable li > ul > li { margin-left: ${properties.level2}px; }` +
+            `.sortable li > ul > li > ul > li { margin-left: ${properties.level3}px; }` +
             `.ql-container.ql-snow {border: non}`;
         // Add to stylesheet
+/*
+.sortable li {
+  margin-left: 20px;
+}
+.sortable li li {
+  margin-left: 40px;
+}
+.sortable li li li {
+  margin-left: 60px;
+}
+*/
+       // instance.canvas.find('head').appendChild('<style>' + newCss + '</style>');
+        $('<style>').text(newCss).appendTo('#cardstack');
+        const style = document.createElement('style');
+style.textContent =  `.sortable li { margin-left: ${properties.level1}px; }` +
+`.sortable li > ul > li { margin-left: ${properties.level2}px; }` +
+`.sortable li > ul > li > ul > li { margin-left: ${properties.level3}px; }`;
 
-        instance.canvas.find('head').append('<style>' + newCss + '</style>');
+document.body.appendChild(style);
     }
 }
 
-
-
-function buildHierarchyHtml(hierarchy1) {
-    instance.data.logging ? console.log("heirBuild", hierarchy1) : null;
-    let hierarchy = JSON.parse(hierarchy1);
-    instance.data.logging ? console.log('buildHierarchyHtml Declared', hierarchy.length) : null;
-    let cardListHtml = '';
-    for (let i = 0; i < hierarchy.length; i++) {
-        let hierarchyItem = hierarchy[i];
-        let hierarchyItemId = hierarchyItem.id;
-        instance.data.logging ? console.log('hierarchyitem and id' + hierarchy[i] + hierarchyItem.id) : null;
-        //Get the snippet that corresponds to this item
-        let thesnippet = instance.data.APS.filter((snippet) => {
-            if (hierarchyItemId == snippet._id) {
-                return snippet;
-            }
-        })[0];
-        //Pass thesnippet to html generator
-        instance.data.logging ? console.log("theSnippet", thesnippet) : null;
-        if (thesnippet) {
-            cardListHtml += instance.data.generateListItemHtml(thesnippet);
-        }
-        console.log('cardListHtml B4', cardListHtml, 'item', hierarchyItemId, 'hierarchy.children', hierarchyItem.children);
-        let childCardHtml = '';
-        if (hierarchyItem.children) {
-            childCardHtml += '<ol>'
-            childCardHtml += buildHierarchyHtml(JSON.stringify(hierarchyItem.children));
-            childCardHtml += '</ol>';
-        }
-        cardListHtml += childCardHtml;
-    }
-    cardListHtml += '</li>';
-    instance.data.start = false;
-    return cardListHtml;
-}
 instance.data.callNestedSortable();
 if (!instance.data.halt) {
 
@@ -80,52 +63,7 @@ if (!instance.data.halt) {
         instance.publishState('selectedsnippet', `${evt.currentTarget.id}|||${evt.currentTarget.type}`);
         instance.triggerEvent('select_snippet');
     }
-
-    ///add stragglers 
-
-    if (!instance.data.start) {
-
-        instance.data.DASAdd = properties.das.get(0, properties.das.length());
-        instance.data.TOASAdd = properties.toas.get(0, properties.toas.length());
-
-        instance.data.DASAdd.forEach((das) => {
-            instance.data.logging ? console.log("checking das", das) : null;
-            let id = das.get('_id');
-            let found = instance.canvas.find(`.crop-das-${id}`).length;
-            if (!found && instance.data.APS.length) {
-                let apsID = das.get('attribute_custom_attribute').get('_id');
-                const aps1 = instance.data.APS.filter((aps2) => aps2.attribute_id_text === apsID);
-
-                instance.data.logging ? console.log("das Add", das, aps1[0]) : null;
-                instance.data.singleDas = das;
-                instance.data.singleAPS = aps1;
-                if (aps1[0] && das) {
-                    if (instance.data.sliderEnabled) { instance.data.addSingleDAS(das, aps1[0]); }
-                }
-            } else {
-                instance.data.logging ? console.log("das Found") : null;
-            }
-        });
-
-        instance.data.TOASAdd.forEach((toas) => {
-            instance.data.logging ? console.log("checking toas", toas) : null;
-            let id = toas.get('_id');
-            let found = instance.canvas.find(`.crop-das-${id}`).length;
-            if (!found) {
-                instance.data.logging ? console.log("toas Add", toas) : null;
-                let apsID = toas.get('attribute_custom_attribute').get('_id');
-                const aps1 = instance.data.APS.filter((aps2) => aps2.attribute_id_text === apsID);
-                if (aps1[0] && toas) {
-                    if (instance.data.sliderEnabled) { instance.data.addSingleTOAS(toas, aps1[0]); }
-                }
-            } else {
-                instance.data.logging ? console.log("das Found") : null;
-            }
-        });
-
-    }
-
-
+ 
     //CSP add for data purposes,bubble
     instance.data.logging ? console.log("instance.data.isBubble instance.data.start", instance.data.isBubble, instance.data.start) : null;
     if (instance.data.isBubble && instance.data.start) {
@@ -276,7 +214,7 @@ if (!instance.data.halt) {
     function main() {
         instance.data.halt = true;
         console.log("main called");
-        window.CSP = instance;
+        instance.data.logging ? window.CSP = instance:null;
         // Looping through all the attribute plan snippets and creating their markup the first time when its loaded when theres no hierarchy data
         if (!instance.data.hierarchyInitial && instance.data.start) {
             instance.data.logging ? console.log('hierarchyContent not present. Rendering from data_source') : null;
@@ -288,14 +226,14 @@ if (!instance.data.halt) {
                 //instance.data.logging ? console.log(cardsListHtml):null;
             };
             let cardStackHtml = '<ol id="' + instance.data.plan_unique_id +
-                '" class="sortable ui-sortable mjs-nestedSortable-branch mjs-nestedSortable-expanded">' +
+                '" class="sortable ui-sortable mjs-nestedSortable-branch mjs-nestedSortable-expanded leaf1">' +
                 cardsListHtml + "</ol>";
             //instance.data.logging ? console.log(cardStackHtml):null;
             instance.canvas.html(cardStackHtml)
         } else if (instance.data.hierarchyInitial && instance.data.start) {
             let cardStackHtml = '<ol id="' + instance.data.plan_unique_id +
-                '" class="sortable ui-sortable mjs-nestedSortable-branch mjs-nestedSortable-expanded">' +
-                buildHierarchyHtml(instance.data.hierarchyInitial) + "</ol>";
+                '" class="sortable ui-sortable mjs-nestedSortable-branch mjs-nestedSortable-expanded leaf1">' +
+                instance.data.buildHierarchyHtml(instance.data.hierarchyInitial) + "</ol>";
             instance.data.logging ? console.log('hierarchyContent present. BuildHierarchy HTML Called') : null;
             instance.canvas.html(cardStackHtml);
         }
@@ -367,11 +305,54 @@ setTimeout(instance.data.deleteFoldCollapse, 200);
 
 
 
-
+//instance.data.ns.data().mjsNestedSortable.options['disabled'] = instance.data.disabled;
 }
 if (instance.data.initialize) {
     instance.data.initialize = false;
     instance.data.resetPlan();
 }
-    //end update
+if (!instance.data.start) {
+
+    instance.data.DASAdd = properties.das.get(0, properties.das.length());
+    instance.data.TOASAdd = properties.toas.get(0, properties.toas.length());
+
+    instance.data.DASAdd.forEach((das) => {
+        instance.data.logging ? console.log("checking das", das) : null;
+        let id = das.get('_id');
+        let found = instance.canvas.find(`#${id}`).length;
+        if (!found && instance.data.APS.length) {
+            let apsID = das.get('attribute_custom_attribute').get('_id');
+            const aps1 = instance.data.APS.filter((aps2) => aps2.attribute_id_text === apsID);
+
+            instance.data.logging ? console.log("das Add", das, aps1[0]) : null;
+            instance.data.singleDas = das;
+            instance.data.singleAPS = aps1;
+            if (aps1[0] && das) {
+                if (instance.data.sliderEnabled) { instance.data.addSingleDAS(das, aps1[0]); }
+            }
+        } else {
+            instance.data.logging ? console.log("das Found") : null;
+        }
+    });
+
+    instance.data.TOASAdd.forEach((toas) => {
+        instance.data.logging ? console.log("checking toas", toas) : null;
+        let id = toas.get('_id');
+        let found = instance.canvas.find(`.crop-das-${id}`).length;
+        if (!found) {
+            instance.data.logging ? console.log("toas Add", toas) : null;
+            let apsID = toas.get('attribute_custom_attribute').get('_id');
+            const aps1 = instance.data.APS.filter((aps2) => aps2.attribute_id_text === apsID);
+            if (aps1[0] && toas) {
+                if (instance.data.sliderEnabled) { instance.data.addSingleTOAS(toas, aps1[0]); }
+            }
+        } else {
+            instance.data.logging ? console.log("das Found") : null;
+        }
+    });
+
+}
+
+
+//end update
 }

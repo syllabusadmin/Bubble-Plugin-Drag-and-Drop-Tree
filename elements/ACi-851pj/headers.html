@@ -97,13 +97,15 @@
 
         .labelTitleContainer {
             border: 1px solid black;
-            padding: 4px;
+            padding-top: 10px !important;
+            padding: 4px !important;
         }
 
         .quillTitleContainer {
             box-sizing: border-box;
             padding: 4px;
         }
+
         .contentContainer {
   position: relative;
 }
@@ -383,7 +385,8 @@
         .carousel-cell-image {
             width: 150px;
             height: 150px;
-            margin-right: 10px;
+            margin-right: 10px;  
+            margin: 10px !important;
             border: none;
             display: flex;
             align-items: center;
@@ -392,8 +395,8 @@
 
         /* Style the carousel images */
         .carousel-img {
-            max-width: 95%;
-            max-height: 95%;
+            max-width: 90%;
+            max-height: 90%;
         }
 
         .carousel-img:hover {
@@ -436,7 +439,26 @@
 
     <style>
 
-        .quillEditor {
-             border: 1px solid #ccc !important;
-        }
+.quillEditor {
+    border: 1px solid #ccc !important;
+    padding: 15px !important;
+}
+        
+#myInput {
+  width: 25%; /* or width: 2em; */
+}
+
+div.ql-toolbar[hidden="true"] .ql-editor > *:last-child {
+    padding-bottom: 0 !important;
+}
+
+div.ql-toolbar[hidden="true"] .ql-editor > *:first-child {
+    padding-top: 0 !important;
+}
+ol > li {
+  margin-bottom: 0px; /* or any other value */
+}
+li > li {
+  margin-bottom: 0px; /* or any other value */
+}
     </style>
