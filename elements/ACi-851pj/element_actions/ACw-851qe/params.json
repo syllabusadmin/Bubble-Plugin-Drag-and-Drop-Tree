@@ -1,0 +1,12 @@
+{
+    "caption": "ScrollTo",
+    "fields": {
+        "ACy": {
+            "caption": "Attribute UniqueID",
+            "editor": "DynamicValue",
+            "name": "element",
+            "rank": 0,
+            "value": "text"
+        }
+    }
+}
