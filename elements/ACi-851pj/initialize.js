@@ -98,7 +98,10 @@ let aps = attributeplansnippet._id;
  <span class="dragHandle material-icons">drag_indicator</span></div><div class="contentContainer">
  <div class ="menuContainer"><span title="Click to show/hide children" class="disclose ui-icon ui-icon-minusthick"><span></span>
  </span><span title="Click to show/hide description" data-id="${aps}" class = "expandEditor material-icons" >expand_more</span>
- <input  type="text" class="cardTitle" data-id="${aps}" value="${aps_card_name_text}" ${disabled}>${deleteDisabled}</div><div class="quillContainer quillTitleContainer" id="${aps}"><div class="quillEditor quillBorder" id="${aps}">${aps_quill_text}</div></div>
+ <input  type="text" class="cardTitle" data-id="${aps}" value="${aps_card_name_text}" ${disabled}>${deleteDisabled}</div><div class="quillContainer quillTitleContainer" id="${aps}">
+ <div class="quillEditor quillBorder" id="${aps}">${aps_quill_text}</div></div>
+
+ <div><input style="padding-top: 10px !important;" type="text" id="labelTitle-${aps}" class="labelTitle labelTitleContainer" value=" Associated label:" disabled></div>
  <div id="labelTitle-${aps}" class="labelTitleContainer"><input  type="text" class="labelTitle" data-id="${aps}" value="${aps_name_text}" ${disabled}></div>
  <div id="slider-aps-${aps}"></div></div></div>`;
     //console.log("Quill Description Text" + attributeplansnippet.get("description_text"));
@@ -327,7 +330,7 @@ instance.data.addDASTOASAPI = (DAS, TOAS, DASArray, TOASArray, DASV, TOASV, APS,
             //!instance.data.isBubble ? newItem['snapshot'] = value['snapshot'] : newItem['snapshot'] = value['snapshot_image'];
             //newItem['attribute_name'] = value['attribute_custom_attribute'].get('name_text');
             //newItem['webpage_screenshot_custom_webpage_screenshot'] = value['attribute_custom_attribute'].get('webpage_screenshot_custom_webpage_screenshot');
-            newItem['webpage_screenshot_custom_webpage_screenshot'] = 'https:' + screenshots[index].split(",")[0];
+            //newItem['webpage_screenshot_custom_webpage_screenshot'] = 'https:' + screenshots[index].split(",")[0];
             instance.data.DASTOAS.push(newItem);
             instance.data.logging ? console.log("newItemDAS", newItem) : null;
         });
