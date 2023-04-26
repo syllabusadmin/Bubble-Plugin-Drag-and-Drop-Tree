@@ -330,7 +330,7 @@ instance.data.addDASTOASAPI = (DAS, TOAS, DASArray, TOASArray, DASV, TOASV, APS,
             //!instance.data.isBubble ? newItem['snapshot'] = value['snapshot'] : newItem['snapshot'] = value['snapshot_image'];
             //newItem['attribute_name'] = value['attribute_custom_attribute'].get('name_text');
             //newItem['webpage_screenshot_custom_webpage_screenshot'] = value['attribute_custom_attribute'].get('webpage_screenshot_custom_webpage_screenshot');
-            //newItem['webpage_screenshot_custom_webpage_screenshot'] = 'https:' + screenshots[index].split(",")[0];
+            newItem['webpage_screenshot_custom_webpage_screenshot'] = 'https:' + screenshots[index].split(",")[0];
             instance.data.DASTOAS.push(newItem);
             instance.data.logging ? console.log("newItemDAS", newItem) : null;
         });
