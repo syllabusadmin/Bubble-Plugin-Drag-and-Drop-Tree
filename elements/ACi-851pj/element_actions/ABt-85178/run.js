@@ -30,7 +30,7 @@ function(instance, properties, context) {
     //Append the new li item to the existing cardstack
     cardStackInnerHtml.prepend(newlyDroppedCardHtml);
     console.log("prepended");
-    instance.data.addSlider(instance.data.APSnew);
+    instance.data.sliderEnabled ? instance.data.addSlider(instance.data.APSnew):null;
     instance.data.APS = instance.data.APSnew.concat(instance.data.APS);
     instance.data.cardstack = cardStackInnerHtml;
     instance.data.addQuillEditor(instance.data.cardstack.find(".quillEditor")[0]);

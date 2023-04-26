@@ -7,6 +7,14 @@
             "name": "element",
             "rank": 0,
             "value": "text"
+        },
+        "ACz": {
+            "caption": "pad",
+            "default_val": 0,
+            "editor": "DynamicValue",
+            "name": "pad",
+            "rank": 1,
+            "value": "number"
         }
     }
 }

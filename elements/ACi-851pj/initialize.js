@@ -100,9 +100,9 @@ let aps = attributeplansnippet._id;
  </span><span title="Click to show/hide description" data-id="${aps}" class = "expandEditor material-icons" >expand_more</span>
  <input  type="text" class="cardTitle" data-id="${aps}" value="${aps_card_name_text}" ${disabled}>${deleteDisabled}</div><div class="quillContainer quillTitleContainer" id="${aps}">
  <div class="quillEditor quillBorder" id="${aps}">${aps_quill_text}</div></div>
-
- <div><input style="padding-top: 10px !important;" type="text" id="labelTitle-${aps}" class="labelTitle labelTitleContainer" value=" Associated label:" disabled></div>
- <div id="labelTitle-${aps}" class="labelTitleContainer"><input  type="text" class="labelTitle" data-id="${aps}" value="${aps_name_text}" ${disabled}></div>
+ <div id="labelTitle-${aps}" class="labelTitleContainer">
+ <input style="padding-top: 10px !important;" type="text" class="labelTitle" data-id="${aps}" value="Associated label:" disabled>
+ <input  type="text" class="labelTitle" data-id="${aps}" value="${aps_name_text}" ${disabled}></div>
  <div id="slider-aps-${aps}"></div></div></div>`;
     //console.log("Quill Description Text" + attributeplansnippet.get("description_text"));
     //console.log(cardItemHtml);
