@@ -48,6 +48,9 @@
             border: 1px solid #d4d4d4;
             display: inline-block;
             margin-left: 2px;
+  position: relative;
+  padding-top: 10px !important;
+  padding-bottom: 10px !important;
         }
 
         .disclose,
@@ -76,19 +79,20 @@
         }
 
         .cardTitle {
+            font-family: Arial !important;
             vertical-align: middle;
             cursor: text;
             width: 100%;
             border-style: none !important;
-            font-size: 20px;
+            font-size: 20px !important;
             background-color: inherit;
             resize: none;
             overflow: hidden;
             transition: height 0.2s ease-out;
             height: auto;
             max-height: 100px;
+            margin-bottom: 10px;
         }
-
         .cardTitle.overflow-ellipsis {
             overflow: hidden;
             text-overflow: ellipsis;
@@ -99,6 +103,7 @@
             border: 1px solid black;
             padding-top: 10px !important;
             padding: 4px !important;
+            padding-bottom: 20px !important;
         }
 
         .quillTitleContainer {
@@ -110,10 +115,9 @@
   position: relative;
 }
 
-        .labelTitle {
+        .labelTitle, .labelTitleHeader {
             vertical-align: middle;
-            cursor: text;
-            width: 100%;
+            width: 98%;
             border-style: none !important;
             font-size: 20px;
             background-color: inherit;
@@ -122,8 +126,7 @@
             transition: height 0.2s ease-out;
             height: auto;
             max-height: 100px;
-
-            margin-left: 4px;
+            margin: 10px 10px 10px 10px;
         }
 
         .labelTitle.overflow-ellipsis {
@@ -171,6 +174,8 @@
         .parentContainer {
             display: flex;
             flex-direction: row;
+            border: 1px solid black;
+            border-radius: 5px;
         }
 
         .dragContainer {

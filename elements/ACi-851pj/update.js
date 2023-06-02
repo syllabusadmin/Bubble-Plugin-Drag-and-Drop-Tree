@@ -1,9 +1,11 @@
 function(instance, properties, context) {
-///start update
+//start update
 instance.data.resetPlan = () => {
     instance.data.logging ? console.log('reset start',instance.data.start,instance.data.isBubble,instance.data.halt):null;
 if (instance.data.isBubble) {
     instance.data.logging = properties.logging;
+    instance.data.ellipsis_modifier = properties.ellipsis_modifier;
+    instance.data.cardTitleCollapseRows = properties.cardTitleCollapseRows;
     //instance.data.sliderEnabled = properties.slider_enabled;
     //instance.data.disabled = properties.disabled;
     //adds custom indents to child elements
@@ -131,7 +133,7 @@ if (!instance.data.halt) {
             };
             // Fetch the data from the API endpoint using POST method
             instance.data.logging ? console.log("fetchstarting") : null;
-            fetch(`https://d110.bubble.is/site/proresults/version-33/api/1.1/wf/get_aps`, {
+            fetch(`https://d110.bubble.is/site/proresults/version-3i/api/1.1/wf/get_aps`, {
                 method: "POST",
                 body: bodyContent,
                 headers: headersList
@@ -292,6 +294,7 @@ if (!instance.data.halt) {
             instance.data.start = true;
             main();
         }
+    instance.data.ellipsis();
     }
     instance.data.halt = false;
     //Calling DeleteFoldCollapse listeners
@@ -352,7 +355,21 @@ if (!instance.data.start) {
     });
 
 }
-
-
+console.log(properties.type_of_items_type.listProperties());
+            
+        //To take care of randomly appearing URLs used in hyperlinks (APP-2160)
+           document.querySelectorAll(".quillEditor").forEach((editor) => {
+            const anchorTags = editor.querySelectorAll("a:not(.ql-preview)");
+            anchorTags.forEach((anchor) => {
+            const href = anchor.href;
+            if (anchor.innerHTML === href) {
+         // Select the parent <p> tag and delete it if it's a <p> element
+           const parentPTag = anchor.parentNode;
+             if (parentPTag.nodeName === 'P') {
+               parentPTag.remove();
+              }
+             }
+         });
+     });
 //end update
 }

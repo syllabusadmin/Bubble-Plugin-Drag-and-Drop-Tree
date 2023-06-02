@@ -38,5 +38,34 @@ function(instance, properties, context) {
     //Call hierarchy
     setTimeout(instance.data.hierarchy, 100);
     setTimeout(instance.data.deleteFoldCollapse, 200);
+    
+   //Function for ellipsis
+       	// When the textarea is focussed, it's content will be whatever the description of that APS is. When it is not, it will show everything till the third line and then finish it with ellipsis
+        //Steps - Add event listeners for focus and unfocus evenents.
+    //console.log(properties.type_of_items_type.listProperties());
+    //console.log(instance.data.APS[0]);
+            let titleTextAreas = document.querySelectorAll(".cardTitle")
+        titleTextAreas.forEach ((textarea) => {
+            if (textarea.value.length > 115) {textarea.value = textarea.value.slice(0,115) + "...."};
+            let id = textarea.getAttribute("data-id");
+            let attplansnippet = instance.data.APS.find((item) => item._id === id);
+            let titleText = attplansnippet.card_name_text;
+            textarea.addEventListener("focus", () => {
+                console.log('Value set from db');
+                textarea.value = attplansnippet.card_name_text;  
+            });
+
+            textarea.addEventListener("blur", () => {
+                if (textarea.value.length > 115){
+                console.log('Trimmed Value');
+                textarea.value = textarea.value.slice(0,115) + "....";
+                }
+                else {
+                    console.log('Untrimmed Value');
+                 textarea.value = titleText;  
+                }
+            });
+
+        });        
 }
     

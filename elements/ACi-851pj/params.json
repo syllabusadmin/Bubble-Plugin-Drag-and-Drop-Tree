@@ -209,6 +209,23 @@
             "name": "disabled",
             "rank": 20,
             "value": "boolean"
+        },
+        "ADA": {
+            "caption": "Card Title Ellipsis Char Percent Modifier",
+            "default_val": 1,
+            "editor": "DynamicValue",
+            "name": "ellipsis_modifier",
+            "optional": false,
+            "rank": 21,
+            "value": "number"
+        },
+        "ADB": {
+            "caption": "Card Title Collapse Rows",
+            "default_val": 3,
+            "editor": "DynamicValue",
+            "name": "cardTitleCollapseRows",
+            "rank": 22,
+            "value": "number"
         }
     },
     "icon": "ion-android-list",
