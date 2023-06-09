@@ -107,12 +107,11 @@ function(instance, context) {
      <span class="dragHandle material-icons">drag_indicator</span></div><div class="contentContainer">
      <div class ="menuContainer"><span title="Click to show/hide children" class="disclose ui-icon ui-icon-minusthick"><span></span>
      </span><span title="Click to show/hide description" data-id="${aps}" class = "expandEditor material-icons" >expand_more</span>
-     <textarea class = "cardTitle" rows = "1" data-id="${aps}" ${disabled}>${aps_card_name_text}</textarea>${deleteDisabled}</div><div class="quillContainer quillTitleContainer" id="${aps}">
-     <div class="quillEditor quillBorder" id="${aps}">${aps_quill_text}</div></div>
+     <textarea class = "cardTitle" rows = "1" data-id="${aps}" ${disabled}>${aps_card_name_text}</textarea>${deleteDisabled}</div><div class="quillContainer quillTitleContainer" id="${aps}"><div class="quillEditor quillBorder" id="${aps}">${aps_quill_text}</div></div>
     
     
      <div id="labelTitle-${aps}" style="padding-top: 10px !important;">
-     <input  style="margin-top: 10px !important; padding-bottom: 5px !important; width: 45% !important;" type="text" class="labelTitleHeader" data-id="${aps}" value="Associated label:" disabled>
+     <input  style="margin-top: 10px !important; padding-bottom: 5px !important;" type="text" class="labelTitleHeader" data-id="${aps}" value="Associated label:" disabled>
      <div data-id="${aps_att_id_text}" class="labelTitleContainer highlightable highlight-${aps_att_id_text}"><p class="labelTitle highlightable" data-id="${aps_att_id_text}" value=>${aps_name_text}</p>
      <div id="slider-aps-${aps}"></div></div></div></div></div>`;
         //console.log("Quill Description Text" + attributeplansnippet.get("description_text"));
@@ -465,6 +464,7 @@ function(instance, context) {
     }
     //addQuill
     instance.data.addQuillEditor = (editor) => {
+        instance.data.editor = editor;
         instance.data.logging ? console.log('AddQuillEditor Declared') : null;
         const quill = new Quill(editor, {
             modules: {
@@ -508,9 +508,11 @@ function(instance, context) {
             bounds: editor
         });
     
-        const toolbar = quill.root.parentElement.previousSibling;
+        const toolbar = quill.getModule('toolbar');
+        console.log("Toolbar selected Succesfully " + toolbar)
         toolbar.setAttribute('hidden', true);
         quill.root.parentElement.style.borderTop = `1px`;
+        instance.data.toolbar = toolbar;
     
         //disable toolbar if disabled
         if (instance.data.disabled) {
