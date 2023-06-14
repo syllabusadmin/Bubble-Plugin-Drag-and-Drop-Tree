@@ -116,6 +116,7 @@ function(instance, context) {
      <div id="slider-aps-${aps}"></div></div></div></div></div>`;
         //console.log("Quill Description Text" + attributeplansnippet.get("description_text"));
         //console.log(cardItemHtml);
+        instance.data.attributeplansnippet
         return cardItemHtml;
     }
     instance.data.buildHierarchyHtml = (hierarchy1) => {
@@ -464,8 +465,7 @@ function(instance, context) {
     }
     //addQuill
     instance.data.addQuillEditor = (editor) => {
-        instance.data.editor = editor;
-        instance.data.logging ? console.log('AddQuillEditor Declared') : null;
+        instance.data.logging ? console.log('AddQuillEditor Declared',editor) : null;
         const quill = new Quill(editor, {
             modules: {
                 toolbar: [
@@ -507,19 +507,28 @@ function(instance, context) {
             debug: 'warn',
             bounds: editor
         });
+
     
+        instance.data.logging ? window.quill = quill : null;
+        instance.data.logging ? window.toolbar = quill.getModule('toolbar').container : null;
+        const toolbar = quill.getModule('toolbar').container;
+        console.log("Toolbar selected Succesfully " + toolbar);
+        quill.getModule('toolbar').container.style.display = 'none';
+        quill.root.parentElement.style.borderTop = `1px`;
+        instance.data.toolbar = toolbar;
+        /*old
         const toolbar = quill.getModule('toolbar');
         console.log("Toolbar selected Succesfully " + toolbar)
         toolbar.setAttribute('hidden', true);
         quill.root.parentElement.style.borderTop = `1px`;
         instance.data.toolbar = toolbar;
-    
+    new */
         //disable toolbar if disabled
         if (instance.data.disabled) {
     
             quill.disable();
-            var toolbar1 = quill.getModule('toolbar');
-            toolbar1.container.style.display = 'none';
+            var toolbar1 = quill.getModule('toolbar').container;
+            quill.getModule('toolbar').container.style.display = 'none';
         } /*
              else {
                  quill.enable();
@@ -530,13 +539,13 @@ function(instance, context) {
     
         quill.root.addEventListener('focus', (e) => {
             instance.data.focused = true
-            toolbar.removeAttribute('hidden', false)
+            quill.getModule('toolbar').container.style.display = 'block';
         })
         const handleClick = (e) => {
             instance.data.logging ? console.log(`editor`, editor.parentElement.id) : null;
             if (!e.target.closest(`[id="${editor.parentElement.id}"]`)) {
                 //instance.data.logging ? console.log(`hiding toolbar: the target is`, e.target,`and the toolbar is`, toolbar, `and the preview is`, e.target.classList.contains('ql-preview')) : null;
-                toolbar.setAttribute('hidden', true);
+                quill.getModule('toolbar').container.style.display = 'none';
             }
         }
         window.addEventListener('click', handleClick)
@@ -857,7 +866,7 @@ function(instance, context) {
     const observer = new MutationObserver(callback);
     observer.observe(targetNode, config);
     
-    instance.data.ellipsis = () => {   
+    /*instance.data.ellipsis = () => {   
          //Function for ellipsis
                // When the textarea is focussed, it's content will be whatever the description of that APS is. When it is not, it will show everything till the third line and then finish it with ellipsis
             //Steps - Add event listeners for focus and unfocus evenents.
@@ -868,14 +877,15 @@ function(instance, context) {
                 if (textarea.value.length > (instance.data.ellipsis_length * instance.data.ellipsis_modifier)) {textarea.value = textarea.value.slice(0,(instance.data.ellipsis_length * instance.data.ellipsis_modifier)) + "...."};
                 let id = textarea.getAttribute("data-id");
                 let attplansnippet = instance.data.APS.find((item) => item._id === id);
-                let titleText = attplansnippet.card_name_text;
+                let titleText = (attplansnippet.card_name_text && attplansnippet.card_name_text.trim() !== '') ? attplansnippet.card_name_text : '';
+
                
                 
                 textarea.addEventListener("focus", (event) => {
                     
                     id = event.target.getAttribute("data-id");
                     attplansnippet = instance.data.APS.find((item) => item._id === id);
-                    titleText = attplansnippet.card_name_text;
+                    titleText = (attplansnippet.card_name_text && attplansnippet.card_name_text.trim() !== '') ? attplansnippet.card_name_text : '';
                     instance.data.isBubble ? textarea.value = titleText: textarea.value = attplansnippet.attribute_card_name_text; 
                     textarea.rows = 3; 
                     console.log('CardNameText=',titleText,'AttCardNameText',attplansnippet.attribute_card_name_text);
@@ -902,7 +912,7 @@ function(instance, context) {
                 });
     
             });        
-        }
+        } */
       
     //end initialize
     }

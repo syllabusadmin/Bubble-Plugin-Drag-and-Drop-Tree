@@ -44,6 +44,14 @@
             "name": "aps",
             "rank": 0,
             "value": "custom_data_element_ACW"
+        },
+        "ADD": {
+            "caption": "Disable Ellipsis",
+            "default_val": false,
+            "editor": "DynamicValue",
+            "name": "disable_ellipsis",
+            "rank": 5,
+            "value": "boolean"
         }
     }
 }

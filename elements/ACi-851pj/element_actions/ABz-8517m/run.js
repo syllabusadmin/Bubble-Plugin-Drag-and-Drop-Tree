@@ -2,7 +2,7 @@ function(instance, properties, context) {
 
 
   //Load any data 
-	instance.data.halted = properties.StopUpdate;
+	instance.data.halt = properties.StopUpdate;
 
   //Do the operation
 

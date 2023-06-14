@@ -1,9 +1,4 @@
 function(instance, properties, context) {
-    //When a new card is dropped, it has to become part of the hierarchy object 
-    //1. Pass that Attribute Plan Snippet to the Plugin 
-    //2. Render its html
-    //3. Append that to the bottom of the list
-    //4. Call hierarchy function
 
     //initialize variables
     let DAS = properties.das.get(0, properties.das.length());
@@ -33,39 +28,19 @@ function(instance, properties, context) {
     instance.data.sliderEnabled ? instance.data.addSlider(instance.data.APSnew):null;
     instance.data.APS = instance.data.APSnew.concat(instance.data.APS);
     instance.data.cardstack = cardStackInnerHtml;
-    instance.data.addQuillEditor(instance.data.cardstack.find(".quillEditor")[0]);
+    console.log('newly dropped card id ' + instance.data.APSnew[0]._id);
+//    let newCardEditor = $('#' + instance.data.APSnew[0]._id + '.quillEditor');
+    let newCardEditor = cardStackInnerHtml.find('#' + instance.data.APSnew[0]._id + '.quillEditor');
+  
+    if (newCardEditor) {
+        console.log(newCardEditor); 
+        setTimeout(instance.data.addQuillEditor(newCardEditor[0]),200)};
     window.CS = instance;
     //Call hierarchy
     setTimeout(instance.data.hierarchy, 100);
-    setTimeout(instance.data.deleteFoldCollapse, 200);
+    setTimeout(instance.data.deleteFoldCollapse, 200);   
+    //if (!properties.disable_ellipsis) {setTimeout(instance.data.ellipsis(),100);} 
     
-   //Function for ellipsis
-       	// When the textarea is focussed, it's content will be whatever the description of that APS is. When it is not, it will show everything till the third line and then finish it with ellipsis
-        //Steps - Add event listeners for focus and unfocus evenents.
-    //console.log(properties.type_of_items_type.listProperties());
-    //console.log(instance.data.APS[0]);
-            let titleTextAreas = document.querySelectorAll(".cardTitle")
-        titleTextAreas.forEach ((textarea) => {
-            if (textarea.value.length > 115) {textarea.value = textarea.value.slice(0,115) + "...."};
-            let id = textarea.getAttribute("data-id");
-            let attplansnippet = instance.data.APS.find((item) => item._id === id);
-            let titleText = attplansnippet.card_name_text;
-            textarea.addEventListener("focus", () => {
-                console.log('Value set from db');
-                textarea.value = attplansnippet.card_name_text;  
-            });
-
-            textarea.addEventListener("blur", () => {
-                if (textarea.value.length > 115){
-                console.log('Trimmed Value');
-                textarea.value = textarea.value.slice(0,115) + "....";
-                }
-                else {
-                    console.log('Untrimmed Value');
-                 textarea.value = titleText;  
-                }
-            });
-
-        });        
+    
 }
     
