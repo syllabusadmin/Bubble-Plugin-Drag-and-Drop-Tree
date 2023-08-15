@@ -8,6 +8,7 @@ function(instance, context) {
     if (!isBubble) {
         var instance = {};
         instance.data = {};
+        instance.data.version = 'version-11a/';
         instance.data.start = true;
         instance.data.halt = false;
         instance.data.listcount = 0;
@@ -50,6 +51,7 @@ function(instance, context) {
         instance.data.ellipsis_length = instance.canvas.width() / 16;
         instance.data.cardTitleCollapseRows = 3;
         instance.data.ellipsis_modifier = 1;
+        instance.data.version = 'version-11a/';
     }
     
     ///end CSP initialize
@@ -62,8 +64,9 @@ function(instance, context) {
         instance.triggerEvent('stopped_typing');
         instance.data.typingTimeout = null;
         // Expose Delta as state
-        instance.publishState('delta', content);
-        instance.publishState('editedcard_id', editor.id);
+        //instance.publishState('delta', content);
+        //instance.publishState('editedcard_id', editor.id);
+        instance.data.saveQuill(editor.id,content);
         //instance.publishState('htmlobject', instance.canvas.html());
         //instance.publishState('quill_editor_content', content);
         //instance.triggerEvent('relocated');
@@ -866,13 +869,13 @@ function(instance, context) {
     const observer = new MutationObserver(callback);
     observer.observe(targetNode, config);
     
-    /*instance.data.ellipsis = () => {   
+    instance.data.ellipsis = () => {   
          //Function for ellipsis
                // When the textarea is focussed, it's content will be whatever the description of that APS is. When it is not, it will show everything till the third line and then finish it with ellipsis
             //Steps - Add event listeners for focus and unfocus evenents.
         //console.log(properties.type_of_items_type.listProperties());
         //console.log(instance.data.APS[0]);
-                let titleTextAreas = document.querySelectorAll(".cardTitle")
+                let titleTextAreas = $("ol#" + instance.data.plan_unique_id + " .cardTitle").get();
             titleTextAreas.forEach ((textarea) => {
                 if (textarea.value.length > (instance.data.ellipsis_length * instance.data.ellipsis_modifier)) {textarea.value = textarea.value.slice(0,(instance.data.ellipsis_length * instance.data.ellipsis_modifier)) + "...."};
                 let id = textarea.getAttribute("data-id");
@@ -912,7 +915,26 @@ function(instance, context) {
                 });
     
             });        
-        } */
-      
+        }
+        instance.data.saveQuill = (aps, text) => {
+    // define your form data
+    let formData = new FormData();
+    formData.append("aps", aps);
+    formData.append("text", text);
+
+    // define your url
+    let url = `https://app.syllabus.io/${instance.data.version}api/1.1/wf/save_quill_aps/`;
+
+    // create your fetch request
+    fetch(url, {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => instance.data.logging ? console.log(data):null)
+    .catch((error) => {
+        console.error('Error:', error);
+    });
+}
     //end initialize
     }

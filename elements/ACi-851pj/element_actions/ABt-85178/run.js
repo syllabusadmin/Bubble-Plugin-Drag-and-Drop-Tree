@@ -18,7 +18,7 @@ function(instance, properties, context) {
 
     console.log('Add New List Item Ran', instance.data.plan_unique_id);
     //Call generatelist item on newly dropped card
-    let newlyDroppedCardHtml = instance.data.generateListItemHtml(instance.data.APSnew[0]);
+    let newlyDroppedCardHtml = instance.data.generateListItemHtml(instance.data.APSnew[0]) + "</li>";
     console.log("newlyDroppedCardHtml", newlyDroppedCardHtml);
     //Append that to the innerhtml of the ol.sortable list
     let cardStackInnerHtml = $('ol.sortable#' + instance.data.plan_unique_id);
@@ -28,19 +28,11 @@ function(instance, properties, context) {
     instance.data.sliderEnabled ? instance.data.addSlider(instance.data.APSnew):null;
     instance.data.APS = instance.data.APSnew.concat(instance.data.APS);
     instance.data.cardstack = cardStackInnerHtml;
-    console.log('newly dropped card id ' + instance.data.APSnew[0]._id);
-//    let newCardEditor = $('#' + instance.data.APSnew[0]._id + '.quillEditor');
-    let newCardEditor = cardStackInnerHtml.find('#' + instance.data.APSnew[0]._id + '.quillEditor');
-  
-    if (newCardEditor) {
-        console.log(newCardEditor); 
-        setTimeout(instance.data.addQuillEditor(newCardEditor[0]),200)};
+    let newCardEditor = $('.quillContainer' + "#" + instance.data.APSnew[0]._id).get(0,1).childNodes[0];
+    setTimeout(instance.data.addQuillEditor(newCardEditor),200);
     window.CS = instance;
     //Call hierarchy
     setTimeout(instance.data.hierarchy, 100);
     setTimeout(instance.data.deleteFoldCollapse, 200);   
-    //if (!properties.disable_ellipsis) {setTimeout(instance.data.ellipsis(),100);} 
-    
-    
+    setTimeout(instance.data.ellipsis(),100); 
 }
-    

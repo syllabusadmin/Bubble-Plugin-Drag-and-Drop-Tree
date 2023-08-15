@@ -1,5 +1,7 @@
 function(instance, properties, context) {
 //start update
+    
+instance.data.version = properties.version || '';
 instance.data.resetPlan = () => {
     instance.data.logging ? console.log('reset start',instance.data.start,instance.data.isBubble,instance.data.halt):null;
 if (instance.data.isBubble) {

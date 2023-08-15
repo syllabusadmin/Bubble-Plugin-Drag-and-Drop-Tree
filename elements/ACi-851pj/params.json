@@ -226,6 +226,14 @@
             "name": "cardTitleCollapseRows",
             "rank": 22,
             "value": "number"
+        },
+        "ADH": {
+            "caption": "version",
+            "editor": "DynamicValue",
+            "name": "version",
+            "optional": true,
+            "rank": 23,
+            "value": "text"
         }
     },
     "icon": "ion-android-list",
