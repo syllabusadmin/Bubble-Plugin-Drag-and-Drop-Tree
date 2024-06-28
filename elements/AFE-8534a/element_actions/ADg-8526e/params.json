@@ -1,0 +1,13 @@
+{
+    "caption": "Expand/Collapse All Cards",
+    "fields": {
+        "ADh": {
+            "caption": "expand",
+            "default_val": true,
+            "editor": "DynamicValue",
+            "name": "expand",
+            "rank": 0,
+            "value": "boolean"
+        }
+    }
+}

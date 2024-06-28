@@ -148,6 +148,45 @@ function generateListItemHtml(attributeplansnippet) {
 }
         function addQuillEditor(editor) {
     console.log('AddQuillEditor Declared');
+
+    const formattingOptions = {
+        Standalone: [],
+        Inline: [
+          'background',
+          'bold',
+          'color',
+          'font',
+          'code',
+          'italic',
+          'link',
+          'size',
+          'strike',
+          'script',
+          'underline'
+        ],
+        Block: [
+          'blockquote',
+          'header',
+          'indent',
+          'list',
+          'align',
+          'direction',
+          'code-block'
+        ],
+        Embeds: [
+          'formula', // requires KaTex
+          //'image',
+          'video',
+          'embedResponsive' // our custom iframe embed
+        ]
+      };
+      
+      const formats = [].concat(
+        formattingOptions.Standalone,
+        formattingOptions.Inline,
+        formattingOptions.Block,
+        formattingOptions.Embeds
+      );   
     const quill = new Quill(editor, {
         modules: {
             toolbar: [
@@ -187,6 +226,7 @@ function generateListItemHtml(attributeplansnippet) {
         },
         theme: 'snow',
         debug: 'warn',
+        formats: formats,
         bounds: editor
     });
     const toolbar = quill.root.parentElement.previousSibling;

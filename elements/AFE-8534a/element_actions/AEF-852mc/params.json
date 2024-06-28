@@ -1,0 +1,12 @@
+{
+    "caption": "Remove List Item",
+    "fields": {
+        "AEG": {
+            "caption": "removeID",
+            "editor": "DynamicValue",
+            "name": "removeid",
+            "rank": 0,
+            "value": "text"
+        }
+    }
+}

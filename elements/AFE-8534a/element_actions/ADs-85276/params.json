@@ -1,0 +1,12 @@
+{
+    "caption": "Halt Update",
+    "fields": {
+        "ADt": {
+            "caption": "Stop Update",
+            "default_val": false,
+            "editor": "Checkbox",
+            "name": "StopUpdate",
+            "rank": 0
+        }
+    }
+}

@@ -2,40 +2,6 @@
     "caption": "Add New List Item",
     "doc": "",
     "fields": {
-        "ABu": {
-            "caption": "DAS for Attribute Plan Snippet",
-            "doc": "Drawn attribute snippets",
-            "editor": "DynamicValue",
-            "is_list": true,
-            "name": "das",
-            "rank": 1,
-            "value": "custom_data_element_ACQ"
-        },
-        "ABv": {
-            "caption": "TOAS for Attribute Plan Snippet",
-            "doc": "Text Only  attribute snippets",
-            "editor": "DynamicValue",
-            "is_list": true,
-            "name": "toas",
-            "rank": 3,
-            "value": "custom_data_element_ACR"
-        },
-        "ABw": {
-            "caption": "Text Only Attribute Snippets Volume",
-            "editor": "DynamicValue",
-            "is_list": true,
-            "name": "text_only_attribute_snippets_volume",
-            "rank": 4,
-            "value": "number"
-        },
-        "ABx": {
-            "caption": "Drawn Attribute Snippets Volume",
-            "editor": "DynamicValue",
-            "is_list": true,
-            "name": "drawn_attribute_snippets_volume",
-            "rank": 2,
-            "value": "number"
-        },
         "ABy": {
             "caption": "Attribute Plan Snippet",
             "doc": "Old-notUsed-must be a list to be an array which functions with existing data prep",
@@ -50,7 +16,31 @@
             "default_val": false,
             "editor": "DynamicValue",
             "name": "disable_ellipsis",
-            "rank": 5,
+            "rank": 1,
+            "value": "boolean"
+        },
+        "ADI": {
+            "caption": "replaceID",
+            "editor": "DynamicValue",
+            "name": "replace",
+            "optional": true,
+            "rank": 2,
+            "value": "text"
+        },
+        "ADL": {
+            "caption": "timeoutboost",
+            "default_val": 0,
+            "editor": "DynamicValue",
+            "name": "timeoutboost",
+            "rank": 3,
+            "value": "number"
+        },
+        "ADS": {
+            "caption": "prepend",
+            "default_val": true,
+            "editor": "DynamicValue",
+            "name": "prepend",
+            "rank": 4,
             "value": "boolean"
         }
     }

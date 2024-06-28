@@ -25,6 +25,38 @@ function(instance, properties, context) {
         }
     }
     if (!instance.data.isBubble) {
+        properties.custom_indents = true;
+        properties.level1 = 10;
+        properties.level2 = 50;
+        properties.level3 = 110;
+        //adds custom indents to child elements
+        if (properties.custom_indents) {
+            var newCss = `.sortable ol { margin-left: ${properties.level1}px; }` +
+                `.sortable li { margin-left: ${properties.level1}px; }` +
+                `.sortable li > ul > li { margin-left: ${properties.level2}px; }` +
+                `.sortable li > ul > li > ul > li { margin-left: ${properties.level3}px; }` +
+                `.ql-container.ql-snow {border: non}`;
+            // Add to stylesheet
+    /*
+    .sortable li {
+      margin-left: 20px;
+    }
+    .sortable li li {
+      margin-left: 40px;
+    }
+    .sortable li li li {
+      margin-left: 60px;
+    }
+    */
+           // instance.canvas.find('head').appendChild('<style>' + newCss + '</style>');
+            $('<style>').text(newCss).appendTo('#cardstack');
+            const style = document.createElement('style');
+    style.textContent =  `.sortable li { margin-left: ${properties.level1}px; }` +
+    `.sortable li > ul > li { margin-left: ${properties.level2}px; }` +
+    `.sortable li > ul > li > ul > li { margin-left: ${properties.level3}px; }`;
+    
+    document.body.appendChild(style);
+        }
     }
     
     instance.data.callNestedSortable();
@@ -44,10 +76,10 @@ function(instance, properties, context) {
             instance.data.plan_unique_id = properties.plan_unique_id;
             instance.data.hierarchyInitial = properties.hierarchycontent;
             instance.data.html_field = properties.html_field;
-            let DAS = [];
-            let TOAS = [];
+            let DAS = properties.das.get(0, properties.das.length());
+            let TOAS = properties.toas.get(0, properties.toas.length());
     
-            instance.data.DASTOASCount = 0;
+            instance.data.DASTOASCount = DAS.length + TOAS.length;
             let DASProperties = ['account_webpage_custom_account_webpage', 'attribute_custom_attribute',
                 'box_height_number', 'box_width_number', 'corner_roundness_number', 'initial_drawn_scale_number',
                 'mobile_screenshot_custom_webpage_screenshot', 'stroke_width_number', 'syllabus_box_side_number',
@@ -70,10 +102,12 @@ function(instance, properties, context) {
             const keyListDataSource = properties.data_source.get(0, properties.data_source.length())[0];
             console.log('DATA SOURCE LOADED ' + keyListDataSource)
             let dSList = properties.data_source.get(0, properties.data_source.length());
-            let DASV = [];
-            let TOASV = [];
+            let DASV = properties.drawn_attribute_snippets_volume.get(0, properties.drawn_attribute_snippets_volume
+                .length());
+            let TOASV = properties.text_only_attribute_snippets_volume.get(0, properties
+                .text_only_attribute_snippets_volume.length());
             let APS = properties.aps.get(0, properties.aps.length());
-            let screenshots = [];
+            let screenshots = DAS.map(obj => obj.snapshot_image);
             ///add new arrays and processs
             instance.data.DAS = [];
             instance.data.TOAS = [];
@@ -86,7 +120,44 @@ function(instance, properties, context) {
             instance.data.data_source_initial = instance.data.APS.length;
             main();
         }
+        //////////Experimental Data grab from API
+        if (!instance.data.isBubble) {
+             instance.data.logging ? console.log("!isBubble") : null;
+     
+            var input = document.querySelector('#myInput');
+    
+            //var planId = '1681252732021x913202414712782800';
+            var planId = input.value;
+            //
+            instance.data.getAPS = function (plan) {
+                // Create a form data object
+                let bodyContent = new FormData();
+                bodyContent.append("plan_id", plan);
+                let headersList = {
+                    "Accept": "*\/*",
+                };
+                // Fetch the data from the API endpoint using POST method
+                instance.data.logging ? console.log("fetchstarting") : null;
+                fetch(`https://d110.bubble.is/site/proresults/version-3i/api/1.1/wf/get_aps`, {
+                    method: "POST",
+                    body: bodyContent,
+                    headers: headersList
+                }).then((response) => response.json()).then((result) => {
+                    instance.data.logging ? console.log("response", result.response) : null;
+                    instance.data.result = result.response;
+                    instance.data.APS_result = result.response.APS;
+                    onDataLoaded();
+                    return result;
+                }).catch((error) => {
+                    instance.data.logging ? console.log("error", error) : null;
+                    throw error
+                });
+            }
+            //
+            instance.data.properties = properties;
+            instance.data.getAPS(planId);
         
+    }
         ///load function
         function onDataLoaded() {
             instance.data.logging ? console.log("results", instance.data.result, "instance.data.APS_result", instance.data.APS_result) : null;
@@ -108,7 +179,7 @@ function(instance, properties, context) {
             instance.data.data_source_length = instance.data.APS_result.length;
             instance.data.plan_unique_id = instance.data.result.Plan['_id'];
             instance.data.hierarchyInitial = instance.data.result.Plan['Hierarchy Content'];
-            instance.data.logging ? console.log('Hier content', instance.data.hierarchyInitial) : null;
+            console.log('Hier content', instance.data.hierarchyInitial);
             // instance.data.hierarchyInitial = `[{"id":"1678400741256x961039459617341400","foo":"bar"},{"id":"1678398093386x413274195503349760","foo":"bar"},{"id":"1678400899822x568186102965862400","foo":"bar"},{"id":"1678415192492x736722261622652900","foo":"bar"},{"id":"1678415203749x380697560508006400","foo":"bar"}]`;
             //instance.data.html_field = instance.data.hierarchyInitial;
             let DAS = instance.data.result['DAS'];
@@ -149,7 +220,7 @@ function(instance, properties, context) {
         //used to allow for data processing before startup
         function main() {
             instance.data.halt = true;
-            instance.data.logging ? console.log("main called"):null;
+            console.log("main called");
             instance.data.logging ? window.CSP = instance:null;
             // Looping through all the attribute plan snippets and creating their markup the first time when its loaded when theres no hierarchy data
             if (!instance.data.hierarchyInitial && instance.data.start) {
@@ -178,6 +249,8 @@ function(instance, properties, context) {
             //CSP Add create sliders
             instance.data.logging ? console.log("sliderpoint", instance.data.APS, instance.data.sliderEnabled) : null;
             if (instance.data.sliderEnabled) {
+                instance.data.logging ? console.log("instance.data.addSlider", "sliderpoint"):null;
+                instance.data.addSlider(instance.data.APS);
             }
     
             //After generating the html, we call Nested Sortable and Quill on it
@@ -249,9 +322,47 @@ function(instance, properties, context) {
         instance.data.resetPlan();
     }
     if (!instance.data.start) {
-
+    
+        instance.data.DASAdd = properties.das.get(0, properties.das.length());
+        instance.data.TOASAdd = properties.toas.get(0, properties.toas.length());
+    
+        instance.data.DASAdd.forEach((das) => {
+            instance.data.logging ? console.log("checking das", das) : null;
+            let id = das.get('_id');
+            let found = instance.canvas.find(`#${id}`).length;
+            if (!found && instance.data.APS.length) {
+                let apsID = das.get('attribute_custom_attribute').get('_id');
+                const aps1 = instance.data.APS.filter((aps2) => aps2.attribute_id_text === apsID);
+    
+                instance.data.logging ? console.log("das Add", das, aps1[0]) : null;
+                instance.data.singleDas = das;
+                instance.data.singleAPS = aps1;
+                if (aps1[0] && das) {
+                    if (instance.data.sliderEnabled) { instance.data.addSingleDAS(das, aps1[0]); }
+                }
+            } else {
+                instance.data.logging ? console.log("das Found") : null;
+            }
+        });
+    
+        instance.data.TOASAdd.forEach((toas) => {
+            instance.data.logging ? console.log("checking toas", toas) : null;
+            let id = toas.get('_id');
+            let found = instance.canvas.find(`.crop-das-${id}`).length;
+            if (!found) {
+                instance.data.logging ? console.log("toas Add", toas) : null;
+                let apsID = toas.get('attribute_custom_attribute').get('_id');
+                const aps1 = instance.data.APS.filter((aps2) => aps2.attribute_id_text === apsID);
+                if (aps1[0] && toas) {
+                    if (instance.data.sliderEnabled) { instance.data.addSingleTOAS(toas, aps1[0]); }
+                }
+            } else {
+                instance.data.logging ? console.log("das Found") : null;
+            }
+        });
+    
     }
-    instance.data.logging ? console.log(properties.type_of_items_type.listProperties()): null;
+    console.log(properties.type_of_items_type.listProperties());
                 
             //To take care of randomly appearing URLs used in hyperlinks (APP-2160)
                document.querySelectorAll(".quillEditor").forEach((editor) => {

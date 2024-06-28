@@ -1,0 +1,81 @@
+{
+    "caption": "Add New List Item",
+    "doc": "",
+    "fields": {
+        "ADj": {
+            "caption": "DAS for Attribute Plan Snippet",
+            "doc": "Drawn attribute snippets",
+            "editor": "DynamicValue",
+            "is_list": true,
+            "name": "das",
+            "rank": 1,
+            "value": "custom_data_element_ACQ"
+        },
+        "ADk": {
+            "caption": "TOAS for Attribute Plan Snippet",
+            "doc": "Text Only  attribute snippets",
+            "editor": "DynamicValue",
+            "is_list": true,
+            "name": "toas",
+            "rank": 3,
+            "value": "custom_data_element_ACR"
+        },
+        "ADl": {
+            "caption": "Text Only Attribute Snippets Volume",
+            "editor": "DynamicValue",
+            "is_list": true,
+            "name": "text_only_attribute_snippets_volume",
+            "rank": 4,
+            "value": "number"
+        },
+        "ADm": {
+            "caption": "Drawn Attribute Snippets Volume",
+            "editor": "DynamicValue",
+            "is_list": true,
+            "name": "drawn_attribute_snippets_volume",
+            "rank": 2,
+            "value": "number"
+        },
+        "ADn": {
+            "caption": "Attribute Plan Snippet",
+            "doc": "Old-notUsed-must be a list to be an array which functions with existing data prep",
+            "editor": "DynamicValue",
+            "is_list": true,
+            "name": "aps",
+            "rank": 0,
+            "value": "custom_data_element_ACW"
+        },
+        "ADo": {
+            "caption": "Disable Ellipsis",
+            "default_val": false,
+            "editor": "DynamicValue",
+            "name": "disable_ellipsis",
+            "rank": 5,
+            "value": "boolean"
+        },
+        "ADp": {
+            "caption": "replaceID",
+            "editor": "DynamicValue",
+            "name": "replace",
+            "optional": true,
+            "rank": 6,
+            "value": "text"
+        },
+        "ADq": {
+            "caption": "timeoutboost",
+            "default_val": 0,
+            "editor": "DynamicValue",
+            "name": "timeoutboost",
+            "rank": 7,
+            "value": "number"
+        },
+        "ADr": {
+            "caption": "prepend",
+            "default_val": true,
+            "editor": "DynamicValue",
+            "name": "prepend",
+            "rank": 8,
+            "value": "boolean"
+        }
+    }
+}

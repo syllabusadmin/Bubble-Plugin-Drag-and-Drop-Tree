@@ -8,50 +8,50 @@
         "height": 800,
         "width": 400
     },
-    "display": "Drag Drop Tree with Slider",
+    "display": "Drag Drop Tree with Slider (copy)",
     "events": {
-        "ACC": {
+        "AEK": {
             "caption": "change",
             "name": "change"
         },
-        "ACD": {
+        "AEL": {
             "caption": "sort",
             "name": "sort"
         },
-        "ACE": {
+        "AEM": {
             "caption": "revert",
             "name": "revert"
         },
-        "ACF": {
+        "AEN": {
             "caption": "relocated",
             "name": "relocated"
         },
-        "ACG": {
+        "AEO": {
             "caption": "deleted",
             "name": "deleted"
         },
-        "ACH": {
+        "AEP": {
             "caption": "Stopped typing",
             "doc": "Triggers after a user stops typing",
             "name": "stopped_typing"
         },
-        "ACI": {
+        "AEQ": {
             "caption": "namechange",
             "doc": "Triggers when user changes the name(Title) of the Label",
             "name": "namechange"
         },
-        "ACJ": {
+        "AER": {
             "caption": "Select Snippet",
             "name": "select_snippet"
         },
-        "ACp": {
+        "AES": {
             "caption": "Card Name Changed",
             "doc": "Triggers when user changes the name(Title) of the Card",
             "name": "changedcard"
         }
     },
     "fields": {
-        "ACK": {
+        "AET": {
             "caption": "Attribute Plan Snippets",
             "editor": "DynamicValue",
             "is_list": true,
@@ -59,35 +59,35 @@
             "rank": 2,
             "value": "_any_thing"
         },
-        "ACL": {
+        "AEU": {
             "caption": "Type Of Items",
             "editor": "custom_type",
             "name": "type_of_items",
             "rank": 0,
             "value": "_any_thing"
         },
-        "ACM": {
+        "AEV": {
             "caption": "Plan Unique ID",
             "editor": "DynamicValue",
             "name": "plan_unique_id",
             "rank": 4,
             "value": "text"
         },
-        "ACN": {
+        "AEW": {
             "caption": "HTML field",
             "editor": "DynamicValue",
             "name": "html_field",
             "rank": 3,
             "value": "text"
         },
-        "ACO": {
+        "AEX": {
             "caption": "type of items type",
             "editor": "DynamicValue",
             "name": "type_of_items_type",
             "rank": 1,
             "value": "custom_data_ACL"
         },
-        "ACP": {
+        "AEY": {
             "caption": "logging",
             "default_val": false,
             "editor": "DynamicValue",
@@ -95,116 +95,160 @@
             "rank": 5,
             "value": "boolean"
         },
-        "ACW": {
+        "AEZ": {
+            "caption": "Drawn Attribute Snippets Type",
+            "editor": "custom_type",
+            "name": "drawn_attribute_snippets",
+            "rank": 6
+        },
+        "AEa": {
+            "caption": "Text Only Attribute Snippets Type",
+            "editor": "custom_type",
+            "name": "text_only_attribute_snippets",
+            "rank": 9
+        },
+        "AEb": {
+            "caption": "DAS",
+            "editor": "DynamicValue",
+            "is_list": true,
+            "name": "das",
+            "rank": 7,
+            "value": "custom_data_ACQ"
+        },
+        "AEc": {
+            "caption": "TOAS",
+            "editor": "DynamicValue",
+            "is_list": true,
+            "name": "toas",
+            "rank": 10,
+            "value": "custom_data_ACR"
+        },
+        "AEd": {
+            "caption": "Drawn Attribute Snippets Volume",
+            "editor": "DynamicValue",
+            "is_list": true,
+            "name": "drawn_attribute_snippets_volume",
+            "rank": 8,
+            "value": "number"
+        },
+        "AEe": {
+            "caption": "Text Only Attribute Snippets Volume",
+            "editor": "DynamicValue",
+            "is_list": true,
+            "name": "text_only_attribute_snippets_volume",
+            "rank": 11,
+            "value": "number"
+        },
+        "AEf": {
             "caption": "Attribute Plan Snippets Type",
             "editor": "custom_type",
             "name": "attribute_plan_snippets",
-            "rank": 6
+            "rank": 12
         },
-        "ACX": {
+        "AEg": {
             "caption": "APS",
             "doc": "data_source Swap Out",
             "editor": "DynamicValue",
             "is_list": true,
             "name": "aps",
-            "rank": 7,
+            "rank": 13,
             "value": "custom_data_ACW"
         },
-        "ACY": {
+        "AEh": {
             "caption": "hierarchycontent",
             "editor": "DynamicValue",
             "name": "hierarchycontent",
-            "rank": 8,
+            "rank": 14,
             "value": "text"
         },
-        "ACj": {
+        "AEi": {
             "caption": "Slider Enabled",
             "default_val": true,
             "editor": "DynamicValue",
             "name": "slider_enabled",
-            "rank": 9,
+            "rank": 15,
             "value": "boolean"
         },
-        "ACl": {
+        "AEj": {
             "caption": "Custom Child Indents",
             "default_val": false,
             "doc": "Allows for custom indentation",
             "editor": "DynamicValue",
             "name": "custom_indents",
-            "rank": 10,
+            "rank": 16,
             "value": "boolean"
         },
-        "ACm": {
+        "AEk": {
             "caption": "level1",
             "editor": "DynamicValue",
             "name": "level1",
             "optional": true,
-            "rank": 11,
+            "rank": 17,
             "value": "number"
         },
-        "ACn": {
+        "AEl": {
             "caption": "level2",
             "editor": "DynamicValue",
             "name": "level2",
             "optional": true,
-            "rank": 12,
+            "rank": 18,
             "value": "number"
         },
-        "ACo": {
+        "AEm": {
             "caption": "level3",
             "editor": "DynamicValue",
             "name": "level3",
             "optional": true,
-            "rank": 13,
+            "rank": 19,
             "value": "number"
         },
-        "ACr": {
+        "AEn": {
             "caption": "disabled",
             "default_val": false,
             "editor": "DynamicValue",
             "name": "disabled",
-            "rank": 14,
+            "rank": 20,
             "value": "boolean"
         },
-        "ADA": {
+        "AEo": {
             "caption": "Card Title Ellipsis Char Percent Modifier",
             "default_val": 1,
             "editor": "DynamicValue",
             "name": "ellipsis_modifier",
             "optional": false,
-            "rank": 15,
+            "rank": 21,
             "value": "number"
         },
-        "ADB": {
+        "AEp": {
             "caption": "Card Title Collapse Rows",
             "default_val": 3,
             "editor": "DynamicValue",
             "name": "cardTitleCollapseRows",
-            "rank": 16,
+            "rank": 22,
             "value": "number"
         },
-        "ADH": {
+        "AEq": {
             "caption": "version",
             "editor": "DynamicValue",
             "name": "version",
             "optional": true,
-            "rank": 17,
+            "rank": 23,
             "value": "text"
         },
-        "ADT": {
+        "AEr": {
             "caption": "Comments Visible",
             "default_val": true,
             "editor": "DynamicValue",
             "name": "comments_visible",
-            "rank": 18,
+            "rank": 24,
             "value": "boolean"
         },
-        "ADU": {
+        "AEs": {
             "caption": "delay",
             "default_val": 200,
             "editor": "DynamicValue",
             "name": "delay",
-            "rank": 19,
+            "rank": 25,
             "value": "number"
         }
     },
@@ -217,7 +261,7 @@
         "resizable": true
     },
     "states": {
-        "ACZ": {
+        "AEt": {
             "caption": "htmlobject",
             "initialization_code": {
                 "fn": "function(properties, context) {\n\n\n\n}"
@@ -226,7 +270,7 @@
             "name": "htmlobject",
             "value": "text"
         },
-        "ACa": {
+        "AEu": {
             "caption": "deletedcard_id",
             "doc": "The deletd item's id will be exposed, to be selected in the 'deleted' action.",
             "initialization_code": {
@@ -235,7 +279,7 @@
             "name": "deletedcard_id",
             "value": "text"
         },
-        "ACb": {
+        "AEv": {
             "caption": "deletedchildren_id_list",
             "doc": "The deleted item's childrens ids will be exposed",
             "initialization_code": {
@@ -245,7 +289,7 @@
             "name": "deletedchildren_id_list",
             "value": "text"
         },
-        "ACc": {
+        "AEw": {
             "caption": "delta",
             "doc": "",
             "initialization_code": {
@@ -254,7 +298,7 @@
             "name": "delta",
             "value": "text"
         },
-        "ACd": {
+        "AEx": {
             "caption": "editedcard_id",
             "doc": "The edited card's unique id wille be exposed",
             "initialization_code": {
@@ -263,7 +307,7 @@
             "name": "editedcard_id",
             "value": "text"
         },
-        "ACe": {
+        "AEy": {
             "caption": "changedname",
             "doc": "The edited title of the card will be exposed",
             "initialization_code": {
@@ -272,7 +316,7 @@
             "name": "changedname",
             "value": "text"
         },
-        "ACf": {
+        "AEz": {
             "caption": "selectedSnippet",
             "initialization_code": {
                 "fn": "function(properties, context) {\n\n\n\n}"
@@ -280,7 +324,7 @@
             "name": "selectedsnippet",
             "value": "text"
         },
-        "ACg": {
+        "AFA": {
             "caption": "hierarchycontent",
             "initialization_code": {
                 "fn": "function(properties, context) {\n\n\n\n}"
@@ -288,7 +332,7 @@
             "name": "hierarchycontent",
             "value": "text"
         },
-        "ACh": {
+        "AFB": {
             "caption": "Quill Editor Content",
             "doc": "Inner HTML of the Quill Editor",
             "initialization_code": {
@@ -297,7 +341,7 @@
             "name": "quill_editor_content",
             "value": "text"
         },
-        "ACq": {
+        "AFC": {
             "caption": "changedcard",
             "initialization_code": {
                 "fn": "function(properties, context) {\n\n\n\n}"
@@ -305,7 +349,7 @@
             "name": "changedcard",
             "value": "text"
         },
-        "ADV": {
+        "AFD": {
             "caption": "ready",
             "initialization_code": {
                 "fn": "function(properties, context) {\n\n\n\n}"

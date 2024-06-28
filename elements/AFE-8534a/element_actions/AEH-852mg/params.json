@@ -1,0 +1,20 @@
+{
+    "caption": "reinitializeQuillEditor",
+    "fields": {
+        "AEI": {
+            "caption": "APS_id",
+            "editor": "DynamicValue",
+            "name": "aps_id",
+            "rank": 0,
+            "value": "text"
+        },
+        "AEJ": {
+            "caption": "timeoutboost",
+            "default_val": 0,
+            "editor": "DynamicValue",
+            "name": "timeoutboost",
+            "rank": 1,
+            "value": "number"
+        }
+    }
+}

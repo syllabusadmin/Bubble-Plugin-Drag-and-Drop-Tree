@@ -55,8 +55,15 @@ function(instance, context) {
     }
 
     ///end CSP initialize
+    instance.publishState('ready', false);
     instance.data.listcount = 0;
-
+    instance.data.htmlEncode = (str) => {
+        return str.replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&apos;');
+    }
     instance.data.handleTypingChange = (editor) => {
         // When the typing has stopped, trigger the "stopped_typing" event and update the Quill contents
         let content = editor.innerHTML;
@@ -78,13 +85,31 @@ function(instance, context) {
         clearTimeout(instance.data.typingTimeout);
         instance.data.typingTimeout = setTimeout(() => instance.data.handleTypingChange(editor), 1000);
     };
+    instance.data.commentWithCoords = (aps) => {
+        const element = document.querySelector(`.comment-${aps}`);
+
+        if (element) {
+            const rect = element.getBoundingClientRect();
+            const x = rect.left.toString(); // Convert X coordinate to a string
+            const y = rect.top.toString(); // Convert Y coordinate to a string
+
+            // Call the triggerComment function with aps, X, and Y coordinates as strings
+            //console.log('(aps, x, y);',aps, x, y);
+            bubble_fn_triggerComment([aps, x, y]);
+        }
+    }
+    window.commentWithCoords = instance.data.commentWithCoords;
     instance.data.generateListItemHtml = (attributeplansnippet) => {
         let aps = attributeplansnippet._id;
         let aps_att_id_text = attributeplansnippet.attribute_id_text;
         let aps_name_text = attributeplansnippet.attribute_name_text;
         let aps_card_name_text = attributeplansnippet.attribute_card_name_text;
-        if (instance.data.isBubble) { aps_card_name_text = attributeplansnippet.card_name_text };
-        if (!aps_card_name_text) { aps_card_name_text = attributeplansnippet.attribute_name_text };
+        if (instance.data.isBubble) {
+            aps_card_name_text = attributeplansnippet.card_name_text
+        };
+        if (!aps_card_name_text) {
+            aps_card_name_text = attributeplansnippet.attribute_name_text
+        };
         instance.data.logging ? console.log("apscard", attributeplansnippet) : null;
         instance.data.apscard = attributeplansnippet;
         //QUESTION HERE
@@ -93,9 +118,15 @@ function(instance, context) {
         if (aps_quill_text === "null") {
             aps_quill_text = "";
         }
+
+
         var disabled = '';
+        var comments = '';
         var deleteDisabled = '<span class="deleteMenu material-icons" title="Click to delete item." data-id="' +
             aps + '">close</span>';
+        if (instance.data.commentsVisible) {
+            comments = `<div class="comment-img comment-${aps}" style="cursor: pointer;" onclick="commentWithCoords('${aps}')"></div>`;
+        }
         var inputDisabled = '';
         if (instance.data.disabled) {
             deleteDisabled = '';
@@ -106,20 +137,20 @@ function(instance, context) {
             'GenerateListItem Declared,aps, aps_id_text, aps_name_text, aps_quill_text,aps_card_name_text', aps, aps_att_id_text,
             aps_name_text, aps_quill_text, aps_card_name_text) : null;
         let cardItemHtml = `<li id="menuItem_${aps}" style="display: list-item;" class="mjs-nestedSortable-leaf leaf1" data-foo="bar">
-     <div class = "parentContainer" id="${aps_att_id_text}"><div class="contentContainer"><div class = "dragContainer">
-     <span class="dragHandle material-icons">drag_indicator</span></div>
-     <div class ="menuContainer"></span>
-     </span><span title="Click to show/hide description" data-id="${aps}" class = "expandEditor material-icons" >expand_more</span>
-     <input type="text" value = "${aps_card_name_text}" class = "cardTitle" rows = "1" data-id="${aps}" ${disabled}></input>${deleteDisabled}</div><div class="quillContainer quillTitleContainer" id="${aps}"><div class="quillEditor quillBorder" id="${aps}">${aps_quill_text}</div></div>
-    
-    
-     <div id="labelTitle-${aps}" >
-     <input  style="margin-top: 10px !important; padding-bottom: 5px !important;" type="text" class="labelTitleHeader" data-id="${aps}" value="Associated label:" disabled>
-     <div data-id="${aps_att_id_text}" class="labelTitleContainer highlightable highlight-${aps_att_id_text}"><p class="labelTitle highlightable" data-id="${aps_att_id_text}" value=>${aps_name_text}</p>
-     <div id="slider-aps-${aps}"></div></div></div></div></div>`;
+        <div class = "parentContainer" id="${aps_att_id_text}"><div class="contentContainer"><div class = "dragContainer">
+        <span class="dragHandle material-icons">drag_indicator</span></div>
+        <div class ="menuContainer"></span>
+        </span><span title="Click to show/hide description" data-id="${aps}" class = "expandEditor material-icons" >expand_more</span>
+        <input type="text" value = "${instance.data.htmlEncode(aps_card_name_text)}" class = "cardTitle ellipsis-input" rows = "1" data-id="${aps}" title="${instance.data.htmlEncode(aps_card_name_text)}" ${disabled}></input>${comments} ${deleteDisabled}</div><div class="quillContainer quillTitleContainer" id="${aps}"><div class="quillEditor quillBorder" id="${aps}">${aps_quill_text}</div></div>
+        
+        
+        <div id="labelTitle-${aps}" >
+        <input  style="margin-top: 10px !important; padding-bottom: 5px !important;" type="text" class="labelTitleHeader" data-id="${aps}" value="Associated label:" disabled>
+        <div data-id="${aps_att_id_text}" class="labelTitleContainer highlightable highlight_ddt-${aps_att_id_text}"><p class="labelTitle highlightable" data-id="${aps_att_id_text}" value=>${instance.data.htmlEncode(aps_name_text)}</p>
+        <div id="slider-aps-${aps}"></div></div></div></div></div>`;
         //console.log("Quill Description Text" + attributeplansnippet.get("description_text"));
         //console.log(cardItemHtml);
-        instance.data.attributeplansnippet
+        //instance.data.attributeplansnippet
         return cardItemHtml;
     }
     instance.data.buildHierarchyHtml = (hierarchy1) => {
@@ -156,7 +187,7 @@ function(instance, context) {
         return cardListHtml;
     }
     instance.data.callNestedSortable = () => {
-        instance.data.logging ? console.log('ANLI NestedSortable Declared') : null;
+        instance.data.logging ? console.log('ANLI NestedSortable Declared', instance.data.disabled) : null;
         //super dumb but seems to require it to be added first
         //instance.canvas.find('ol.sortable#' + instance.data.plan_unique_id).nestedSortable();
         //CSP End
@@ -204,6 +235,7 @@ function(instance, context) {
                 setTimeout(instance.data.hierarchy, 100);
             }
         });
+        console.log('NS', instance.data.ns);
     }
     instance.data.hierarchy = () => {
         instance.data.logging ? console.log('toHierarchy Declared') : null;
@@ -468,6 +500,9 @@ function(instance, context) {
     }
     //addQuill
     instance.data.addQuillEditor = (editor) => {
+        if (!editor) {
+            return; // Exit the function early if editor is null or otherwise falsy
+        }
         instance.data.logging ? console.log('AddQuillEditor Declared', editor) : null;
         const formattingOptions = {
             Standalone: [],
@@ -562,14 +597,13 @@ function(instance, context) {
         quill.root.style.paddingTop = '0px';
 
         //if there is no content in the editor, add a 16px padding to the top of the parent container else, no padding
-        console.log(`quill root`, quill)
         if (quill.root.innerHTML === '<p><br></p>') {
             toolbar.parentElement.style.paddingTop = "8px";
-        }
-        else {
+        } else {
             toolbar.parentElement.style.paddingTop = "8px";
 
         }
+        toolbar.style.marginBottom = "8px"
 
 
         instance.data.toolbar = toolbar;
@@ -583,8 +617,9 @@ function(instance, context) {
         //disable toolbar if disabled
         if (instance.data.disabled) {
 
+        
             quill.disable();
-            console.loga(`TOOLBARDISABLED`, quill.getModule('toolbar').container);
+            console.log(`TOOLBARDISABLED`, quill.getModule('toolbar').container);
             var toolbar1 = quill.getModule('toolbar').container;
             quill.getModule('toolbar').container.style.display = 'none';
         }
@@ -604,14 +639,12 @@ function(instance, context) {
                 //instance.data.logging ? console.log(`hiding toolbar: the target is`, e.target,`and the toolbar is`, toolbar, `and the preview is`, e.target.classList.contains('ql-preview')) : null;
                 let toolBar = quill.getModule('toolbar').container
                 quill.getModule('toolbar').container.style.display = 'none';
-                console.log(`toolbar clicky`, toolBar)
-                if (quill.root.innerHTML === '<p><br></p>') {
-                    toolbar.parentElement.style.paddingTop = "8px";
 
+                if (toolbar.clientHeight === 8) {
+                    toolbar.parentElement.style.paddingTop = "0px";
                 }
-                else {
-                    toolbar.parentElement.style.paddingTop = "8px";
-                }
+
+
             }
         }
         window.addEventListener('click', handleClick)
@@ -688,15 +721,30 @@ function(instance, context) {
                 if (instance.canvas.find('.expandEditor[data-id=' + uniqueId + ']').html() === 'expand_more') {
                     instance.canvas.find('.expandEditor[data-id=' + uniqueId + ']').html('expand_less');
                     //fix the margin of the parent container
-                    console.log(`the real ele is exapnd more`, instance.canvas.find('.expandEditor[data-id=' + uniqueId + ']')[0].parentElement);
-                    instance.canvas.find('.expandEditor[data-id=' + uniqueId + ']')[0].parentElement.style.marginBottom = "16px";
+                    const expandLessHeader = instance.canvas.find('.expandEditor[data-id=' + uniqueId + ']')[0].parentElement;
 
-                    instance.canvas.find('.expandEditor[data-id=' + uniqueId + ']')[0].parentElement.nextSibling.style.paddingTop = "16px";
+                    const quillEditor = instance.canvas.find('.expandEditor[data-id=' + uniqueId + ']')[0].parentElement.nextSibling;
+
+
+
+                    expandLessHeader.style.marginBottom = "0px";
+
+
+                    setTimeout(() => {
+
+                        quillEditor.style.marginTop = "0px";
+                        quillEditor.style.paddingTop = "0px";
+                    }, 100);
+
 
                 } else {
+                    const expandMoreHeader = instance.canvas.find('.expandEditor[data-id=' + uniqueId + ']')[0].parentElement;
+                    const quillEditor = instance.canvas.find('.expandEditor[data-id=' + uniqueId + ']')[0].parentElement.nextSibling;
+
+
                     instance.canvas.find('.expandEditor[data-id=' + uniqueId + ']').html('expand_more');
                     //fix the margin of the parent container
-                    instance.canvas.find('.expandEditor[data-id=' + uniqueId + ']')[0].parentElement.style.marginBottom = "0px";
+                    expandMoreHeader.style.marginBottom = "16px";
 
                     instance.canvas.find('.expandEditor[data-id=' + uniqueId + ']')[0].parentElement.nextSibling.style.paddingTop = "0px";
 
@@ -710,13 +758,7 @@ function(instance, context) {
                         instance.canvas.find(`#slider-aps-${uniqueId}`).addClass('slider_invisible');
                     }
                 }
-                //CSP Add for new Label Title
 
-                if (instance.canvas.find(`#labelTitle-${uniqueId}`).hasClass('slider_invisible')) {
-                    instance.canvas.find(`#labelTitle-${uniqueId}`).removeClass('slider_invisible');
-                } else {
-                    instance.canvas.find(`#labelTitle-${uniqueId}`).addClass('slider_invisible');
-                }
             });
             waitForElm('.cardTitle').then((elm) => {
                 instance.canvas.find('.cardTitle').unbind();
@@ -885,10 +927,6 @@ function(instance, context) {
                     if (instance.data.sliderEnabled) {
                         instance.canvas.find(`#slider-aps-${uniqueId}`).removeClass('slider_invisible');
                     }
-                    //CSP Add for new Label Title
-                    if (instance.canvas.find(`#labelTitle-${uniqueId}`).hasClass('slider_invisible')) {
-                        instance.canvas.find(`#labelTitle-${uniqueId}`).removeClass('slider_invisible');
-                    }
                 })
             } else {
                 instance.data.APS.forEach((aps) => {
@@ -900,7 +938,6 @@ function(instance, context) {
                     if (instance.data.sliderEnabled) {
                         instance.canvas.find(`#slider-aps-${uniqueId}`).addClass('slider_invisible');
                     }
-                    instance.canvas.find(`#labelTitle-${uniqueId}`).addClass('slider_invisible');
                 })
             }
             instance.data.expander = !instance.data.expander;
@@ -909,7 +946,10 @@ function(instance, context) {
     }
     // Observe for css changes
     const targetNode = document.body;
-    const config = { childList: true, subtree: true };
+    const config = {
+        childList: true,
+        subtree: true
+    };
     const callback = function (mutationsList, observer) {
         for (let mutation of mutationsList) {
             if (mutation.type === 'childList') {
@@ -929,71 +969,55 @@ function(instance, context) {
     observer.observe(targetNode, config);
 
     instance.data.ellipsis = () => {
-        //Function for ellipsis
-        // When the textarea is focussed, it's content will be whatever the description of that APS is. When it is not, it will show everything till the third line and then finish it with ellipsis
-        //Steps - Add event listeners for focus and unfocus evenents.
-        //console.log(properties.type_of_items_type.listProperties());
-        //console.log(instance.data.APS[0]);
         let titleTextAreas = $("ol#" + instance.data.plan_unique_id + " .cardTitle").get();
+
         titleTextAreas.forEach((textarea) => {
-            if (textarea.value.length > (instance.data.ellipsis_length * instance.data.ellipsis_modifier)) { textarea.value = textarea.value.slice(0, (instance.data.ellipsis_length * instance.data.ellipsis_modifier)) + "...." };
-            let id = textarea.getAttribute("data-id");
-            let attplansnippet = instance.data.APS.find((item) => item._id === id);
-            let titleText = (attplansnippet.card_name_text && attplansnippet.card_name_text.trim() !== '') ? attplansnippet.card_name_text : '';
+            // Remove existing listeners
+            textarea.removeEventListener("focus", focusHandler);
+            textarea.removeEventListener("blur", blurHandler);
 
-
-
-            textarea.addEventListener("focus", (event) => {
-
-                id = event.target.getAttribute("data-id");
-                attplansnippet = instance.data.APS.find((item) => item._id === id);
-                titleText = (attplansnippet.card_name_text && attplansnippet.card_name_text.trim() !== '') ? attplansnippet.card_name_text : '';
-                instance.data.isBubble ? textarea.value = titleText : textarea.value = attplansnippet.attribute_card_name_text;
-                textarea.rows = 1;
-                console.log('CardNameText=', titleText, 'AttCardNameText', attplansnippet.attribute_card_name_text);
-                console.log('Value set from db', event.target.value);
-            });
-
-            textarea.addEventListener("blur", (event) => {
-                if (textarea.value.length > (instance.data.ellipsis_length * instance.data.ellipsis_modifier)) {
-                    //instance.data.ellipsis_length = (textarea.offsetWidth / 11) - 20;
-                    //console.log('Trimmed Value',textarea.value.length,instance.data.ellipsis_length,instance.data.ellipsis_modifier,(instance.data.ellipsis_length * instance.data.ellipsis_modifier)); 
-                    textarea.value = textarea.value.slice(0, (instance.data.ellipsis_length * instance.data.ellipsis_modifier)) + "....";
-                    textarea.rows = 1;
-                    console.log('Trimmed Value', textarea.value);
-                }
-                else {
-                    //let id = textarea.getAttribute("data-id");
-                    //let titleText
-                    //let attplansnippet = instance.data.APS.find((item) => item._id === id);
-                    instance.data.isBubble ? titleText = attplansnippet.card_name_text : titleText = attplansnippet.attribute_card_name_text;
-                    textarea.value = titleText;
-                    textarea.rows = 1;
-                    console.log('Untrimmed Value', textarea.value);
-                }
+            // Add the listeners again
+            textarea.addEventListener("focus", focusHandler);
+            textarea.addEventListener("blur", blurHandler);
+            textarea.addEventListener('input', function () {
+                // Update the title attribute to match the input's current value
+                this.setAttribute('title', this.value);
             });
 
         });
+
+        function focusHandler(event) {
+            $(event.target).removeClass('ellipsis-input');
+            // Additional focus logic here
+        }
+
+        function blurHandler(event) {
+            $(event.target).addClass('ellipsis-input');
+            // Additional blur logic here
+        }
     }
-    instance.data.saveQuill = (aps, text) => {
-        // define your form data
-        let formData = new FormData();
-        formData.append("aps", aps);
-        formData.append("text", text);
+    instance.data.saveQuill = (aps, text, delayMilliseconds) => {
+        // Delay before making the fetch request
+        setTimeout(() => {
+            // define your form data
+            let formData = new FormData();
+            formData.append("aps", aps);
+            formData.append("text", text);
 
-        // define your url
-        let url = `https://app.syllabus.io/${instance.data.version}api/1.1/wf/save_quill_aps/`;
+            // define your url
+            let url = `https://app.syllabus.io/${instance.data.version}api/1.1/wf/save_quill_aps/`;
 
-        // create your fetch request
-        fetch(url, {
-            method: 'POST',
-            body: formData
-        })
-            .then(response => response.json())
-            .then(data => instance.data.logging ? console.log(data) : null)
-            .catch((error) => {
-                console.error('Error:', error);
-            });
+            // create your fetch request
+            fetch(url, {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => instance.data.logging ? console.log(data) : null)
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+        }, instance.data.delayMilliseconds);
     }
 
     //end initialize

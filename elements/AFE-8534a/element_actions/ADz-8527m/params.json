@@ -1,0 +1,20 @@
+{
+    "caption": "ScrollTo",
+    "fields": {
+        "AEA": {
+            "caption": "Attribute UniqueID",
+            "editor": "DynamicValue",
+            "name": "element",
+            "rank": 0,
+            "value": "text"
+        },
+        "AEB": {
+            "caption": "pad",
+            "default_val": 0,
+            "editor": "DynamicValue",
+            "name": "pad",
+            "rank": 1,
+            "value": "number"
+        }
+    }
+}

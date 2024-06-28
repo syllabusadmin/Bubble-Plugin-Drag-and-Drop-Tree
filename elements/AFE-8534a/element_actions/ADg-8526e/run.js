@@ -9,7 +9,7 @@ if(properties.expand){
    $('.expandEditor').html("expand_more");
 }
 */
-    instance.data.logging ? console.log(`running the expander function`):null;
+    console.log(`running the expander function`)
 
     instance.data.expander = properties.expand;
     instance.data.logging ? console.log("expand expander", instance.data.expander) : null;
@@ -18,7 +18,7 @@ if(properties.expand){
             const uniqueId = aps._id;
             instance.canvas.find('#' + uniqueId + '.quillEditor').slideDown('fast', 'swing');
             let element = instance.canvas.find('.expandEditor[data-id=' + uniqueId + ']')[0]?.parentElement.nextSibling;
-            instance.data.logging ? console.log(`element expander`, element):null;
+            console.log(`element expander`, element)
 
             if (element?.style) {
                 element.style.paddingTop = '16px';
@@ -31,7 +31,8 @@ if(properties.expand){
 
             }
             //CSP Add for Slider
-            if (instance.data.sliderEnabled) {;
+            if (instance.data.sliderEnabled) {
+                instance.canvas.find(`#slider-aps-${uniqueId}`).removeClass('slider_invisible');
             }
         })
     } else {
@@ -39,7 +40,7 @@ if(properties.expand){
             const uniqueId = aps._id;
             instance.canvas.find('#' + uniqueId + '.quillEditor').slideUp('fast', 'swing');
             let element = instance.canvas.find('.expandEditor[data-id=' + uniqueId + ']')[0]?.parentElement.nextSibling;
-            instance.data.logging ? console.log(`element expander`, element):null;
+            console.log(`element expander`, element)
 
             if (element?.style) {
                 element.style.paddingTop = '0px';
@@ -49,7 +50,9 @@ if(properties.expand){
                 instance.canvas.find('.expandEditor[data-id=' + uniqueId + ']').html('expand_more');
 
             }
-
+            if (instance.data.sliderEnabled) {
+                instance.canvas.find(`#slider-aps-${uniqueId}`).addClass('slider_invisible');
+            }
         })
     }
 

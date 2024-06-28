@@ -1,0 +1,19 @@
+{
+    "caption": "sortRecieve",
+    "fields": {
+        "AED": {
+            "caption": "enabled",
+            "editor": "DynamicValue",
+            "name": "enabled",
+            "rank": 0,
+            "value": "boolean"
+        },
+        "AEE": {
+            "caption": "unique",
+            "editor": "DynamicValue",
+            "name": "unique",
+            "rank": 1,
+            "value": "text"
+        }
+    }
+}

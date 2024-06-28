@@ -1,0 +1,19 @@
+{
+    "caption": "sortRecieve",
+    "fields": {
+        "ADK": {
+            "caption": "enabled",
+            "editor": "DynamicValue",
+            "name": "enabled",
+            "rank": 0,
+            "value": "boolean"
+        },
+        "ADO": {
+            "caption": "unique",
+            "editor": "DynamicValue",
+            "name": "unique",
+            "rank": 1,
+            "value": "text"
+        }
+    }
+}
